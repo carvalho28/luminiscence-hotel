@@ -1,10 +1,21 @@
-function App() {
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./Home";
+
+export function AppRoutes() {
 
   return (
     <div>
-        <h1>Luninescence Hotel</h1>
+        <Routes>
+            <Route path="/" element={<Home />} />
+        </Routes>
     </div>
   )
 }
 
-export default App
+export default function App() {
+    return (
+        <BrowserRouter>
+            <AppRoutes />
+        </BrowserRouter>
+    );
+}
