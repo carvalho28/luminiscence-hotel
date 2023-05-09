@@ -17,6 +17,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     // spring security
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    // lombok
+    compileOnly('org.projectlombok:lombok')
+    annotationProcessor('org.projectlombok:lombok')
+    testCompileOnly('org.projectlombok:lombok')
+    testAnnotationProcessor('org.projectlombok:lombok')
+    //jjwt
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'org.postgresql:postgresql'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
