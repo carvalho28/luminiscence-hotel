@@ -1,12 +1,17 @@
 package com.example.luminescencehotel.user;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Collections;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
     @Id
     @SequenceGenerator(
             name = "user_sequence",
@@ -22,13 +27,13 @@ public class User {
     private String username;
     private String password;
     private String salt;
-    private String role;
+    private UserRole role;
     private LocalDate createdAt;
 
     public User() {
     }
 
-    public User(Long id, String name, String username, String password, String salt, String role, LocalDate createdAt) {
+    public User(Long id, String name, String username, String password, String salt, UserRole role, LocalDate createdAt) {
         this.id = id;
         this.name = name;
         this.username = username;
@@ -38,13 +43,50 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    public User(String name, String username, String password, String salt, String role) {
+    public User(String name, String username, String password, String salt, UserRole role, LocalDate createdAt) {
         this.name = name;
         this.username = username;
         this.password = password;
         this.salt = salt;
         this.role = role;
-        this.createdAt = LocalDate.now();
+        this.createdAt = createdAt;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        SimpleGrantedAuthority authority
+                = new SimpleGrantedAuthority(role.name());
+        return Collections.singletonList(authority);
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public Long getId() {
@@ -63,16 +105,8 @@ public class User {
         this.name = name;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public void setPassword(String password) {
@@ -87,11 +121,11 @@ public class User {
         this.salt = salt;
     }
 
-    public String getRole() {
+    public UserRole getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(UserRole role) {
         this.role = role;
     }
 
@@ -111,7 +145,7 @@ public class User {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", salt='" + salt + '\'' +
-                ", role='" + role + '\'' +
+                ", role=" + role +
                 ", createdAt=" + createdAt +
                 '}';
     }
