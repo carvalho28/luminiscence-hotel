@@ -3,6 +3,8 @@ import Home from "./Home";
 import Login from "./Login";
 import Register from "./Register";
 
+export const serverUrl = import.meta.env.VITE_SERVER_URL;
+
 export function AppRoutes() {
 
   return (
