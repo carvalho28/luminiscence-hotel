@@ -35,7 +35,7 @@ export default function Register() {
 
   const [showSpinner, setShowSpinner] = useState<boolean>(false);
 
-  const [showDialog, setShowDialog] = useState<boolean>(true);
+  const [showDialog, setShowDialog] = useState<boolean>(false);
 
   const register = async () => {
     if (name === "") {
@@ -76,7 +76,6 @@ export default function Register() {
     if (response.status === 200) {
       setShowSpinner(false);
       setShowDialog(true);
-      // navigate("/login");
     } else {
       setShowSpinner(false);
       setShowError(true);
