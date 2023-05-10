@@ -25,6 +25,6 @@ class DemoControllerTest {
     @Test
     public void shouldReturn403WhenAccessingDemoEndpointWithoutAuthentication() throws Exception {
         mvc.perform(get("/api/v1/demo"))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden());
     }
 }
