@@ -1,32 +1,31 @@
 package com.example.luminescencehotel.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class UserService {
+@AllArgsConstructor
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final static String USER_NOT_FOUND_MSG =
+            "user with username %s not found";
 
     public List<User> getUsers() {
         return userRepository.findAll();
     }
 
-//    new User(
-//                        1L,
-//                                "John Doe",
-//                                "johndoe",
-//                                "password",
-//                                "salt",
-//                                "admin",
-//                        LocalDate.now()
-//                )
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException(
+                                String.format(USER_NOT_FOUND_MSG, username)));
+    }
 }
