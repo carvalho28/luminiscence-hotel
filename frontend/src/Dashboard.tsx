@@ -6,11 +6,14 @@ import {
   Text,
   Center,
   Container,
-  Card,
-  CardBody,
   Flex,
+  Box,
+  useColorModeValue,
+  Img,
+  Heading,
 } from "@chakra-ui/react";
 import { RiHotelBedLine } from "react-icons/ri";
+import { BsArrowUpRight } from "react-icons/bs";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -29,48 +32,111 @@ export default function Dashboard() {
             Dashboard
           </Text>
         </Center>
-        <Flex flexDirection="row" mt="10" gap="50" justifyContent="center">
-          <Card minW="md" mt="10" minH="150" align="center" variant="elevated">
-            <CardBody>
-              <Flex flexDirection="row" justifyContent="center" gap="10">
-                <RiHotelBedLine size="3em" />
-                <Flex
-                  ml="2"
-                  flexDirection="column"
-                  justifyContent="center"
-                  alignItems="center"
-                >
-                  <Text fontSize="xl" as="b">
-                    Quartos vagos
-                  </Text>
-                  <Text fontSize="md" as="b">
-                    10
-                  </Text>
-                </Flex>
-              </Flex>
-            </CardBody>
-          </Card>
 
-          <Card minW="md" mt="10" minH="150" align="center" variant="elevated">
-            <CardBody>
-              <Flex flexDirection="row" justifyContent="center" gap="10" alignItems="center">
-                <RiHotelBedLine size="3em" />
-                <Flex
-                  ml="2"
-                  flexDirection="column"
-                  justifyContent="center"
-                  alignItems="center"
-                >
-                  <Text fontSize="xl" as="b">
-                    Quartos vagos
-                  </Text>
-                  <Text fontSize="md" as="b">
-                    10
-                  </Text>
-                </Flex>
+        <Flex
+          justifyContent="center"
+          alignItems="center"
+          gap={"50"}
+          mt={"10"}
+          flexDir={"row"}
+        >
+          <Center py={6}>
+            <Box
+              w="md"
+              rounded={"sm"}
+              my={5}
+              mx={[0, 5]}
+              overflow={"hidden"}
+              bg="white"
+              border={"1px"}
+              borderColor="black"
+              boxShadow={useColorModeValue("6px 6px 0 black", "6px 6px 0 cyan")}
+            >
+              <Flex
+                justifyContent={"space-between"}
+                alignItems={"center"}
+                flexDir={"row"}
+                p={2}
+              >
+                <Box p={4} w="50%">
+                  {/* <RiHotelBedLine size="3em" /> */}
+                  <Img
+                    src={
+                      "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+                    }
+                    roundedTop={"sm"}
+                    objectFit="cover"
+                    h="full"
+                    w="auto"
+                    alt={"Blog Image"}
+                  />
+                </Box>
+                <Box p={4}>
+                  <Flex
+                    justifyContent={"space-between"}
+                    alignItems={"center"}
+                    flexDir={"column"}
+                  >
+                    <Heading color={"black"} fontSize={"2xl"} noOfLines={1}>
+                      Quartos vagos
+                    </Heading>
+                    <Text color={"gray.500"} noOfLines={2} fontSize={"4xl"}>
+                      10
+                    </Text>
+                  </Flex>
+                </Box>
               </Flex>
-            </CardBody>
-          </Card>
+            </Box>
+          </Center>
+
+          <Center py={6}>
+            <Box
+              w="md"
+              rounded={"sm"}
+              my={5}
+              mx={[0, 5]}
+              overflow={"hidden"}
+              bg="white"
+              border={"1px"}
+              borderColor="black"
+              boxShadow={useColorModeValue("6px 6px 0 black", "6px 6px 0 cyan")}
+            >
+              <Flex
+                justifyContent={"space-between"}
+                alignItems={"center"}
+                flexDir={"row"}
+                p={2}
+              >
+                <Box p={4} w="50%">
+                  {/* <RiHotelBedLine size="3em" /> */}
+                  <Img
+                    src={
+                      "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+                    }
+                    roundedTop={"sm"}
+                    objectFit="cover"
+                    h="full"
+                    w="auto"
+                    alt={"Blog Image"}
+                  />
+                </Box>
+                <Box p={4}>
+                  <Flex
+                    justifyContent={"space-between"}
+                    alignItems={"center"}
+                    flexDir={"column"}
+                  >
+                    <Heading color={"black"} fontSize={"2xl"} noOfLines={1}>
+                      Quartos vagos
+                    </Heading>
+                    <Text color={"gray.500"} noOfLines={2} fontSize={"4xl"}>
+                      10
+                    </Text>
+                  </Flex>
+                </Box>
+              </Flex>
+            </Box>
+          </Center>
         </Flex>
       </Container>
     </Layout>

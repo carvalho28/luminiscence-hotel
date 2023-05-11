@@ -4,6 +4,8 @@ import Login from "./Login";
 import Register from "./Register";
 import Dashboard from "./Dashboard";
 import Settings from "./Settings";
+import NotFound from "./NotFound";
+import Statistics from "./Statistics";
 
 export const serverUrl = import.meta.env.VITE_SERVER_URL;
 
@@ -17,6 +19,8 @@ export function AppRoutes() {
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/statistics" element={<Statistics />} />
+            <Route path="*" element={<NotFound />} />
         </Routes>
     </div>
   )
