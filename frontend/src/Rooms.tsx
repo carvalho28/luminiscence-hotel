@@ -14,9 +14,12 @@ import {useEffect, useState} from "react";
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css';
 import {serverUrl} from "./App";
-import {BadgeRoom} from "./components/BadgeRoom"; // theme css file
+import {BadgeRoom} from "./components/BadgeRoom";
+import {Link, useNavigate} from "react-router-dom";
+import Reservation from "./Reservation"; // theme css file
 
 export default function Rooms() {
+    const navigate = useNavigate();
 
     const [dateRange, setDateRange] = useState([
         {
@@ -48,6 +51,17 @@ export default function Rooms() {
                 setRooms(data);
             })
     }, []);
+
+    const handleRoomClick = (room_id: number, room_price: number) => {
+        const state = {
+            room_id: room_id,
+            price: room_price,
+            start_date: (dateRange[0].startDate).toString(),
+            end_date: (dateRange[0].endDate).toString(),
+        };
+        console.log(state);
+        navigate('/reservation', {state: state});
+    }
 
     return (
         <Layout>
@@ -87,7 +101,8 @@ export default function Rooms() {
                                     </Thead>
                                     <Tbody>
                                         {rooms.map((room: any) => (
-                                            <Tr>
+                                            <Tr onClick={() => handleRoomClick(room.room_id, room.price)}
+                                                key={room.room_id}>
                                                 <Td>{room.room_id}</Td>
                                                 <Td>
                                                     <BadgeRoom room_type={room.room_type}/>
