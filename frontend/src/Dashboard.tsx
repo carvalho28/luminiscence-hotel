@@ -12,8 +12,6 @@ import {
   Img,
   Heading,
 } from "@chakra-ui/react";
-import { RiHotelBedLine } from "react-icons/ri";
-import { BsArrowUpRight } from "react-icons/bs";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -28,7 +26,7 @@ export default function Dashboard() {
     <Layout>
       <Container maxW="container.xl" mt="10">
         <Center>
-          <Text fontSize="2xl" as="b">
+          <Text fontSize="3xl" as="b">
             Dashboard
           </Text>
         </Center>
