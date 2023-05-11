@@ -33,6 +33,7 @@ export default function Rooms() {
         let startDate = dateRange[0].startDate;
         let endDate = dateRange[0].endDate;
         console.log(startDate, endDate);
+
     }
 
     useEffect(() => {
