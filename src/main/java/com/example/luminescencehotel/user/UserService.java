@@ -6,7 +6,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -27,5 +29,9 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() ->
                         new UsernameNotFoundException(
                                 String.format(USER_NOT_FOUND_MSG, username)));
+    }
+
+    public List<User> findByRole(UserRole role) {
+        return userRepository.findByRole(role);
     }
 }
