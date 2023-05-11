@@ -1,6 +1,7 @@
 package com.example.luminescencehotel.reservation;
 
 import com.example.luminescencehotel.room.Room;
+import com.example.luminescencehotel.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +20,9 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reservation_id;
-    private Long user_id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(referencedColumnName = "id")
+    private User user;
     private LocalDate start_date;
     private LocalDate end_date;
 
