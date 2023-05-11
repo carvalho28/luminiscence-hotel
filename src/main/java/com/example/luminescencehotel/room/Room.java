@@ -13,9 +13,9 @@ public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long room_id;
-    private Integer singleBeds;
-    private Integer twinBeds;
+    @Enumerated(EnumType.STRING)
+    private RoomType room_type;
     private Float price;
-    private Boolean tv;
-    private Boolean animalFriendly;
+//    private Boolean tv;
+//    private Boolean animal_friendly;
 }

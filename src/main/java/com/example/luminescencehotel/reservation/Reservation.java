@@ -19,7 +19,7 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reservation_id;
-    private Long userId;
+    private Long user_id;
     private LocalDate start_date;
     private LocalDate end_date;
 

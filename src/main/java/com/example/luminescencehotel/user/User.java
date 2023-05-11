@@ -25,7 +25,7 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private UserRole role;
-    private LocalDate createdAt;
+    private LocalDate created_at;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

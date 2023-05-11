@@ -6,6 +6,7 @@ import Dashboard from "./Dashboard";
 import Settings from "./Settings";
 import NotFound from "./NotFound";
 import Statistics from "./Statistics";
+import Rooms from "./Rooms";
 
 export const serverUrl = import.meta.env.VITE_SERVER_URL;
 
@@ -20,6 +21,7 @@ export function AppRoutes() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/statistics" element={<Statistics />} />
+            <Route path="/rooms" element={<Rooms />} />
             <Route path="*" element={<NotFound />} />
         </Routes>
     </div>
