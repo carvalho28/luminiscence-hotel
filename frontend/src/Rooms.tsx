@@ -15,8 +15,7 @@ import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css';
 import {serverUrl} from "./App";
 import {BadgeRoom} from "./components/BadgeRoom";
-import {Link, useNavigate} from "react-router-dom";
-import Reservation from "./Reservation"; // theme css file
+import {useNavigate} from "react-router-dom";
 
 export default function Rooms() {
     const navigate = useNavigate();
@@ -102,6 +101,7 @@ export default function Rooms() {
                                     <Tbody>
                                         {rooms.map((room: any) => (
                                             <Tr onClick={() => handleRoomClick(room.room_id, room.price)}
+                                                _hover={{cursor: "pointer", bg: "gray.100"}}
                                                 key={room.room_id}>
                                                 <Td>{room.room_id}</Td>
                                                 <Td>

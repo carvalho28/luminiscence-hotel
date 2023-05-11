@@ -27,6 +27,6 @@ public class Reservation {
     private LocalDate end_date;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(referencedColumnName = "room_id")
+    @JoinColumn(referencedColumnName = "room_id", name = "room_id")
     private Room room;
 }

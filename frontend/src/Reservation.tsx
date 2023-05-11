@@ -5,7 +5,7 @@ import {
 } from "@chakra-ui/react";
 import {useEffect, useState} from "react";
 import {serverUrl} from "./App";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 type Cliente = {
     id: number,
@@ -22,7 +22,13 @@ interface ReservationProps {
 
 export default function Reservation() {
     const location = useLocation();
-    const {room_id, price, start_date, end_date} = location.state;
+    const navigate = useNavigate();
+    const {room_id, price, start_date, end_date} = location.state || {};
+    useEffect(() => {
+        if (!room_id || !price || !start_date || !end_date) {
+            navigate("/rooms");
+        }
+    } , [room_id, price, start_date, end_date]);
 
     const [nif, setNif] = useState<string>('');
     const [cliente, setCliente] = useState<null | Cliente>(null);
@@ -39,13 +45,9 @@ export default function Reservation() {
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         setNDays(diffDays);
         setNNights(diffDays - 1);
-        console.log("nDays", nDays);
-        console.log("nNights", nNights);
         // calculate price
         const total = nNights * price;
         setTotalPrice(total);
-        console.log("price", price);
-        console.log("room_id", room_id);
     }, [])
 
     const procurarCliente = async () => {
@@ -83,10 +85,10 @@ export default function Reservation() {
                     Procurar cliente
                 </Text>
                 <Center>
-                    <InputGroup w="22%" mt={10}>
+                    <InputGroup w="25%" mt={10}>
                         <Input type='text' placeholder='Insira o NIF do cliente' maxLength={9} value={nif}
                                onChange={(e) => setNif(e.target.value)}/>
-                        <Button colorScheme='blue' onClick={procurarCliente}> Procurar</Button>
+                        <Button colorScheme='blue' onClick={procurarCliente} ml={"6"}> Procurar</Button>
                     </InputGroup>
                 </Center>
 
