@@ -8,6 +8,12 @@ import {
   Center,
   Text,
   Container,
+  Stat,
+  StatLabel,
+  StatNumber,
+  StatHelpText,
+  StatGroup,
+  StatArrow,
 } from "@chakra-ui/react";
 
 export default function Register() {
@@ -19,7 +25,7 @@ export default function Register() {
             Statistics
           </Text>
         </Center>
-        <Tabs size="md" variant="enclosed" mt="10">
+        <Tabs size="lg" variant="enclosed" mt="10">
           <TabList>
             <Tab>Rooms</Tab>
             <Tab>People</Tab>
@@ -27,7 +33,25 @@ export default function Register() {
           </TabList>
           <TabPanels>
             <TabPanel>
-              <p>one!</p>
+              <StatGroup>
+                <Stat>
+                  <StatLabel>Sent</StatLabel>
+                  <StatNumber>345,670</StatNumber>
+                  <StatHelpText>
+                    <StatArrow type="increase" />
+                    23.36%
+                  </StatHelpText>
+                </Stat>
+
+                <Stat>
+                  <StatLabel>Clicked</StatLabel>
+                  <StatNumber>45</StatNumber>
+                  <StatHelpText>
+                    <StatArrow type="decrease" />
+                    9.05%
+                  </StatHelpText>
+                </Stat>
+              </StatGroup>{" "}
             </TabPanel>
             <TabPanel>
               <p>two!</p>
