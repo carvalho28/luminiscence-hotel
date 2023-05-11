@@ -27,12 +27,13 @@ import { Logo } from "./Logo";
 interface LinkItemProps {
   name: string;
   icon: IconType;
+  href: string;
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: "Dashboard", icon: RiHome4Line },
-  { name: "Rooms", icon: RiHotelBedLine },
-  { name: "Statistics", icon: RiBarChartFill },
-  { name: "Settings", icon: RiSettings2Line },
+  { name: "Dashboard", icon: RiHome4Line, href: "/dashboard" },
+  { name: "Rooms", icon: RiHotelBedLine, href: "/rooms" },
+  { name: "Statistics", icon: RiBarChartFill, href: "/statistics" },
+  { name: "Settings", icon: RiSettings2Line, href: "/settings" },
 ];
 
 export default function SimpleSidebar({ children }: { children: ReactNode }) {
@@ -95,7 +96,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       </Flex>
       <Flex paddingTop="8"></Flex>
       {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>
+        <NavItem key={link.name} icon={link.icon} href={link.href}>
           {link.name}
         </NavItem>
       ))}
@@ -106,11 +107,12 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 interface NavItemProps extends FlexProps {
   icon: IconType;
   children: ReactNode;
+  href: string;
 }
-const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
+const NavItem = ({ icon, children, href, ...rest }: NavItemProps) => {
   return (
     <Link
-      href="#"
+      href={href}
       style={{ textDecoration: "none" }}
       _focus={{ boxShadow: "none" }}
     >
