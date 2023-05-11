@@ -12,8 +12,8 @@ import {
     Stack,
     Text,
 } from '@chakra-ui/react'
-import {PasswordField} from "../components/PasswordField";
-import {Logo} from "../components/Logo";
+import {PasswordField} from "./components/PasswordField";
+import {Logo} from "./components/Logo";
 import { serverUrl } from "./App";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";

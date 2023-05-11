@@ -15,12 +15,12 @@ import {
   AlertIcon,
   AlertTitle,
 } from "@chakra-ui/react";
-import { PasswordField } from "../components/PasswordField";
-import { Logo } from "../components/Logo";
+import { PasswordField } from "./components/PasswordField";
+import { Logo } from "./components/Logo";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { serverUrl } from "./App";
-import { AlertPopup } from "../components/AlertPopup";
+import { AlertPopup } from "./components/AlertPopup";
 
 export default function Register() {
   const navigate = useNavigate();
