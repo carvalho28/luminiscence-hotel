@@ -24,6 +24,8 @@ public class User implements UserDetails {
     private String name;
     private String username;
     private String password;
+    @Column(unique = true)
+    private String nif;
     @Enumerated(EnumType.STRING)
     private UserRole role;
     private LocalDate created_at;

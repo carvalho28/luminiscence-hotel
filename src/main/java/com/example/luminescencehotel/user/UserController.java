@@ -1,5 +1,7 @@
 package com.example.luminescencehotel.user;
 
+import com.example.luminescencehotel.user.request.NifRequest;
+import com.example.luminescencehotel.user.request.RoleRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +21,12 @@ public class UserController {
     }
 
     @PostMapping("/role")
-    public ResponseEntity<List<User>> findByRole(@RequestBody Map<String, String> requestBody) {
-        String role = requestBody.get("role");
-        UserRole userRole = UserRole.valueOf(role);
-        return ResponseEntity.ok(userService.findByRole(userRole));
+    public ResponseEntity<List<User>> findByRole(@RequestBody RoleRequest roleRequest){
+        return ResponseEntity.ok(userService.findByRole(roleRequest));
+    }
+
+    @PostMapping("/nif")
+    public ResponseEntity<List<User>> findByNif(@RequestBody NifRequest nif){
+        return ResponseEntity.ok(userService.findByNif(nif));
     }
 }

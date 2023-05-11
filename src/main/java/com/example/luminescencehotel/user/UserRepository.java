@@ -14,4 +14,7 @@ public interface UserRepository
 
     // get user by role
     List<User> findByRole(UserRole role);
+
+    // get user by nif
+    List<User> findByNif(String nif);
 }
