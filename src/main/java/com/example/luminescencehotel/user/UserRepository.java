@@ -17,4 +17,5 @@ public interface UserRepository
 
     // get user by nif
     List<User> findByNif(String nif);
+
 }

@@ -5,7 +5,7 @@ import {
     Tr,
     Th,
     Td,
-    TableContainer,
+    TableContainer, Spinner,
 } from "@chakra-ui/react";
 import {Layout} from "./components/Layout";
 import {DateRange} from 'react-date-range';
@@ -20,6 +20,9 @@ import {useNavigate} from "react-router-dom";
 export default function Rooms() {
     const navigate = useNavigate();
 
+    const [rooms, setRooms] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
     const [dateRange, setDateRange] = useState([
         {
             startDate: new Date(),
@@ -27,8 +30,6 @@ export default function Rooms() {
             key: 'selection'
         }
     ]);
-
-    const [rooms, setRooms] = useState([]);
 
     const getDatesFromPicker = () => {
         // let dates: Date[] = [];
@@ -60,6 +61,7 @@ export default function Rooms() {
             .then(res => res.json())
             .then(data => {
                 setRooms(data);
+                setIsLoading(false);
             })
     }
 
@@ -128,6 +130,11 @@ export default function Rooms() {
                 {dateRange[0].startDate && dateRange[0].endDate && (
                     <>
                         <Text fontSize={"xl"}>Available Rooms</Text>
+                        {isLoading && (
+                            <Center>
+                                <Spinner size="xl"/>
+                            </Center>
+                        )}
                         <Center mt={"10"} mb={"10"}>
                             <TableContainer width={"75%"}>
                                 <Table variant='simple' size={"sm"}>

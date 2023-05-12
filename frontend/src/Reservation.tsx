@@ -6,8 +6,9 @@ import {
 import {useEffect, useState} from "react";
 import {serverUrl} from "./App";
 import {useLocation, useNavigate} from "react-router-dom";
+import {ModalNewCustomer} from "./components/ModalNewCustomer";
 
-type Cliente = {
+export type Cliente = {
     id: number,
     name: string,
     nif: string,
@@ -39,6 +40,8 @@ export default function Reservation() {
 
     const [showError, setShowError] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>('');
+    const [showCreateNewCustomer, setShowCreateNewCustomer] = useState<boolean>(false);
+    const [showPopup, setShowPopup] = useState<boolean>(false);
 
     useEffect(() => {
         // calculate nDays between start_date and end_date
@@ -48,12 +51,20 @@ export default function Reservation() {
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         setNDays(diffDays);
         setNNights(diffDays - 1);
+    }, []);
+
+    useEffect(() => {
         // calculate price
         const total = nNights * price;
         setTotalPrice(total);
-    }, [])
+    }, [nNights]);
 
     const procurarCliente = async () => {
+        if (nif === '') {
+            setShowError(true);
+            setErrorMessage("Insira o NIF do cliente");
+            return;
+        }
         console.log(nif);
         fetch(`${serverUrl}/user/nif`, {
             method: 'POST',
@@ -68,6 +79,7 @@ export default function Reservation() {
                 if (data.length === 0) {
                     setShowError(true);
                     setErrorMessage("Cliente não encontrado");
+                    setShowCreateNewCustomer(true);
                     return;
                 }
                 const {id, name, nif} = data[0];
@@ -84,6 +96,17 @@ export default function Reservation() {
     useEffect(() => {
     }, [cliente, nNights, nDays, totalPrice]);
 
+    const createNewCustomer = async () => {
+        setShowPopup(true);
+    }
+
+    const onPopupClose = () => {
+        setShowPopup(false);
+        setShowCreateNewCustomer(false);
+        setErrorMessage('');
+        setShowError(false);
+    }
+
     return (
         <Layout>
             <Container maxW="container.xl" mt="10">
@@ -97,10 +120,10 @@ export default function Reservation() {
                     Procurar cliente
                 </Text>
                 <Center>
-                    <InputGroup w="25%" mt={10}>
+                    <InputGroup w="29%" mt={10}>
                         <Input type='text' placeholder='Insira o NIF do cliente' maxLength={9} value={nif}
                                onChange={(e) => setNif(e.target.value)}/>
-                        <Button colorScheme='blue' onClick={procurarCliente} ml={"6"}> Procurar</Button>
+                        <Button colorScheme='blue' onClick={procurarCliente} ml={"6"} w={"50%"}> Procurar</Button>
                     </InputGroup>
                 </Center>
 
@@ -113,8 +136,16 @@ export default function Reservation() {
                             </AlertTitle>
                             <AlertDescription>{errorMessage}</AlertDescription>
                         </Alert>
+                        {showCreateNewCustomer  ? (
+                            <Button colorScheme='blue' ml={"6"} mt={10} onClick={() => createNewCustomer()}> Criar novo cliente</Button>
+                        ) : null}
                     </Center>
                 ) : null}
+
+                {showPopup ? (
+                    <ModalNewCustomer isOpen={true} onClose={() => onPopupClose()} setCliente={setCliente}/>
+                ) : null}
+
 
                 {cliente === null ? (
                     // render the image
