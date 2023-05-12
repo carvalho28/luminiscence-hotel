@@ -118,46 +118,67 @@ export default function Reservation() {
                                 </Text>
                             </Stack>
                         </Stack>
-                    </Center>
-                ) : null}
+                        <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
+                            <Image
+                                src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+                                alt="hotel"/>
+                            <Box p="6">
+                                <Box alignItems="baseline">
 
-                {cliente ? (
-                    <>
-                        <Text fontSize="xl">
-                            Resumo da reserva
-                        </Text>
-                        <Center>
-                            <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
-                                <Image
-                                    src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
-                                    alt="hotel"/>
-                                <Box p="6">
-                                    <Box alignItems="baseline">
-
-                                        <Box
-                                            color="gray.500"
-                                            fontWeight="semibold"
-                                            letterSpacing="wide"
-                                            fontSize="xs"
-                                            textTransform="uppercase"
-                                            ml="2"
-                                        >
-                                            {/*n days &bull; n nights*/}
-                                            {nDays} dias &bull; {nNights} noites &bull; {totalPrice}€
-                                        </Box>
+                                    <Box
+                                        color="gray.500"
+                                        fontWeight="semibold"
+                                        letterSpacing="wide"
+                                        fontSize="xs"
+                                        textTransform="uppercase"
+                                        ml="2"
+                                    >
+                                        {/*n days &bull; n nights*/}
+                                        {nDays} dias &bull; {nNights} noites &bull; {totalPrice}€
                                     </Box>
                                 </Box>
                             </Box>
-                        </Center>
-
-                        {/*    buttons to confirm and cancel*/
-                        }
-                        <Center mt={"4"}>
-                            <Button colorScheme='blue'>Confirmar</Button>
-                            <Button colorScheme='red' ml={"4"}>Cancelar</Button>
-                        </Center>
-                    </>
+                        </Box>
+                    </Center>
                 ) : null}
+
+                {/*{cliente ? (*/}
+                {/*    <>*/}
+                {/*        <Text fontSize="xl">*/}
+                {/*            Resumo da reserva*/}
+                {/*        </Text>*/}
+                {/*        <Center>*/}
+                {/*            <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">*/}
+                {/*                <Image*/}
+                {/*                    src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"*/}
+                {/*                    alt="hotel"/>*/}
+                {/*                <Box p="6">*/}
+                {/*                    <Box alignItems="baseline">*/}
+
+                {/*                        <Box*/}
+                {/*                            color="gray.500"*/}
+                {/*                            fontWeight="semibold"*/}
+                {/*                            letterSpacing="wide"*/}
+                {/*                            fontSize="xs"*/}
+                {/*                            textTransform="uppercase"*/}
+                {/*                            ml="2"*/}
+                {/*                        >*/}
+                {/*                            /!*n days &bull; n nights*!/*/}
+                {/*                            {nDays} dias &bull; {nNights} noites &bull; {totalPrice}€*/}
+                {/*                        </Box>*/}
+                {/*                    </Box>*/}
+                {/*                </Box>*/}
+                {/*            </Box>*/}
+                {/*        </Center>*/}
+
+                        {/*    buttons to confirm and cancel*/}
+                {/*        }*/}
+                {/*        <Center mt={"4"}>*/}
+                {/*            <Button colorScheme='blue'>Confirmar</Button>*/}
+                {/*            <Button colorScheme='red' ml={"4"}>Cancelar</Button>*/}
+                {/*        </Center>*/}
+                {/*    </>*/}
+                {/*) : null}*/}
             </Container>
         </Layout>
     )
