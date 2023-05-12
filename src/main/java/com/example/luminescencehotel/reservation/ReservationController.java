@@ -1,14 +1,13 @@
 package com.example.luminescencehotel.reservation;
 
 import com.example.luminescencehotel.reservation.request.MakeReservationRequest;
+import com.example.luminescencehotel.reservation.response.AllReservationsResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -26,5 +25,11 @@ public class ReservationController {
         response.put("status", "ok");
         response.put("message", "Reservation created successfully");
         return ResponseEntity.ok(response);
+    }
+
+    // get all reservations
+    @GetMapping(path = "/all")
+    public ResponseEntity<List<AllReservationsResponse>> getAllReservations() {
+        return ResponseEntity.ok(reservationService.getAllReservations());
     }
 }

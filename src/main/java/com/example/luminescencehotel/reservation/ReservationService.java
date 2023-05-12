@@ -1,6 +1,7 @@
 package com.example.luminescencehotel.reservation;
 
 import com.example.luminescencehotel.reservation.request.MakeReservationRequest;
+import com.example.luminescencehotel.reservation.response.AllReservationsResponse;
 import com.example.luminescencehotel.room.RoomRepository;
 import com.example.luminescencehotel.user.User;
 import com.example.luminescencehotel.room.Room;
@@ -9,6 +10,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -32,4 +35,22 @@ public class ReservationService {
 
         reservationRepository.save(reservation);
     }
+
+    // get all reservations
+    public List<AllReservationsResponse> getAllReservations() {
+        List<Reservation> reservations = reservationRepository.findAll();
+        List<AllReservationsResponse> allReservations = new ArrayList<>();
+        for (Reservation reservation : reservations) {
+            AllReservationsResponse allReservationsResponse = new AllReservationsResponse();
+            allReservationsResponse.setReservation_id(reservation.getReservation_id());
+            allReservationsResponse.setName(reservation.getUser().getName());
+            allReservationsResponse.setCustomer_id(reservation.getUser().getId());
+            allReservationsResponse.setRoom_number(reservation.getRoom().getRoom_id());
+            allReservationsResponse.setStart_date(reservation.getStart_date().toString());
+            allReservationsResponse.setEnd_date(reservation.getEnd_date().toString());
+            allReservations.add(allReservationsResponse);
+        }
+        return allReservations;
+    }
+
 }

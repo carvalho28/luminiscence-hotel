@@ -1,23 +1,45 @@
-
 import {Layout} from "./components/Layout";
-import {Center, Container, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr} from "@chakra-ui/react";
-
-const bookings = [
-    {
-        reservation_id: 1,
-        room_id: 1,
-        start_date: "2021-06-01",
-        end_date: "2021-06-05"
-    },
-    {
-        reservation_id: 2,
-        room_id: 2,
-        start_date: "2021-06-01",
-        end_date: "2021-06-05"
-    },
-]
+import {
+    Box,
+    Center,
+    Container,
+    Flex,
+    Img,
+    Table,
+    TableContainer,
+    Tbody,
+    Td,
+    Text,
+    Th,
+    Thead,
+    Tr
+} from "@chakra-ui/react";
+import {useEffect, useState} from "react";
+import {serverUrl} from "./App";
 
 export default function Bookings() {
+
+    const [bookings, setBookings] = useState([]);
+
+    useEffect(() => {
+        fetch(`${serverUrl}/reservation/all`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                    setBookings(data);
+                }
+            )
+            .catch((error) => {
+                    console.error('Error:', error);
+                }
+            );
+    }, []);
+
+
     return (
         <Layout selected="Bookings">
             {/* render all the rooms */}
@@ -29,34 +51,43 @@ export default function Bookings() {
                 </Center>
 
                 <Center mt={"10"} mb={"10"}>
-                <TableContainer width={"75%"}>
-                    <Table variant='simple' size={"sm"}>
-                        <Thead>
-                            <Tr>
-                                <Th>Reservation ID</Th>
-                                <Th>Room Number</Th>
-                                <Th>Check In</Th>
-                                <Th>Check Out</Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            {bookings.map((room: any) => (
-                                <Tr _hover={{cursor: "pointer", bg: "gray.100"}} key={room.room_id}>
-                                    <Td>{room.reservation_id}</Td>
-                                    <Td>
-                                        {room.room_id}
-                                    </Td>
-                                    <Td>
-                                        {room.start_date}
-                                    </Td>
-                                    <Td>
-                                        {room.end_date}
-                                    </Td>
+
+                    <TableContainer width={"75%"}>
+                        <Table variant='simple' size={"sm"}>
+                            <Thead>
+                                <Tr>
+                                    <Th>Reservation ID</Th>
+                                    <Th>Check In</Th>
+                                    <Th>Check Out</Th>
+                                    <Th>Room Number</Th>
+                                    <Th>Customer ID</Th>
+                                    <Th>Customer Name</Th>
                                 </Tr>
-                            ))}
-                        </Tbody>
-                    </Table>
-                </TableContainer>
+                            </Thead>
+                            <Tbody>
+                                {bookings.map((booking: any) => (
+                                    <Tr _hover={{cursor: "pointer", bg: "gray.100"}} key={booking.reservation_id}>
+                                        <Td>{booking.reservation_id}</Td>
+                                        <Td>
+                                            {booking.start_date}
+                                        </Td>
+                                        <Td>
+                                            {booking.end_date}
+                                        </Td>
+                                        <Td>
+                                            {booking.room_number}
+                                        </Td>
+                                        <Td>
+                                            {booking.customer_id}
+                                        </Td>
+                                        <Td>
+                                            {booking.name}
+                                        </Td>
+                                    </Tr>
+                                ))}
+                            </Tbody>
+                        </Table>
+                    </TableContainer>
                 </Center>
             </Container>
         </Layout>
