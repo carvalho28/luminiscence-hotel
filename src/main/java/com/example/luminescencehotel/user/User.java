@@ -1,6 +1,7 @@
 package com.example.luminescencehotel.user;
 
 import com.example.luminescencehotel.reservation.Reservation;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,6 +31,7 @@ public class User implements UserDetails {
     private UserRole role;
     private LocalDate created_at;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Reservation> reservations;
 

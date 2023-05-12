@@ -1,7 +1,7 @@
 import {Layout} from "./components/Layout";
 import {
     Center, Container, Text, InputGroup, InputLeftAddon, Input, Button, Box, Card, Badge,
-    Image, Stack, Flex, Heading, useColorModeValue, Link
+    Image, Stack, Flex, Heading, useColorModeValue, Link, Divider, AlertIcon, AlertTitle, AlertDescription, Alert
 } from "@chakra-ui/react";
 import {useEffect, useState} from "react";
 import {serverUrl} from "./App";
@@ -37,6 +37,9 @@ export default function Reservation() {
     const [nNights, setNNights] = useState<number>(0);
     const [totalPrice, setTotalPrice] = useState<number>(0);
 
+    const [showError, setShowError] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<string>('');
+
     useEffect(() => {
         // calculate nDays between start_date and end_date
         const start = new Date(start_date);
@@ -62,15 +65,24 @@ export default function Reservation() {
             })
         }).then(res => res.json())
             .then(data => {
+                if (data.length === 0) {
+                    setShowError(true);
+                    setErrorMessage("Cliente não encontrado");
+                    return;
+                }
                 const {id, name, nif} = data[0];
+                setShowError(false);
                 const newCliente: Cliente = {id, name, nif};
                 console.log("new", newCliente);
                 setCliente(newCliente);
             })
+            .catch(err => {
+                console.log(err);
+            }
+        )
     }
     useEffect(() => {
-        console.log("cliente", cliente);
-    }, [cliente])
+    }, [cliente, nNights, nDays, totalPrice]);
 
     return (
         <Layout>
@@ -92,93 +104,74 @@ export default function Reservation() {
                     </InputGroup>
                 </Center>
 
-                {cliente ? (
-                    <Center py={6}>
-                        <Stack
-                            borderWidth="1px"
-                            borderRadius="lg"
-                            w={{sm: '100%', md: '400px'}}
-                            height={{sm: '476px', md: '8rem'}}
-                            direction={{base: 'column', md: 'row'}}
-                            bg={useColorModeValue('white', 'gray.900')}
-                            boxShadow={'2xl'}
-                            padding={4}>
-                            <Stack
-                                flex={1}
-                                flexDirection="column"
-                                justifyContent="center"
-                                alignItems="center"
-                                p={1}
-                                pt={2}>
-                                <Heading fontSize={'2xl'} fontFamily={'body'}>
-                                    {cliente.name}
-                                </Heading>
-                                <Text fontWeight={600} color={'gray.500'} size="sm" mb={4}>
-                                    NIF: {cliente.nif}
-                                </Text>
-                            </Stack>
-                        </Stack>
-                        <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
+                {showError ? (
+                    <Center>
+                        <Alert status='error' w={"25%"} mt={10}>
+                            <AlertIcon />
+                            <AlertTitle>
+                                Erro:
+                            </AlertTitle>
+                            <AlertDescription>{errorMessage}</AlertDescription>
+                        </Alert>
+                    </Center>
+                ) : null}
+
+                {cliente === null ? (
+                    // render the image
+                    <Center mt={20}>
+                        <Box maxW="lg" borderWidth="1px" borderRadius="lg" overflow="hidden">
                             <Image
                                 src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
                                 alt="hotel"/>
-                            <Box p="6">
-                                <Box alignItems="baseline">
-
-                                    <Box
-                                        color="gray.500"
-                                        fontWeight="semibold"
-                                        letterSpacing="wide"
-                                        fontSize="xs"
-                                        textTransform="uppercase"
-                                        ml="2"
-                                    >
-                                        {/*n days &bull; n nights*/}
-                                        {nDays} dias &bull; {nNights} noites &bull; {totalPrice}€
-                                    </Box>
-                                </Box>
-                            </Box>
                         </Box>
                     </Center>
                 ) : null}
 
-                {/*{cliente ? (*/}
-                {/*    <>*/}
-                {/*        <Text fontSize="xl">*/}
-                {/*            Resumo da reserva*/}
-                {/*        </Text>*/}
-                {/*        <Center>*/}
-                {/*            <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">*/}
-                {/*                <Image*/}
-                {/*                    src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"*/}
-                {/*                    alt="hotel"/>*/}
-                {/*                <Box p="6">*/}
-                {/*                    <Box alignItems="baseline">*/}
+                {cliente ? (
+                    <>
+                        <Text fontSize="xl" mt={20}>
+                            Resumo da reserva
+                        </Text>
+                        <Center>
+                            <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
+                                <Image
+                                    src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+                                    alt="hotel"/>
+                                <Box p="6">
+                                    {/* show client name and nif*/}
+                                    <Box color="gray.500" fontWeight="semibold" letterSpacing="wide" fontSize="md"
+                                        textTransform="uppercase" ml="2">
+                                        {cliente.name} &bull; {cliente.nif}
+                                    </Box>
 
-                {/*                        <Box*/}
-                {/*                            color="gray.500"*/}
-                {/*                            fontWeight="semibold"*/}
-                {/*                            letterSpacing="wide"*/}
-                {/*                            fontSize="xs"*/}
-                {/*                            textTransform="uppercase"*/}
-                {/*                            ml="2"*/}
-                {/*                        >*/}
-                {/*                            /!*n days &bull; n nights*!/*/}
-                {/*                            {nDays} dias &bull; {nNights} noites &bull; {totalPrice}€*/}
-                {/*                        </Box>*/}
-                {/*                    </Box>*/}
-                {/*                </Box>*/}
-                {/*            </Box>*/}
-                {/*        </Center>*/}
+                                    <Divider orientation='horizontal' borderWidth={'1px'} borderColor={'gray.400'} mt={2} mb={2}/>
 
-                        {/*    buttons to confirm and cancel*/}
-                {/*        }*/}
-                {/*        <Center mt={"4"}>*/}
-                {/*            <Button colorScheme='blue'>Confirmar</Button>*/}
-                {/*            <Button colorScheme='red' ml={"4"}>Cancelar</Button>*/}
-                {/*        </Center>*/}
-                {/*    </>*/}
-                {/*) : null}*/}
+
+                                    <Box alignItems="baseline">
+                                        <Box
+                                            color="gray.500"
+                                            fontWeight="semibold"
+                                            letterSpacing="wide"
+                                            fontSize="md"
+                                            textTransform="uppercase"
+                                            ml="2"
+                                        >
+                                            {/*n days &bull; n nights*/}
+                                            {nDays} dias &bull; {nNights} noites &bull; {totalPrice}€
+                                        </Box>
+                                    </Box>
+                                </Box>
+                            </Box>
+                        </Center>
+
+                        {/*    buttons to confirm and cancel*/
+                        }
+                        <Center mt={"10"}>
+                            <Button colorScheme='blue'>Confirmar</Button>
+                            <Button colorScheme='red' ml={"4"}>Cancelar</Button>
+                        </Center>
+                    </>
+                ) : null}
             </Container>
         </Layout>
     )
