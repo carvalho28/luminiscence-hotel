@@ -105,7 +105,7 @@ export default function Rooms() {
     }
 
     return (
-        <Layout>
+        <Layout selected="Rooms">
             <Container maxW="container.xl" mt="10">
                 <Center>
                     <Text fontSize="3xl" as="b">
