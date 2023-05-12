@@ -41,4 +41,16 @@ public class UserService implements UserDetailsService {
     public List<User> findByNif(NifRequest nifRequest) {
         return userRepository.findByNif(nifRequest.getNif());
     }
+
+//    public List<User> deleteUser(NifRequest nifRequest) {
+//        userRepository.delete(userRepository.findByNif(nifRequest.toString()).get(0));
+////        TODO: return lista vazia
+//    }
+//
+//    public List<User> updateUser(NifRequest nifRequest, User u) {
+//        if(userRepository.findByNif(nifRequest.toString()).size() != 0)
+//            deleteUser(nifRequest);
+////       TODO Add user (posso estar a falhar uma maneira mais direta de fazer isto)
+////        e dps return lista vazia
+//    }
 }

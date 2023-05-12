@@ -29,4 +29,16 @@ public class UserController {
     public ResponseEntity<List<User>> findByNif(@RequestBody NifRequest nif){
         return ResponseEntity.ok(userService.findByNif(nif));
     }
+
+//    Return da lista vazia?
+//    @DeleteMapping("/delete")
+//    public ResponseEntity<List<User>> deleteUser(@RequestBody NifRequest nif) {
+//        return ResponseEntity.ok(userService.deleteUser(nif));
+//    }
+//
+//    @PostMapping("/update")
+//    public ResponseEntity<List<User>> updateUser(@RequestBody NifRequest nif, User u) {
+//        return ResponseEntity.ok(UserService.updateUser(nif, u));
+//    }
+
 }
