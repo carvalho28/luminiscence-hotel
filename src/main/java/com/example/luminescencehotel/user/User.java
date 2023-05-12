@@ -1,5 +1,6 @@
 package com.example.luminescencehotel.user;
 
+import com.example.luminescencehotel.reservation.Reservation;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -24,9 +24,14 @@ public class User implements UserDetails {
     private String name;
     private String username;
     private String password;
+    @Column(unique = true)
+    private String nif;
     @Enumerated(EnumType.STRING)
     private UserRole role;
-    private LocalDate createdAt;
+    private LocalDate created_at;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Reservation> reservations;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

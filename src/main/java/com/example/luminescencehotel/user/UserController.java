@@ -1,26 +1,32 @@
 package com.example.luminescencehotel.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.luminescencehotel.user.request.NifRequest;
+import com.example.luminescencehotel.user.request.RoleRequest;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping(path = "api/v1/user")
 public class UserController {
     private final UserService userService;
-
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     @GetMapping
     public List<User> getUsers() {
         return userService.getUsers();
     }
 
+    @PostMapping("/role")
+    public ResponseEntity<List<User>> findByRole(@RequestBody RoleRequest roleRequest){
+        return ResponseEntity.ok(userService.findByRole(roleRequest));
+    }
+
+    @PostMapping("/nif")
+    public ResponseEntity<List<User>> findByNif(@RequestBody NifRequest nif){
+        return ResponseEntity.ok(userService.findByNif(nif));
+    }
 }
