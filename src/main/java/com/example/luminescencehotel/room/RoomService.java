@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -29,24 +30,9 @@ public class RoomService {
     }
 
 
-    @Transactional(readOnly = true)
     public List<Room> findAvailableRooms(AvailableRoomsRequest availableRoomsRequest) {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Room> query = cb.createQuery(Room.class);
-        Root<Room> roomRoot = query.from(Room.class);
-        Join<Room, Reservation> reservationJoin = roomRoot.join("reservations", JoinType.LEFT);
-
-        Predicate overlapping = cb.and(
-                cb.lessThan(reservationJoin.get("end_date"), availableRoomsRequest.getStartDate()),
-                cb.greaterThan(reservationJoin.get("start_date"), availableRoomsRequest.getEndDate())
-        );
-
-        Predicate noReservations = cb.isNull(reservationJoin.get("reservation_id"));
-
-        query.select(roomRoot)
-                .where(cb.or(overlapping, noReservations));
-
-        TypedQuery<Room> typedQuery = entityManager.createQuery(query);
-        return typedQuery.getResultList();
+        LocalDate startDate = LocalDate.parse(availableRoomsRequest.getStartDate());
+        LocalDate endDate = LocalDate.parse(availableRoomsRequest.getEndDate());
+        return roomRepository.findAvailableRooms(startDate, endDate);
     }
 }

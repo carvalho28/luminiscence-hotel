@@ -40,16 +40,56 @@ export default function Rooms() {
 
     useEffect(() => {
         getDatesFromPicker();
-    }, [dateRange])
+    }, [dateRange]);
 
-    useEffect(() => {
-        fetch(`${serverUrl}/room`)
+    const getAvailableRooms = async () => {
+        console.log(JSON.stringify({
+            startDate: (dateRange[0].startDate).toISOString().slice(0, 10),
+            endDate: (dateRange[0].endDate).toISOString().slice(0, 10),
+        }));
+        fetch(`${serverUrl}/room/available`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                startDate: (dateRange[0].startDate).toISOString().slice(0, 10),
+                endDate: (dateRange[0].endDate).toISOString().slice(0, 10),
+            })
+        })
             .then(res => res.json())
             .then(data => {
-                console.log(data);
                 setRooms(data);
             })
+    }
+
+    useEffect(() => {
+        const getRooms7Days = async () => {
+            try {
+                await getAvailableRooms();
+            }
+            catch (e) {
+                console.log(e);
+            }
+        }
+        getRooms7Days();
     }, []);
+
+    useEffect(() => {
+        const getRoomsSelectedDates = async () => {
+            try {
+                await getAvailableRooms();
+            }
+            catch (e) {
+                console.log(e);
+            }
+        }
+        getRoomsSelectedDates();
+    }, [dateRange]);
+
+    useEffect(() => {
+
+    }, [rooms]);
 
     const handleRoomClick = (room_id: number, room_price: number) => {
         const state = {

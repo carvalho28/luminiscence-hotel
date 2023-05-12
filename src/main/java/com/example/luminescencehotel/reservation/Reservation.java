@@ -2,6 +2,7 @@ package com.example.luminescencehotel.reservation;
 
 import com.example.luminescencehotel.room.Room;
 import com.example.luminescencehotel.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

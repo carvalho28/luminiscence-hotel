@@ -1,6 +1,7 @@
 package com.example.luminescencehotel.room;
 
 import com.example.luminescencehotel.reservation.Reservation;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,6 +21,7 @@ public class Room {
     private RoomType room_type;
     private Float price;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
     private List<Reservation> reservations;
 
