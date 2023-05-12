@@ -1,7 +1,7 @@
 import {Layout} from "./components/Layout";
 import {
     Center, Container, Text, InputGroup, InputLeftAddon, Input, Button, Box, Card, Badge,
-    Image, Stack, Flex, Heading, useColorModeValue, Link
+    Image, Stack, Flex, Heading, useColorModeValue, Link, Divider, AlertIcon, AlertTitle, AlertDescription, Alert
 } from "@chakra-ui/react";
 import {useEffect, useState} from "react";
 import {serverUrl} from "./App";
@@ -65,7 +65,13 @@ export default function Reservation() {
             })
         }).then(res => res.json())
             .then(data => {
+                if (data.length === 0) {
+                    setShowError(true);
+                    setErrorMessage("Cliente não encontrado");
+                    return;
+                }
                 const {id, name, nif} = data[0];
+                setShowError(false);
                 const newCliente: Cliente = {id, name, nif};
                 console.log("new", newCliente);
                 setCliente(newCliente);
@@ -100,7 +106,7 @@ export default function Reservation() {
 
                 {showError ? (
                     <Center>
-                        <Alert status='error' w={"35%"} mt={2}>
+                        <Alert status='error' w={"25%"} mt={10}>
                             <AlertIcon />
                             <AlertTitle>
                                 Erro:
