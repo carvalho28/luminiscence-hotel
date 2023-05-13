@@ -63,4 +63,10 @@ public class ReservationController {
     public ResponseEntity<List<CheckInTodayResponse>> getCheckInInfoToday() {
         return ResponseEntity.ok(reservationService.getCheckInsToday());
     }
+
+    // check out info today
+    @GetMapping(path = "/checkout/info/today")
+    public ResponseEntity<List<CheckInTodayResponse>> getCheckOutInfoToday() {
+        return ResponseEntity.ok(reservationService.getCheckOutsToday());
+    }
 }

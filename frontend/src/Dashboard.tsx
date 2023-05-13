@@ -9,7 +9,7 @@ import {
     Box,
     useColorModeValue,
     Img,
-    Heading, List, ListIcon, ListItem, Table, Thead, Tr, Th, Tbody, Td, TableContainer,
+    Heading, Table, Thead, Tr, Th, Tbody, Td, TableContainer,
 } from "@chakra-ui/react";
 import {serverUrl} from "./App";
 
@@ -27,6 +27,7 @@ export default function Dashboard() {
     const [nReservationsToday, setNReservationsToday] = useState(0);
     const [nCheckinsToday, setNCheckinsToday] = useState(0);
     const [checkinsToday, setCheckinsToday] = useState<Checkin[]>([]);
+    const [checkoutsToday, setCheckoutsToday] = useState<Checkin[]>([]);
     const [nCheckoutsToday, setNCheckoutsToday] = useState(0);
 
     useEffect(() => {
@@ -83,7 +84,7 @@ export default function Dashboard() {
                 );
         }
         const getNCheckoutsToday = async () => {
-            fetch(`${serverUrl}/reservation/checkout/today`, {
+            fetch(`${serverUrl}/reservation/checkout/info/today`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -91,7 +92,8 @@ export default function Dashboard() {
             })
                 .then(response => response.json())
                 .then(data => {
-                        setNCheckoutsToday(data.count);
+                        setNCheckoutsToday(data.length);
+                        setCheckoutsToday(data);
                     }
                 )
                 .catch((error) => {
@@ -355,6 +357,32 @@ export default function Dashboard() {
                                     </Flex>
                                 </Box>
                             </Flex>
+                            <Box p={4}>
+                                <Center>
+                                    <TableContainer width={"100%"}>
+                                        <Table variant='simple' size={"sm"}>
+                                            <Thead>
+                                                <Tr>
+                                                    <Th>Reserva</Th>
+                                                    <Th>Name</Th>
+                                                    <Th>NIF</Th>
+                                                    <Th>Quarto</Th>
+                                                </Tr>
+                                            </Thead>
+                                            <Tbody>
+                                                {checkoutsToday.map((reservation) => (
+                                                    <Tr key={reservation.reservation_id}>
+                                                        <Td>{reservation.reservation_id}</Td>
+                                                        <Td>{reservation.name}</Td>
+                                                        <Td>{reservation.nif}</Td>
+                                                        <Td>{reservation.room_id}</Td>
+                                                    </Tr>
+                                                ))}
+                                            </Tbody>
+                                        </Table>
+                                    </TableContainer>
+                                </Center>
+                            </Box>
                         </Box>
                     </Center>
                 </Flex>

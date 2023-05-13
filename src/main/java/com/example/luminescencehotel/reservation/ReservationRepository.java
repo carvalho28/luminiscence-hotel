@@ -23,4 +23,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long>{
     // get name, nif and room number of today's check-ins
     @Query("SELECT r.reservation_id, r.user.name, r.user.nif, r.room.room_id FROM Reservation r WHERE r.start_date = CURRENT_DATE")
     List<Object[]> getCheckInsToday();
+
+    // get name, nif and room number of today's check-outs
+    @Query("SELECT r.reservation_id, r.user.name, r.user.nif, r.room.room_id FROM Reservation r WHERE r.end_date = CURRENT_DATE")
+    List<Object[]> getCheckOutsToday();
 }

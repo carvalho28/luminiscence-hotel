@@ -88,4 +88,20 @@ public class ReservationService {
         return checkInsToday;
     }
 
+    // get name, nif and room number of today's check-outs
+    public List<CheckInTodayResponse> getCheckOutsToday() {
+        List<CheckInTodayResponse> checkOutsToday = new ArrayList<>();
+        List<Object[]> checkOutsTodayObjects = reservationRepository.getCheckOutsToday();
+
+        for (Object[] checkOutsTodayObject : checkOutsTodayObjects) {
+            CheckInTodayResponse checkOutsTodayResponse = new CheckInTodayResponse();
+            checkOutsTodayResponse.setReservation_id((Long) checkOutsTodayObject[0]);
+            checkOutsTodayResponse.setName((String) checkOutsTodayObject[1]);
+            checkOutsTodayResponse.setNif((String) checkOutsTodayObject[2]);
+            checkOutsTodayResponse.setRoom_id((Long) checkOutsTodayObject[3]);
+            checkOutsToday.add(checkOutsTodayResponse);
+        }
+
+        return checkOutsToday;
+    }
 }
