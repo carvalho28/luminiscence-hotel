@@ -15,10 +15,17 @@ import ReactEChart from "echarts-for-react";
 import {useEffect, useState} from "react";
 import {serverUrl} from "./App";
 
+type PeopleReservation = {
+    value: number,
+    name: string,
+}
+
 export default function Statistics() {
 
     const [popularRoomsIds, setPopularRoomsIds] = useState([]);
     const [popularRoomsValues, setPopularRoomsValues] = useState([]);
+
+    const [numberOfReservations, setNumberOfReservations] = useState<PeopleReservation[]>([]);
 
     useEffect(() => {
         const getMostPopularRooms = async () => {
@@ -39,7 +46,33 @@ export default function Statistics() {
                     }
                 );
         }
+        const getMostReservationPeople = async () => {
+            fetch(`${serverUrl}/reservation/count/people`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                        // numberOfReservationsByPersonNames(data.map((person: any) => person.name));
+                        // numberOfReservationsByPersonValues(data.map((person: any) => person.person_count));
+                        setNumberOfReservations(data.map((person: any) => {
+                            return {
+                                value: person.person_count,
+                                name: person.name
+                            }
+                        }));
+
+                    }
+                )
+                .catch((error) => {
+                        console.error('Error:', error);
+                    }
+                );
+        }
         getMostPopularRooms();
+        getMostReservationPeople();
     }, []);
 
     useEffect(() => {
@@ -101,13 +134,14 @@ export default function Statistics() {
                 name: 'Access From',
                 type: 'pie',
                 radius: '50%',
-                data: [
-                    {value: 3, name: 'Zé'},
-                    {value: 5, name: 'Maria Antónia'},
-                    {value: 2, name: 'Email'},
-                    {value: 3, name: 'Union Ads'},
-                    {value: 7, name: 'Adelaide Piedade'}
-                ],
+                // data: [
+                //     {value: 3, name: 'Zé'},
+                //     {value: 5, name: 'Maria Antónia'},
+                //     {value: 2, name: 'Email'},
+                //     {value: 3, name: 'Union Ads'},
+                //     {value: 7, name: 'Adelaide Piedade'}
+                // ],
+                data: numberOfReservations,
                 emphasis: {
                     itemStyle: {
                         shadowBlur: 10,
