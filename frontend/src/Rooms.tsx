@@ -35,8 +35,11 @@ export default function Rooms() {
         // let dates: Date[] = [];
         let startDate = dateRange[0].startDate;
         let endDate = dateRange[0].endDate;
-        console.log(startDate, endDate);
-
+        startDate = addDays(startDate, 1);
+        endDate = addDays(endDate, 1);
+        // add 1 to both dates because the dateRange[0].startDate is the day before the actual start date
+        console.log(startDate.toISOString().slice(0, 10));
+        console.log(endDate.toISOString().slice(0, 10));
     }
 
     useEffect(() => {
@@ -45,8 +48,8 @@ export default function Rooms() {
 
     const getAvailableRooms = async () => {
         console.log(JSON.stringify({
-            startDate: (dateRange[0].startDate).toISOString().slice(0, 10),
-            endDate: (dateRange[0].endDate).toISOString().slice(0, 10),
+            startDate: addDays(dateRange[0].startDate, 1).toISOString().slice(0, 10),
+            endDate: addDays(dateRange[0].endDate, 1).toISOString().slice(0, 10),
         }));
         fetch(`${serverUrl}/room/available`, {
             method: 'POST',
@@ -54,8 +57,8 @@ export default function Rooms() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                startDate: (dateRange[0].startDate).toISOString().slice(0, 10),
-                endDate: (dateRange[0].endDate).toISOString().slice(0, 10),
+                startDate: addDays(dateRange[0].startDate, 1).toISOString().slice(0, 10),
+                endDate: addDays(dateRange[0].endDate, 1).toISOString().slice(0, 10),
             })
         })
             .then(res => res.json())
@@ -97,8 +100,8 @@ export default function Rooms() {
         const state = {
             room_id: room_id,
             price: room_price,
-            start_date: (dateRange[0].startDate).toString(),
-            end_date: (dateRange[0].endDate).toString(),
+            start_date: addDays(dateRange[0].startDate, 1).toISOString().slice(0, 10),
+            end_date: addDays(dateRange[0].endDate, 1).toISOString().slice(0, 10),
         };
         console.log(state);
         navigate('/reservation', {state: state});

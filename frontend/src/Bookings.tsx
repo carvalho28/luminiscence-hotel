@@ -1,10 +1,7 @@
 import {Layout} from "./components/Layout";
 import {
-    Box,
     Center,
     Container,
-    Flex,
-    Img,
     Table,
     TableContainer,
     Tbody,

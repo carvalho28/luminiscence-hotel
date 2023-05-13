@@ -11,7 +11,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -44,4 +46,12 @@ public class RoomController {
 //    public ResponseEntity<Boolean> updateRoom(@RequestBody IdRequest idRequest, TypeRequest typeRequest, PriceRequest priceRequest) {
 //        return ResponseEntity.ok(roomService.updateRoom(idRequest, typeRequest, priceRequest));
 //    }
+
+    // count the number of rooms
+    @GetMapping(path = "/count")
+    public ResponseEntity<Map<String, Object>> countRooms() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("count", roomService.countRooms());
+        return ResponseEntity.ok(response);
+    }
 }

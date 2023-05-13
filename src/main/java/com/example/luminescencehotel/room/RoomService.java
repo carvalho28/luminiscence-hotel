@@ -33,7 +33,6 @@ public class RoomService {
         return roomRepository.findAll();
     }
 
-
     public List<Room> findAvailableRooms(AvailableRoomsRequest availableRoomsRequest) {
         LocalDate startDate = LocalDate.parse(availableRoomsRequest.getStartDate());
         LocalDate endDate = LocalDate.parse(availableRoomsRequest.getEndDate());
@@ -67,4 +66,9 @@ public class RoomService {
 //        }
 //        return false;
 //    }
+
+    // count the number of rooms
+    public Long countRooms() {
+    	return roomRepository.count();
+    }
 }
