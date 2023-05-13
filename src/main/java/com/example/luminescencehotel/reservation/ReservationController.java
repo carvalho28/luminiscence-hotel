@@ -2,6 +2,7 @@ package com.example.luminescencehotel.reservation;
 
 import com.example.luminescencehotel.reservation.request.MakeReservationRequest;
 import com.example.luminescencehotel.reservation.response.AllReservationsResponse;
+import com.example.luminescencehotel.reservation.response.CheckInTodayResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,5 +32,41 @@ public class ReservationController {
     @GetMapping(path = "/all")
     public ResponseEntity<List<AllReservationsResponse>> getAllReservations() {
         return ResponseEntity.ok(reservationService.getAllReservations());
+    }
+
+    // count the number of reservations that took place today
+    @GetMapping(path = "/count/today")
+    public ResponseEntity<Map<String, Object>> countReservationsToday() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("count", reservationService.countReservationsToday());
+        return ResponseEntity.ok(response);
+    }
+
+    // check-ins today
+    @GetMapping(path = "/checkin/today")
+    public ResponseEntity<Map<String, Object>> countCheckInsToday() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("count", reservationService.countCheckinsToday());
+        return ResponseEntity.ok(response);
+    }
+
+    // check-outs today
+    @GetMapping(path = "/checkout/today")
+    public ResponseEntity<Map<String, Object>> countCheckOutsToday() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("count", reservationService.countCheckoutsToday());
+        return ResponseEntity.ok(response);
+    }
+
+    // check in info today
+    @GetMapping(path = "/checkin/info/today")
+    public ResponseEntity<List<CheckInTodayResponse>> getCheckInInfoToday() {
+        return ResponseEntity.ok(reservationService.getCheckInsToday());
+    }
+
+    // check out info today
+    @GetMapping(path = "/checkout/info/today")
+    public ResponseEntity<List<CheckInTodayResponse>> getCheckOutInfoToday() {
+        return ResponseEntity.ok(reservationService.getCheckOutsToday());
     }
 }

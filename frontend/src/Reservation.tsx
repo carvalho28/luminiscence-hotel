@@ -19,6 +19,7 @@ export default function Reservation() {
     const location = useLocation();
     const navigate = useNavigate();
     const {room_id, price, start_date, end_date} = location.state || {};
+    console.log(room_id, price, start_date, end_date);
     useEffect(() => {
         if (!room_id || !price || !start_date || !end_date) {
             navigate("/rooms");
@@ -44,7 +45,7 @@ export default function Reservation() {
         const diffTime = Math.abs(end.getTime() - start.getTime());
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         setNDays(diffDays);
-        setNNights(diffDays - 1);
+        setNNights(Math.abs(diffDays - 1));
     }, []);
 
     useEffect(() => {
@@ -217,7 +218,7 @@ export default function Reservation() {
                                             ml="2"
                                         >
                                             {/*n days &bull; n nights*/}
-                                            {nDays} dias &bull; {nNights} noites &bull; {totalPrice}€
+                                            {nDays} dias &bull; {nNights} noites &bull; {Math.abs(totalPrice)}€
                                         </Box>
                                     </Box>
                                 </Box>
