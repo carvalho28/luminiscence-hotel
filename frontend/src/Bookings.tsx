@@ -10,7 +10,7 @@ import {
     Th,
     Thead,
     Tr,
-    Button, Spinner, Img, Box
+    Button, Spinner, Img, Box, useColorModeValue
 } from "@chakra-ui/react";
 import {useEffect, useState} from "react";
 import {serverUrl} from "./App";
@@ -115,78 +115,93 @@ export default function Bookings() {
                 )}
 
                 <Center>
-                    <TableContainer width={"75%"}>
-                        <Table variant='simple' size={"sm"}>
-                            <Thead>
-                                <Tr>
-                                    <Th>
-                                        <Checkbox
-                                            colorScheme="blue"
-                                            defaultChecked={false}
-                                            isChecked={selectAllChecked}
-                                            onChange={(e) => {
-                                                if (e.target.checked) {
-                                                    setSelectAllChecked(true);
-                                                    setReservationIds(bookings.map((booking: Booking) => booking.reservation_id));
-                                                } else {
-                                                    setSelectAllChecked(false);
-                                                    setReservationIds([]);
-                                                }
-                                            }
-                                            }/>
-                                    </Th>
-                                    <Th>Reservation ID</Th>
-                                    <Th>Check In</Th>
-                                    <Th>Check Out</Th>
-                                    <Th>Room Number</Th>
-                                    <Th>Customer ID</Th>
-                                    <Th>Customer Name</Th>
-                                </Tr>
-                            </Thead>
-                            <Tbody>
-                                {bookings.map((booking: Booking) => (
-                                    <Tr _hover={{cursor: "pointer", bg: "gray.100"}} key={booking.reservation_id}>
-                                        <Td>
-                                            <Checkbox
-                                                colorScheme="blue"
-                                                defaultChecked={false}
-                                                isChecked={selectAllChecked || reservationIds.includes(booking.reservation_id)}
-                                                onChange={(e) => {
-                                                    if (e.target.checked) {
-                                                        setReservationIds([...reservationIds, booking.reservation_id]);
-                                                        if (selectAllChecked) {
+                    <Box
+                        w="90%"
+                        rounded={"sm"}
+                        // mx={[0, 5]}
+                        p={'10'}
+                        overflow={"hidden"}
+                        bg="white"
+                        border={"1px"}
+                        borderColor="black"
+                        boxShadow={useColorModeValue("6px 6px 0 black", "6px 6px 0 cyan")}
+                    >
+                        <Center>
+                            <TableContainer width={"100%"}>
+                                <Table variant='simple' size={"md"}>
+                                    <Thead>
+                                        <Tr>
+                                            <Th>
+                                                <Checkbox
+                                                    colorScheme="blue"
+                                                    defaultChecked={false}
+                                                    isChecked={selectAllChecked}
+                                                    onChange={(e) => {
+                                                        if (e.target.checked) {
+                                                            setSelectAllChecked(true);
+                                                            setReservationIds(bookings.map((booking: Booking) => booking.reservation_id));
+                                                        } else {
                                                             setSelectAllChecked(false);
-                                                        }
-                                                    } else {
-                                                        setReservationIds(reservationIds.filter((id) => id !== booking.reservation_id));
-                                                        if (selectAllChecked) {
-                                                            setSelectAllChecked(false);
+                                                            setReservationIds([]);
                                                         }
                                                     }
-                                                }
-                                                }/>
-                                        </Td>
-                                        <Td>{booking.reservation_id}</Td>
-                                        <Td>
-                                            {booking.start_date}
-                                        </Td>
-                                        <Td>
-                                            {booking.end_date}
-                                        </Td>
-                                        <Td>
-                                            {booking.room_number}
-                                        </Td>
-                                        <Td>
-                                            {booking.customer_id}
-                                        </Td>
-                                        <Td>
-                                            {booking.name}
-                                        </Td>
-                                    </Tr>
-                                ))}
-                            </Tbody>
-                        </Table>
-                    </TableContainer>
+                                                    }/>
+                                            </Th>
+                                            <Th>Reservation ID</Th>
+                                            <Th>Check In</Th>
+                                            <Th>Check Out</Th>
+                                            <Th>Room Number</Th>
+                                            <Th>Customer ID</Th>
+                                            <Th>Customer Name</Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        {bookings.map((booking: Booking) => (
+                                            <Tr _hover={{cursor: "pointer", bg: "gray.100"}}
+                                                key={booking.reservation_id}>
+                                                <Td>
+                                                    <Checkbox
+                                                        colorScheme="blue"
+                                                        defaultChecked={false}
+                                                        isChecked={selectAllChecked || reservationIds.includes(booking.reservation_id)}
+                                                        onChange={(e) => {
+                                                            if (e.target.checked) {
+                                                                setReservationIds([...reservationIds, booking.reservation_id]);
+                                                                if (selectAllChecked) {
+                                                                    setSelectAllChecked(false);
+                                                                }
+                                                            } else {
+                                                                setReservationIds(reservationIds.filter((id) => id !== booking.reservation_id));
+                                                                if (selectAllChecked) {
+                                                                    setSelectAllChecked(false);
+                                                                }
+                                                            }
+                                                        }
+                                                        }/>
+                                                </Td>
+                                                <Td>{booking.reservation_id}</Td>
+                                                <Td>
+                                                    {booking.start_date}
+                                                </Td>
+                                                <Td>
+                                                    {booking.end_date}
+                                                </Td>
+                                                <Td>
+                                                    {booking.room_number}
+                                                </Td>
+                                                <Td>
+                                                    {booking.customer_id}
+                                                </Td>
+                                                <Td>
+                                                    {booking.name}
+                                                </Td>
+                                            </Tr>
+                                        ))}
+                                    </Tbody>
+                                </Table>
+                            </TableContainer>
+                        </Center>
+                    </Box>
                 </Center>
 
                 <Center mt={"20"}>
