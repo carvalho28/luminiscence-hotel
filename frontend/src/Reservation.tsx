@@ -51,7 +51,12 @@ export default function Reservation() {
     useEffect(() => {
         // calculate price
         const total = nNights * price;
-        setTotalPrice(total);
+        if (total == 0) {
+            setTotalPrice(price);
+        } else {
+            setTotalPrice(total);
+
+        }
     }, [nNights]);
 
     const procurarCliente = async () => {
@@ -120,6 +125,7 @@ export default function Reservation() {
                     nif: cliente.nif,
                     startDate: new Date(start_date).toISOString().slice(0, 10),
                     endDate: new Date(end_date).toISOString().slice(0, 10),
+                    totalPrice: totalPrice
                 }
             )
         }).then(res => res.json())
@@ -234,7 +240,8 @@ export default function Reservation() {
                         </Center>
 
                         {showSuccess ? (
-                            <AlertPopup message={"Reserva efetuada com sucesso!"} onClose={() => onPopupCloseSuccess()} title={"Sucesso!"}/>
+                            <AlertPopup message={"Reserva efetuada com sucesso!"} onClose={() => onPopupCloseSuccess()}
+                                        title={"Sucesso!"}/>
                         ) : null}
 
                     </>

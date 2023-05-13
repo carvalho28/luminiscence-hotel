@@ -30,6 +30,7 @@ public class ReservationService {
         Reservation reservation = new Reservation();
         reservation.setStart_date(LocalDate.parse(makeReservationRequest.getStartDate()));
         reservation.setEnd_date(LocalDate.parse(makeReservationRequest.getEndDate()));
+        reservation.setTotal_price(makeReservationRequest.getTotalPrice());
         // Find the user by nif and set it on the reservation
         User user = userRepository.findByNif(makeReservationRequest.getNif()).get(0);
         reservation.setUser(user);
