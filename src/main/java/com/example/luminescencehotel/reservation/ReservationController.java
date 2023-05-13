@@ -32,4 +32,12 @@ public class ReservationController {
     public ResponseEntity<List<AllReservationsResponse>> getAllReservations() {
         return ResponseEntity.ok(reservationService.getAllReservations());
     }
+
+    // count the number of reservations that took place today
+    @GetMapping(path = "/count/today")
+    public ResponseEntity<Map<String, Object>> countReservationsToday() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("count", reservationService.countReservationsToday());
+        return ResponseEntity.ok(response);
+    }
 }

@@ -53,4 +53,9 @@ public class ReservationService {
         return allReservations;
     }
 
+
+    // count the number of reservations that took place today
+    public Long countReservationsToday() {
+    	return reservationRepository.countReservationsToday();
+    }
 }
