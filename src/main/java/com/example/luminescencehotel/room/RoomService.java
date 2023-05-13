@@ -45,14 +45,14 @@ public class RoomService {
         return roomRepository.findAllById(id);
     }
 
-    public Boolean deleteRoom(IdRequest idRequest) {
-        try {
-            roomRepository.delete(roomRepository.findRoomById(idRequest).get(0));
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
-    }
+//    public Boolean deleteRoom(IdRequest idRequest) {
+//        try {
+//            roomRepository.delete(roomRepository.findRoomById(idRequest).get(0));
+//        } catch (Exception e) {
+//            return false;
+//        }
+//        return true;
+//    }
 
 //    public Boolean updateRoom(IdRequest idRequest, TypeRequest typeRequest, PriceRequest priceRequest) {
 //        if(roomRepository.findByRoomId(idRequest).size() != 0) {
