@@ -3,6 +3,8 @@ package com.example.luminescencehotel.reservation;
 import com.example.luminescencehotel.reservation.request.MakeReservationRequest;
 import com.example.luminescencehotel.reservation.response.AllReservationsResponse;
 import com.example.luminescencehotel.reservation.response.CheckInTodayResponse;
+import com.example.luminescencehotel.reservation.response.PeopleCountResponse;
+import com.example.luminescencehotel.reservation.response.RoomCountResponse;
 import com.example.luminescencehotel.room.RoomRepository;
 import com.example.luminescencehotel.user.User;
 import com.example.luminescencehotel.room.Room;
@@ -103,5 +105,27 @@ public class ReservationService {
         }
 
         return checkOutsToday;
+    }
+
+    public List<RoomCountResponse> countReservationsByRoom() {
+        List<RoomCountResponse> roomCounts = new ArrayList<RoomCountResponse>();
+        List<Object[]> roomCountsObj = reservationRepository.countReservationsByRoom();
+
+        for (Object[] obj : roomCountsObj) {
+            RoomCountResponse rcr = new RoomCountResponse((Long) obj[0], (Long) obj[1]);
+            roomCounts.add(rcr);
+        }
+        return roomCounts;
+    }
+
+    public List<PeopleCountResponse> countReservationsByPeople() {
+        List<PeopleCountResponse> peopleCounts = new ArrayList<PeopleCountResponse>();
+        List<Object[]> peopleCountsObj = reservationRepository.countReservationsByPeople();
+
+        for (Object[] obj : peopleCountsObj) {
+            PeopleCountResponse pcr = new PeopleCountResponse((String) obj[0], (Long) obj[1]);
+            peopleCounts.add(pcr);
+        }
+        return peopleCounts;
     }
 }

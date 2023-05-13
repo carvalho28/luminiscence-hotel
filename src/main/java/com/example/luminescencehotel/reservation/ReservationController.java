@@ -3,6 +3,8 @@ package com.example.luminescencehotel.reservation;
 import com.example.luminescencehotel.reservation.request.MakeReservationRequest;
 import com.example.luminescencehotel.reservation.response.AllReservationsResponse;
 import com.example.luminescencehotel.reservation.response.CheckInTodayResponse;
+import com.example.luminescencehotel.reservation.response.PeopleCountResponse;
+import com.example.luminescencehotel.reservation.response.RoomCountResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -68,5 +70,15 @@ public class ReservationController {
     @GetMapping(path = "/checkout/info/today")
     public ResponseEntity<List<CheckInTodayResponse>> getCheckOutInfoToday() {
         return ResponseEntity.ok(reservationService.getCheckOutsToday());
+    }
+
+    @GetMapping(path = "/count/rooms")
+    public ResponseEntity<List<RoomCountResponse>> countReservationsByRoom() {
+        return ResponseEntity.ok(reservationService.countReservationsByRoom());
+    }
+
+    @GetMapping(path = "/count/people")
+    public ResponseEntity<List<PeopleCountResponse>> countReservationsByPeople() {
+        return ResponseEntity.ok(reservationService.countReservationsByPeople());
     }
 }

@@ -17,8 +17,4 @@ public interface UserRepository
 
     // get user by nif
     List<User> findByNif(String nif);
-
-    Boolean updateUser(String nif, String name);
-
-    Boolean deleteUser(String nif);
 }

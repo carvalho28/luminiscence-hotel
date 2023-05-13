@@ -44,14 +44,14 @@ public class UserService implements UserDetailsService {
         return userRepository.findByNif(nifRequest.getNif());
     }
 
-    public Boolean deleteUser(NifRequest nifRequest) {
-        try {
-            userRepository.delete(userRepository.findByNif(nifRequest.toString()).get(0));
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
-    }
+//    public Boolean deleteUser(NifRequest nifRequest) {
+//        try {
+//            userRepository.delete(userRepository.findByNif(nifRequest.toString()).get(0));
+//        } catch (Exception e) {
+//            return false;
+//        }
+//        return true;
+//    }
 
 //    public Boolean updateUser(NifRequest nifRequest, NameRequest nameRequest) {
 //        if(userRepository.findByNif(nifRequest.toString()).size() != 0) {
