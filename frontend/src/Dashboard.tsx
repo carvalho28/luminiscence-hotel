@@ -9,9 +9,16 @@ import {
     Box,
     useColorModeValue,
     Img,
-    Heading,
+    Heading, List, ListIcon, ListItem, Table, Thead, Tr, Th, Tbody, Td, TableContainer,
 } from "@chakra-ui/react";
 import {serverUrl} from "./App";
+
+type Checkin = {
+    reservation_id: number,
+    name: string,
+    nif: string,
+    room_id: number,
+}
 
 export default function Dashboard() {
     const navigate = useNavigate();
@@ -19,25 +26,26 @@ export default function Dashboard() {
     const [nRooms, setNRooms] = useState(0);
     const [nReservationsToday, setNReservationsToday] = useState(0);
     const [nCheckinsToday, setNCheckinsToday] = useState(0);
+    const [checkinsToday, setCheckinsToday] = useState<Checkin[]>([]);
     const [nCheckoutsToday, setNCheckoutsToday] = useState(0);
 
     useEffect(() => {
         const getNRooms = async () => {
-        fetch(`${serverUrl}/room/count`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                setNRooms(data.count);
+            fetch(`${serverUrl}/room/count`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
                 }
-            )
-            .catch((error) => {
-                    console.error('Error:', error);
-                }
-            );
+            })
+                .then(response => response.json())
+                .then(data => {
+                        setNRooms(data.count);
+                    }
+                )
+                .catch((error) => {
+                        console.error('Error:', error);
+                    }
+                );
         }
         const getNReservationsToday = async () => {
             fetch(`${serverUrl}/reservation/count/today`, {
@@ -48,7 +56,7 @@ export default function Dashboard() {
             })
                 .then(response => response.json())
                 .then(data => {
-                    setNReservationsToday(data.count);
+                        setNReservationsToday(data.count);
                     }
                 )
                 .catch((error) => {
@@ -56,9 +64,8 @@ export default function Dashboard() {
                     }
                 );
         }
-
         const getNCheckinsToday = async () => {
-            fetch(`${serverUrl}/reservation/checkin/today`, {
+            fetch(`${serverUrl}/reservation/checkin/info/today`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -66,7 +73,8 @@ export default function Dashboard() {
             })
                 .then(response => response.json())
                 .then(data => {
-                    setNCheckinsToday(data.count);
+                        setNCheckinsToday(data.length);
+                        setCheckinsToday(data);
                     }
                 )
                 .catch((error) => {
@@ -83,7 +91,7 @@ export default function Dashboard() {
             })
                 .then(response => response.json())
                 .then(data => {
-                    setNCheckoutsToday(data.count);
+                        setNCheckoutsToday(data.count);
                     }
                 )
                 .catch((error) => {
@@ -271,6 +279,33 @@ export default function Dashboard() {
                                     </Flex>
                                 </Box>
                             </Flex>
+
+                            <Box p={4}>
+                                <Center>
+                                    <TableContainer width={"100%"}>
+                                        <Table variant='simple' size={"sm"}>
+                                            <Thead>
+                                                <Tr>
+                                                    <Th>Reserva</Th>
+                                                    <Th>Name</Th>
+                                                    <Th>NIF</Th>
+                                                    <Th>Quarto</Th>
+                                                </Tr>
+                                            </Thead>
+                                            <Tbody>
+                                                {checkinsToday.map((reservation) => (
+                                                    <Tr key={reservation.reservation_id}>
+                                                        <Td>{reservation.reservation_id}</Td>
+                                                        <Td>{reservation.name}</Td>
+                                                        <Td>{reservation.nif}</Td>
+                                                        <Td>{reservation.room_id}</Td>
+                                                    </Tr>
+                                                ))}
+                                            </Tbody>
+                                        </Table>
+                                    </TableContainer>
+                                </Center>
+                            </Box>
                         </Box>
                     </Center>
 

@@ -2,6 +2,7 @@ package com.example.luminescencehotel.reservation;
 
 import com.example.luminescencehotel.reservation.request.MakeReservationRequest;
 import com.example.luminescencehotel.reservation.response.AllReservationsResponse;
+import com.example.luminescencehotel.reservation.response.CheckInTodayResponse;
 import com.example.luminescencehotel.room.RoomRepository;
 import com.example.luminescencehotel.user.User;
 import com.example.luminescencehotel.room.Room;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -68,4 +70,22 @@ public class ReservationService {
     public Long countCheckoutsToday() {
     	return reservationRepository.countCheckOutsToday();
     }
+
+    // get name, nif and room number of today's check-ins
+    public List<CheckInTodayResponse> getCheckInsToday() {
+        List<CheckInTodayResponse> checkInsToday = new ArrayList<>();
+        List<Object[]> checkInsTodayObjects = reservationRepository.getCheckInsToday();
+
+        for (Object[] checkInTodayObject : checkInsTodayObjects) {
+            CheckInTodayResponse checkInTodayResponse = new CheckInTodayResponse();
+            checkInTodayResponse.setReservation_id((Long) checkInTodayObject[0]);
+            checkInTodayResponse.setName((String) checkInTodayObject[1]);
+            checkInTodayResponse.setNif((String) checkInTodayObject[2]);
+            checkInTodayResponse.setRoom_id((Long) checkInTodayObject[3]);
+            checkInsToday.add(checkInTodayResponse);
+        }
+
+        return checkInsToday;
+    }
+
 }
