@@ -34,7 +34,7 @@ public class UserController {
         return ResponseEntity.ok(userService.findByNif(nif));
     }
 
-
+//    Return da lista vazia?
 //    @DeleteMapping("/delete")
 //    public ResponseEntity<Boolean> deleteUser(@RequestBody NifRequest nif) {
 //        return ResponseEntity.ok(userService.deleteUser(nif));

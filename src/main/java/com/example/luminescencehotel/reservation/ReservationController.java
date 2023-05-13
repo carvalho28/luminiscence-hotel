@@ -80,5 +80,15 @@ public class ReservationController {
     @GetMapping(path = "/count/people")
     public ResponseEntity<List<PeopleCountResponse>> countReservationsByPeople() {
         return ResponseEntity.ok(reservationService.countReservationsByPeople());
+      
+    // delete reservations by id
+    @DeleteMapping(path = "/delete")
+    public ResponseEntity<Map<String, Object>> deleteReservationById(@RequestBody List<String> reservation_id) {
+        reservationService.deleteMultipleReservations(reservation_id);
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", "ok");
+        response.put("message", "Reservation deleted successfully");
+        return ResponseEntity.ok(response);
+
     }
 }

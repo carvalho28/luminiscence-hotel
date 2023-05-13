@@ -42,6 +42,17 @@ public class RoomController {
 ////        return ResponseEntity.ok(roomService.deleteRoom(idRequest));
 //    }
 //
+
+//    @PostMapping(path = "/room")
+//    public ResponseEntity<List<Room>> getRoomFromId(@RequestBody IdRequest idRequest) {
+//        return ResponseEntity.ok(roomService.findRoomById(idRequest));
+//    }
+//
+//    @DeleteMapping("/delete")
+//    public ResponseEntity<Boolean> deleteRoom(@RequestBody IdRequest idRequest) {
+//        return ResponseEntity.ok(roomService.deleteRoom(idRequest));
+//    }
+
 //    @PostMapping("/update")
 //    public ResponseEntity<Boolean> updateRoom(@RequestBody IdRequest idRequest, TypeRequest typeRequest, PriceRequest priceRequest) {
 ////        return ResponseEntity.ok(roomService.updateRoom(idRequest, typeRequest, priceRequest));
