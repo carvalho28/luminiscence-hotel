@@ -3,8 +3,11 @@ package com.example.luminescencehotel.room;
 import com.example.luminescencehotel.reservation.Reservation;
 import com.example.luminescencehotel.room.request.AvailableRoomsRequest;
 import com.example.luminescencehotel.room.request.IdRequest;
+import com.example.luminescencehotel.room.request.PriceRequest;
+import com.example.luminescencehotel.room.request.TypeRequest;
 import com.example.luminescencehotel.user.User;
 import com.example.luminescencehotel.user.UserRole;
+import com.example.luminescencehotel.user.request.NameRequest;
 import com.example.luminescencehotel.user.request.NifRequest;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -16,9 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Array;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -45,27 +46,40 @@ public class RoomService {
         return roomRepository.findAllById(id);
     }
 
-//    public Boolean deleteRoom(IdRequest idRequest) {
-//        try {
-//            roomRepository.delete(roomRepository.findRoomById(idRequest).get(0));
-//        } catch (Exception e) {
-//            return false;
-//        }
-//        return true;
-//    }
+    public Map<String, String> deleteRoom(IdRequest idRequest) {
+        Map<String, String> response = new HashMap<>();
+        try {
+            roomRepository.delete(findRoomById(idRequest).get(0));
+        } catch (Exception e) {
+            response.put("status", "ok");
+            response.put("message", "Room deleted successfully");
+            return response;
+        }
+        response.put("status", "not ok");
+        response.put("message", "There was an error, try again!");
+        return response;
+    }
 
-//    public Boolean updateRoom(IdRequest idRequest, TypeRequest typeRequest, PriceRequest priceRequest) {
-//        if(roomRepository.findByRoomId(idRequest).size() != 0) {
-//            try {
-//                deleteRoom(nifRequest);
-//                //            Add room to db?
-//                return true;
-//            } catch (Exception e) {
-//                return false;
-//            }
-//        }
-//        return false;
-//    }
+    public Map<String, String> updateRoom(IdRequest idRequest, RoomType roomType, PriceRequest priceRequest) {
+        Map<String, String> response = new HashMap<>();
+        if(findRoomById(idRequest).size() != 0) {
+            try {
+                Room r = findRoomById(idRequest).get(0);
+                r.setRoom_type(roomType);
+                r.setPrice(Float.parseFloat(priceRequest.getPrice()));
+                roomRepository.save(r);
+                response.put("status", "ok");
+                response.put("message", "Room updated successfully");
+            } catch (Exception e) {
+                response.put("status", "not ok");
+                response.put("message", "There was an error, try again!");
+            }
+        } else {
+            response.put("status", "not ok");
+            response.put("message", "There was an error, try again!");
+        }
+        return response;
+    }
 
     // count the number of rooms
     public Long countRooms() {

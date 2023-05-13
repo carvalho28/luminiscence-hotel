@@ -51,6 +51,8 @@ export default function Settings() {
             })
         }).then(res => res.json())
             .then(data => {
+                document.getElementById('clientUpdt').removeAttribute("disabled");
+                document.getElementById('clientDlt').removeAttribute("disabled");
                 const {id, name, nif} = data[0];
                 const newCliente: Cliente = {id, name, nif};
                 console.log("new", newCliente);
@@ -58,6 +60,10 @@ export default function Settings() {
             })
     }
     useEffect(() => {
+        document.getElementById('clientUpdt').setAttribute("disabled", "");
+        document.getElementById('clientDlt').setAttribute("disabled", "");
+        document.getElementById('roomUpdt').setAttribute("disabled", "");
+        document.getElementById('roomDlt').setAttribute("disabled", "");
         console.log("cliente", cliente);
     }, [cliente])
 
@@ -74,7 +80,7 @@ export default function Settings() {
         }).then(res => res.json())
             .then(data => {
                 // cliente = null;
-                if (data === true) {
+                if (data[status] === "ok") {
                     document.getElementById("response").innerHTML = "Cliente atualizado com sucesso!";
                 } else {
                     document.getElementById("response").innerHTML = "Houve um problema! Tente de novo!";
@@ -94,7 +100,7 @@ export default function Settings() {
         }).then(res => res.json())
             .then(data => {
                 // cliente = null;
-                if (data === true) {
+                if (data["status"] === "ok") {
                     document.getElementById("response").innerHTML = "Cliente apagado com sucesso!";
                 } else {
                     document.getElementById("response").innerHTML = "Houve um problema! Tente de novo!";
@@ -135,7 +141,7 @@ export default function Settings() {
         }).then(res => res.json())
             .then(data => {
                 // room = null;
-                if (data === true) {
+                if (data["status"] === "ok") {
                     document.getElementById("response").innerHTML = "Quarto atualizado com sucesso!";
                 } else {
                     document.getElementById("response").innerHTML = "Houve um problema! Tente de novo!";
@@ -155,7 +161,7 @@ export default function Settings() {
         }).then(res => res.json())
             .then(data => {
                 // room = null;
-                if (data === true) {
+                if (data["status"] === "ok") {
                     document.getElementById("response").innerHTML = "Quarto apagado com sucesso!";
                 } else {
                     document.getElementById("response").innerHTML = "Houve um problema! Tente de novo!";
@@ -175,55 +181,69 @@ export default function Settings() {
                     <TabList>
                         <Tab>Manage Users</Tab>
                         <Tab>Manage Rooms</Tab>
-                        <Tab>Manage Reservations</Tab>
                     </TabList>
                     <TabPanels>
                         <TabPanel>
+                            <Text mt={"10"} fontSize={"xl"}>Insert a NIF</Text>
                             <Box mt="10">
-                                <Center>
-                                    <InputGroup w="22%" mt={10}>
-                                        <Input type='text' placeholder='Insira o NIF do cliente' maxLength={9} value={nif}
+                                    <InputGroup w="30%" mt={10}>
+                                        <Input type='text' w="70%" mr={5} placeholder='123456789' maxLength={9} value={nif}
                                                onChange={(e) => setNif(e.target.value)}/>
-                                        <Button colorScheme='blue' onClick={procurarCliente}> Procurar</Button>
-                                        <p id={"response"}></p>
+                                        <Button w="80%" colorScheme='blue' onClick={procurarCliente}> Procurar</Button>
+                                        </InputGroup>
+                                <Text mt={10} mb={10} fontSize={"xl"}>Insert a new name</Text>
+                                        <InputGroup>
+                                        <Input disabled type='text' w="32%" mr={5} mb={5} placeholder="John Doe" onChange={(e) => setName(e.target.value)}/>
+                                        </InputGroup>
+                                    <InputGroup>
+                                        <Button id={"clientUpdt"} colorScheme='yellow' mr={5} onClick={atualizarCliente}> Atualizar Nome</Button>
+                                        <Button id={"clientDlt"} colorScheme='red' onClick={apagarCliente}> Eliminar Cliente</Button>
                                     </InputGroup>
-                                </Center>
-                                {cliente ? (
-                                    <center>
-                                        <input type='text' maxLength={9} value={nif} onChange={(e) => setNif(e.target.value)}/>
-                                        <input type='text' value={name} onChange={(e) => setName(e.target.value)}/>
-                                        <Button colorScheme='yellow' onClick={atualizarCliente}> Atualizar Dados</Button>
-                                        <Button colorScheme='red' onClick={apagarCliente}> Eliminar Cliente</Button>
-                                    {/*    TODO: Parte bonita, funcao atualizar*/}
-                                    </center>
-                                ) :  null}
+                                <p id={"response"}></p>
+                                {/*{cliente ? (*/}
+                                {/*    <center>*/}
+                                {/*        <input type='text' maxLength={9} value={nif} onChange={(e) => setNif(e.target.value)}/>*/}
+                                {/*        <input type='text' value={name} onChange={(e) => setName(e.target.value)}/>*/}
+                                {/*        <Button colorScheme='yellow' onClick={atualizarCliente}> Atualizar Dados</Button>*/}
+                                {/*        <Button colorScheme='red' onClick={apagarCliente}> Eliminar Cliente</Button>*/}
+                                {/*    </center>*/}
+                                {/*) :  null}*/}
                             </Box>
                         </TabPanel>
                         <TabPanel>
+                            <Text mt={"10"} fontSize={"xl"}>Insert a room number</Text>
                             <Box mt="10">
-                                <Center>
-                                    <InputGroup w="22%" mt={10}>
-                                        <Input type='text' placeholder='Insira o numero do quarto' value={"1"}
+                                    <InputGroup w="30%" mt={10}>
+                                        <Input type='text' w="70%" placeholder='Room no.' mr={5} value={id}
                                                onChange={(e) => setId(e.target.value)}/>
-                                        <Button colorScheme='blue' onClick={procurarQuarto}> Procurar</Button>
-                                        <p id={"response"}></p>
+                                        <Button w="80%" colorScheme='blue' onClick={procurarQuarto}> Procurar</Button>
                                     </InputGroup>
-                                </Center>
-                                {room ? (
-                                    <center>
-                                        <input type='text' value={"Tipo do quarto"} onChange={(e) => setType(e.target.value)}/>
-                                        <input type='number' value={"100"} onChange={(e) => setPrice(e.target.value)}/>
-                                        <Button colorScheme='yellow' onClick={atualizarQuarto}> Atualizar Dados</Button>
-                                        <Button colorScheme='red' onClick={apagarQuarto}> Eliminar Quarto</Button>
-                                        {/*    TODO: Parte bonita, funcao atualizar*/}
-                                    </center>
-                                ) :  null}
+                                    <InputGroup>
+                                <Text mt={10} mb={10} fontSize={"xl"}>Select a new type and/or price</Text>
+                                </InputGroup>
+                                    <InputGroup>
+                                        <Input disabled type='text' w="32%" mr={5} mb={5} placeholder="Lounge" onChange={(e) => setType(e.target.value)}/>
+                                    </InputGroup>
+                                <InputGroup>
+                                    <Input disabled type='text' w="32%" mr={5} mb={5} placeholder="135.00" onChange={(e) => setPrice(e.target.value)}/>
+                                </InputGroup>
+                                    <InputGroup>
+                                        <Button id={"roomUpdt"} colorScheme='yellow' mr={5} onClick={atualizarQuarto}> Atualizar Quarto</Button>
+                                        <Button id={"roomDlt"} colorScheme='red' onClick={apagarQuarto}> Eliminar Quarto</Button>
+                                    </InputGroup>
+                                <p id={"response"}></p>
+                                {/*{room ? (*/}
+                                {/*    <center>*/}
+                                {/*        <input type='text' value={"Tipo do quarto"} onChange={(e) => setType(e.target.value)}/>*/}
+                                {/*        <input type='number' value={"100"} onChange={(e) => setPrice(e.target.value)}/>*/}
+                                {/*        <Button colorScheme='yellow' onClick={atualizarQuarto}> Atualizar Dados</Button>*/}
+                                {/*        <Button colorScheme='red' onClick={apagarQuarto}> Eliminar Quarto</Button>*/}
+                                {/*        /!*    TODO: Parte bonita, funcao atualizar*!/*/}
+                                {/*    </center>*/}
+                                {/*) :  null}*/}
+                            {/*    TODO: Spinner, responses and testing on browser*/}
                             </Box>
                         </TabPanel>
-                        {/*<TabPanel>*/}
-                        {/*    <Box mt="10">*/}
-                        {/*    </Box>*/}
-                        {/*</TabPanel>*/}
                     </TabPanels>
                 </Tabs>{" "}
             </Container>

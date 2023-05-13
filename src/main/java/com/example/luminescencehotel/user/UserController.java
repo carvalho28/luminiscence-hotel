@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -35,15 +36,15 @@ public class UserController {
     }
 
 
-//    @DeleteMapping("/delete")
-//    public ResponseEntity<Boolean> deleteUser(@RequestBody NifRequest nif) {
-//        return ResponseEntity.ok(userService.deleteUser(nif));
-//    }
+    @DeleteMapping("/delete")
+    public ResponseEntity<Map<String, String>> deleteUser(@RequestBody NifRequest nif) {
+        return ResponseEntity.ok(userService.deleteUser(nif));
+    }
 
-//    @PostMapping("/update")
-//    public ResponseEntity<Boolean> updateUser(@RequestBody NifRequest nif, NameRequest nameRequest) {
-//        return ResponseEntity.ok(UserService.updateUser(nif, nameRequest));
-//    }
+    @PostMapping("/update")
+    public ResponseEntity<Map<String, String>> updateUser(@RequestBody NifRequest nif, NameRequest nameRequest) {
+        return ResponseEntity.ok(userService.updateUser(nif, nameRequest));
+    }
 
     // create customer
     @PostMapping("/create")
