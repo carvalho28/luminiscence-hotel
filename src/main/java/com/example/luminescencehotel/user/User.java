@@ -2,6 +2,7 @@ package com.example.luminescencehotel.user;
 
 import com.example.luminescencehotel.reservation.Reservation;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

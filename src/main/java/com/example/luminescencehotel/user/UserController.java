@@ -1,6 +1,8 @@
 package com.example.luminescencehotel.user;
 
 import com.example.luminescencehotel.user.request.NameRequest;
+import com.example.luminescencehotel.user.request.NewCustomerRequest;
+
 import com.example.luminescencehotel.user.request.NifRequest;
 import com.example.luminescencehotel.user.request.RoleRequest;
 import lombok.AllArgsConstructor;
@@ -43,4 +45,9 @@ public class UserController {
 //        return ResponseEntity.ok(UserService.updateUser(nif, nameRequest));
 //    }
 
+    // create customer
+    @PostMapping("/create")
+    public ResponseEntity<User> createUser(@RequestBody NewCustomerRequest newCustomerRequest) {
+        return ResponseEntity.ok(userService.createUser(newCustomerRequest));
+    }
 }

@@ -164,7 +164,7 @@ export default function Settings() {
     }
 
     return (
-        <Layout>
+        <Layout selected="Settings">
             <Container maxW="container.xl" mt="10">
                 <Center>
                     <Text fontSize="3xl" as="b">

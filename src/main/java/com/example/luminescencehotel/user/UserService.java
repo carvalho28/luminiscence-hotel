@@ -1,6 +1,7 @@
 package com.example.luminescencehotel.user;
 
 import com.example.luminescencehotel.user.request.NameRequest;
+import com.example.luminescencehotel.user.request.NewCustomerRequest;
 import com.example.luminescencehotel.user.request.NifRequest;
 import com.example.luminescencehotel.user.request.RoleRequest;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -62,4 +65,15 @@ public class UserService implements UserDetailsService {
 //        }
 //        return false;
 //    }
+    // create user
+    public User createUser(NewCustomerRequest newCustomerRequest) {
+        User user = new User();
+        user.setName(newCustomerRequest.getName());
+        user.setUsername("");
+        user.setPassword("");
+        user.setNif(newCustomerRequest.getNif());
+        user.setRole(UserRole.CUSTOMER);
+        user.setCreated_at(LocalDate.now());
+        return userRepository.save(user);
+    }
 }

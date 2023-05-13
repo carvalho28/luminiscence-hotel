@@ -23,7 +23,7 @@ export default function Dashboard() {
   // }, []);
 
   return (
-    <Layout>
+    <Layout selected="Dashboard">
       <Container maxW="container.xl" mt="10">
         <Center>
           <Text fontSize="3xl" as="b">
