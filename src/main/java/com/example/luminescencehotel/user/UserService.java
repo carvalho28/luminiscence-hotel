@@ -1,5 +1,6 @@
 package com.example.luminescencehotel.user;
 
+import com.example.luminescencehotel.user.request.NameRequest;
 import com.example.luminescencehotel.user.request.NewCustomerRequest;
 import com.example.luminescencehotel.user.request.NifRequest;
 import com.example.luminescencehotel.user.request.RoleRequest;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -44,6 +44,27 @@ public class UserService implements UserDetailsService {
         return userRepository.findByNif(nifRequest.getNif());
     }
 
+    public Boolean deleteUser(NifRequest nifRequest) {
+        try {
+            userRepository.delete(userRepository.findByNif(nifRequest.toString()).get(0));
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+//    public Boolean updateUser(NifRequest nifRequest, NameRequest nameRequest) {
+//        if(userRepository.findByNif(nifRequest.toString()).size() != 0) {
+//            try {
+//                deleteUser(nifRequest);
+//                //            Add user to db?
+//                return true;
+//            } catch (Exception e) {
+//                return false;
+//            }
+//        }
+//        return false;
+//    }
     // create user
     public User createUser(NewCustomerRequest newCustomerRequest) {
         User user = new User();
