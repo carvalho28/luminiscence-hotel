@@ -35,10 +35,10 @@ public class UserController {
     }
 
 //    Return da lista vazia?
-    @DeleteMapping("/delete")
-    public ResponseEntity<Boolean> deleteUser(@RequestBody NifRequest nif) {
-        return ResponseEntity.ok(userService.deleteUser(nif));
-    }
+//    @DeleteMapping("/delete")
+//    public ResponseEntity<Boolean> deleteUser(@RequestBody NifRequest nif) {
+//        return ResponseEntity.ok(userService.deleteUser(nif));
+//    }
 
 //    @PostMapping("/update")
 //    public ResponseEntity<Boolean> updateUser(@RequestBody NifRequest nif, NameRequest nameRequest) {
