@@ -28,9 +28,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long>{
     @Query("SELECT r.reservation_id, r.user.name, r.user.nif, r.room.room_id FROM Reservation r WHERE r.end_date = CURRENT_DATE")
     List<Object[]> getCheckOutsToday();
 
-    @Query("SELECT r.room.room_id, count(r.room.room_id) FROM Reservation r ORDER BY r.room.room_id")
+    @Query("SELECT r.room.room_id, count(r.room.room_id) FROM Reservation r GROUP BY r.room.room_id")
     List<Object[]> countReservationsByRoom();
 
-    @Query("SELECT r.user.name, count(r.user.name) FROM Reservation r ORDER BY r.user.name")
+    @Query("SELECT r.user.name, count(r.user.name) FROM Reservation r GROUP BY r.user.name")
     List<Object[]> countReservationsByPeople();
 }
