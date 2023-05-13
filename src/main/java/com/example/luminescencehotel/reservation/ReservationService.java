@@ -58,4 +58,14 @@ public class ReservationService {
     public Long countReservationsToday() {
     	return reservationRepository.countReservationsToday();
     }
+
+    // count checkins for today
+    public Long countCheckinsToday() {
+    	return reservationRepository.countCheckInsToday();
+    }
+
+    // count checkouts for today
+    public Long countCheckoutsToday() {
+    	return reservationRepository.countCheckOutsToday();
+    }
 }

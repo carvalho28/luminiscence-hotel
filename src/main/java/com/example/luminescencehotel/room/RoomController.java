@@ -33,4 +33,5 @@ public class RoomController {
         response.put("count", roomService.countRooms());
         return ResponseEntity.ok(response);
     }
+
 }

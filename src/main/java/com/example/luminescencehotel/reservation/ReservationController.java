@@ -40,4 +40,21 @@ public class ReservationController {
         response.put("count", reservationService.countReservationsToday());
         return ResponseEntity.ok(response);
     }
+
+    // check-ins today
+    @GetMapping(path = "/checkin/today")
+    public ResponseEntity<Map<String, Object>> countCheckInsToday() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("count", reservationService.countCheckinsToday());
+        return ResponseEntity.ok(response);
+    }
+
+    // check-outs today
+    @GetMapping(path = "/checkout/today")
+    public ResponseEntity<Map<String, Object>> countCheckOutsToday() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("count", reservationService.countCheckoutsToday());
+        return ResponseEntity.ok(response);
+    }
+
 }
