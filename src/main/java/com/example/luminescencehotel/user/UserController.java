@@ -1,5 +1,6 @@
 package com.example.luminescencehotel.user;
 
+import com.example.luminescencehotel.user.request.NameRequest;
 import com.example.luminescencehotel.user.request.NifRequest;
 import com.example.luminescencehotel.user.request.RoleRequest;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -31,14 +33,14 @@ public class UserController {
     }
 
 //    Return da lista vazia?
-//    @DeleteMapping("/delete")
-//    public ResponseEntity<List<User>> deleteUser(@RequestBody NifRequest nif) {
-//        return ResponseEntity.ok(userService.deleteUser(nif));
-//    }
-//
+    @DeleteMapping("/delete")
+    public ResponseEntity<Boolean> deleteUser(@RequestBody NifRequest nif) {
+        return ResponseEntity.ok(userService.deleteUser(nif));
+    }
+
 //    @PostMapping("/update")
-//    public ResponseEntity<List<User>> updateUser(@RequestBody NifRequest nif, User u) {
-//        return ResponseEntity.ok(UserService.updateUser(nif, u));
+//    public ResponseEntity<Boolean> updateUser(@RequestBody NifRequest nif, NameRequest nameRequest) {
+//        return ResponseEntity.ok(UserService.updateUser(nif, nameRequest));
 //    }
 
 }
