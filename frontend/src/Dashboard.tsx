@@ -24,7 +24,6 @@ export default function Dashboard() {
     const navigate = useNavigate();
 
     const [nRooms, setNRooms] = useState(0);
-    const [nReservationsToday, setNReservationsToday] = useState(0);
     const [nCheckinsToday, setNCheckinsToday] = useState(0);
     const [checkinsToday, setCheckinsToday] = useState<Checkin[]>([]);
     const [checkoutsToday, setCheckoutsToday] = useState<Checkin[]>([]);
@@ -41,23 +40,6 @@ export default function Dashboard() {
                 .then(response => response.json())
                 .then(data => {
                         setNRooms(data.count);
-                    }
-                )
-                .catch((error) => {
-                        console.error('Error:', error);
-                    }
-                );
-        }
-        const getNReservationsToday = async () => {
-            fetch(`${serverUrl}/reservation/count/today`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                        setNReservationsToday(data.count);
                     }
                 )
                 .catch((error) => {
@@ -102,13 +84,12 @@ export default function Dashboard() {
                 );
         }
         getNRooms();
-        getNReservationsToday();
         getNCheckinsToday();
         getNCheckoutsToday();
     }, []);
 
     useEffect(() => {
-    }, [nRooms, nReservationsToday]);
+    }, [nRooms, checkinsToday, checkoutsToday]);
 
     // useEffect(() => {
     //   if (!verifyAuth()) {
@@ -180,53 +161,53 @@ export default function Dashboard() {
                         </Box>
                     </Center>
 
-                    <Center py={6}>
-                        <Box
-                            w="md"
-                            rounded={"sm"}
-                            my={5}
-                            mx={[0, 5]}
-                            overflow={"hidden"}
-                            bg="white"
-                            border={"1px"}
-                            borderColor="black"
-                            boxShadow={useColorModeValue("6px 6px 0 black", "6px 6px 0 cyan")}
-                        >
-                            <Flex
-                                justifyContent={"space-between"}
-                                alignItems={"center"}
-                                flexDir={"row"}
-                                p={2}
-                            >
-                                <Box p={4} w="50%">
-                                    <Img
-                                        src={
-                                            "https://cdn.pixabay.com/photo/2021/02/03/00/10/receptionists-5975962_1280.jpg"
-                                        }
-                                        roundedTop={"sm"}
-                                        objectFit="cover"
-                                        h="full"
-                                        w="auto"
-                                        alt={"Blog Image"}
-                                    />
-                                </Box>
-                                <Box p={4}>
-                                    <Flex
-                                        justifyContent={"space-between"}
-                                        alignItems={"center"}
-                                        flexDir={"column"}
-                                    >
-                                        <Heading color={"black"} fontSize={"2xl"} noOfLines={1}>
-                                            Reservas Hoje
-                                        </Heading>
-                                        <Text color={"gray.500"} noOfLines={2} fontSize={"4xl"}>
-                                            {nReservationsToday}
-                                        </Text>
-                                    </Flex>
-                                </Box>
-                            </Flex>
-                        </Box>
-                    </Center>
+                    {/*<Center py={6}>*/}
+                    {/*    <Box*/}
+                    {/*        w="md"*/}
+                    {/*        rounded={"sm"}*/}
+                    {/*        my={5}*/}
+                    {/*        mx={[0, 5]}*/}
+                    {/*        overflow={"hidden"}*/}
+                    {/*        bg="white"*/}
+                    {/*        border={"1px"}*/}
+                    {/*        borderColor="black"*/}
+                    {/*        boxShadow={useColorModeValue("6px 6px 0 black", "6px 6px 0 cyan")}*/}
+                    {/*    >*/}
+                    {/*        <Flex*/}
+                    {/*            justifyContent={"space-between"}*/}
+                    {/*            alignItems={"center"}*/}
+                    {/*            flexDir={"row"}*/}
+                    {/*            p={2}*/}
+                    {/*        >*/}
+                    {/*            <Box p={4} w="50%">*/}
+                    {/*                <Img*/}
+                    {/*                    src={*/}
+                    {/*                        "https://cdn.pixabay.com/photo/2021/02/03/00/10/receptionists-5975962_1280.jpg"*/}
+                    {/*                    }*/}
+                    {/*                    roundedTop={"sm"}*/}
+                    {/*                    objectFit="cover"*/}
+                    {/*                    h="full"*/}
+                    {/*                    w="auto"*/}
+                    {/*                    alt={"Blog Image"}*/}
+                    {/*                />*/}
+                    {/*            </Box>*/}
+                    {/*            <Box p={4}>*/}
+                    {/*                <Flex*/}
+                    {/*                    justifyContent={"space-between"}*/}
+                    {/*                    alignItems={"center"}*/}
+                    {/*                    flexDir={"column"}*/}
+                    {/*                >*/}
+                    {/*                    <Heading color={"black"} fontSize={"2xl"} noOfLines={1}>*/}
+                    {/*                        Reservas Hoje*/}
+                    {/*                    </Heading>*/}
+                    {/*                    <Text color={"gray.500"} noOfLines={2} fontSize={"4xl"}>*/}
+                    {/*                        {nReservationsToday}*/}
+                    {/*                    </Text>*/}
+                    {/*                </Flex>*/}
+                    {/*            </Box>*/}
+                    {/*        </Flex>*/}
+                    {/*    </Box>*/}
+                    {/*</Center>*/}
                 </Flex>
 
                 <Flex
