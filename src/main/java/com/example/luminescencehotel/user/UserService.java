@@ -5,6 +5,8 @@ import com.example.luminescencehotel.user.request.NewCustomerRequest;
 import com.example.luminescencehotel.user.request.NifRequest;
 import com.example.luminescencehotel.user.request.RoleRequest;
 import lombok.AllArgsConstructor;
+import org.apache.coyote.Response;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -44,27 +48,40 @@ public class UserService implements UserDetailsService {
         return userRepository.findByNif(nifRequest.getNif());
     }
 
-//    public Boolean deleteUser(NifRequest nifRequest) {
-//        try {
-//            userRepository.delete(userRepository.findByNif(nifRequest.toString()).get(0));
-//        } catch (Exception e) {
-//            return false;
-//        }
-//        return true;
-//    }
+    public Map<String, String> deleteUser(NifRequest nifRequest) {
+        Map<String, String> response = new HashMap<>();
+        try {
+            userRepository.delete(userRepository.findByNif(nifRequest.toString()).get(0));
+        } catch (Exception e) {
+            response.put("status", "ok");
+            response.put("message", "User deleted successfully");
+            return response;
+        }
+        response.put("status", "not ok");
+        response.put("message", "There was an error, try again!");
+        return response;
+    }
 
-//    public Boolean updateUser(NifRequest nifRequest, NameRequest nameRequest) {
-//        if(userRepository.findByNif(nifRequest.toString()).size() != 0) {
-//            try {
-//                deleteUser(nifRequest);
-//                //            Add user to db?
-//                return true;
-//            } catch (Exception e) {
-//                return false;
-//            }
-//        }
-//        return false;
-//    }
+    public Map<String, String> updateUser(NifRequest nifRequest, NameRequest nameRequest) {
+        Map<String, String> response = new HashMap<>();
+        if (userRepository.findByNif(nifRequest.toString()).size() != 0) {
+            try {
+                User u = userRepository.findByNif(nifRequest.getNif()).get(0);
+                u.setName(nameRequest.getName());
+                userRepository.save(u);
+                response.put("status", "ok");
+                response.put("message", "User updated successfully");
+            } catch (Exception e) {
+                response.put("status", "not ok");
+                response.put("message", "There was an error, try again!");
+            }
+        } else {
+            response.put("status", "not ok");
+            response.put("message", "There was an error, try again!");
+        }
+        return response;
+    }
+
     // create user
     public User createUser(NewCustomerRequest newCustomerRequest) {
         User user = new User();
