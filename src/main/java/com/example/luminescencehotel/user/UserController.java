@@ -35,11 +35,15 @@ public class UserController {
         return ResponseEntity.ok(userService.findByNif(nif));
     }
 
-
     @DeleteMapping("/delete")
     public ResponseEntity<Map<String, String>> deleteUser(@RequestBody NifRequest nif) {
         return ResponseEntity.ok(userService.deleteUser(nif));
     }
+//    Return da lista vazia?
+//    @DeleteMapping("/delete")
+//    public ResponseEntity<Boolean> deleteUser(@RequestBody NifRequest nif) {
+//        return ResponseEntity.ok(userService.deleteUser(nif));
+//    }
 
     @PostMapping("/update")
     public ResponseEntity<Map<String, String>> updateUser(@RequestBody NifRequest nif, NameRequest nameRequest) {

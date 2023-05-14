@@ -5,7 +5,7 @@ import {
     Tr,
     Th,
     Td,
-    TableContainer, Spinner,
+    TableContainer, Spinner, useColorModeValue, Box
 } from "@chakra-ui/react";
 import {Layout} from "./components/Layout";
 import {DateRange} from 'react-date-range';
@@ -72,8 +72,7 @@ export default function Rooms() {
         const getRooms7Days = async () => {
             try {
                 await getAvailableRooms();
-            }
-            catch (e) {
+            } catch (e) {
                 console.log(e);
             }
         }
@@ -84,8 +83,7 @@ export default function Rooms() {
         const getRoomsSelectedDates = async () => {
             try {
                 await getAvailableRooms();
-            }
-            catch (e) {
+            } catch (e) {
                 console.log(e);
             }
         }
@@ -139,30 +137,44 @@ export default function Rooms() {
                             </Center>
                         )}
                         <Center mt={"10"} mb={"10"}>
-                            <TableContainer width={"75%"}>
-                                <Table variant='simple' size={"sm"}>
-                                    <Thead>
-                                        <Tr>
-                                            <Th>Room Number</Th>
-                                            <Th>Room Type</Th>
-                                            <Th isNumeric>Price</Th>
-                                        </Tr>
-                                    </Thead>
-                                    <Tbody>
-                                        {rooms.map((room: any) => (
-                                            <Tr onClick={() => handleRoomClick(room.room_id, room.price)}
-                                                _hover={{cursor: "pointer", bg: "gray.100"}}
-                                                key={room.room_id}>
-                                                <Td>{room.room_id}</Td>
-                                                <Td>
-                                                    <BadgeRoom room_type={room.room_type}/>
-                                                </Td>
-                                                <Td isNumeric>{room.price}</Td>
-                                            </Tr>
-                                        ))}
-                                    </Tbody>
-                                </Table>
-                            </TableContainer>
+                            <Box
+                                w="100%"
+                                rounded={"sm"}
+                                // mx={[0, 5]}
+                                px={'10'}
+                                overflow={"hidden"}
+                                bg="white"
+                                border={"1px"}
+                                borderColor="black"
+                                boxShadow={useColorModeValue("6px 6px 0 black", "6px 6px 0 cyan")}
+                            >
+                                <Center mt={"5"} mb={"5"}>
+                                    <TableContainer width={"100%"}>
+                                        <Table variant='simple' size={"md"}>
+                                            <Thead>
+                                                <Tr>
+                                                    <Th>Room Number</Th>
+                                                    <Th>Room Type</Th>
+                                                    <Th isNumeric>Price</Th>
+                                                </Tr>
+                                            </Thead>
+                                            <Tbody>
+                                                {rooms.map((room: any) => (
+                                                    <Tr onClick={() => handleRoomClick(room.room_id, room.price)}
+                                                        _hover={{cursor: "pointer", bg: "gray.100"}}
+                                                        key={room.room_id}>
+                                                        <Td>{room.room_id}</Td>
+                                                        <Td>
+                                                            <BadgeRoom room_type={room.room_type}/>
+                                                        </Td>
+                                                        <Td isNumeric>{room.price}</Td>
+                                                    </Tr>
+                                                ))}
+                                            </Tbody>
+                                        </Table>
+                                    </TableContainer>
+                                </Center>
+                            </Box>
                         </Center>
                     </>
                 )}

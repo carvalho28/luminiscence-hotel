@@ -128,4 +128,11 @@ public class ReservationService {
         }
         return peopleCounts;
     }
+
+    // delete multiple reservations by reservation_id
+//    public void deleteMultipleReservations(List<String> reservationIds) {
+//        List<Reservation> reservations = reservationRepository.findAllById(reservationIds.stream().map(Long::parseLong).collect(Collectors.toList()));
+//        reservationRepository.deleteAll(reservations);
+//
+//    }
 }

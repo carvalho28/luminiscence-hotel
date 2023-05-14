@@ -9,7 +9,7 @@ import {
     Box,
     useColorModeValue,
     Img,
-    Heading, Table, Thead, Tr, Th, Tbody, Td, TableContainer,
+    Heading, Table, Thead, Tr, Th, Tbody, Td, TableContainer, Checkbox,
 } from "@chakra-ui/react";
 import {serverUrl} from "./App";
 
@@ -291,7 +291,6 @@ export default function Dashboard() {
                             </Box>
                         </Box>
                     </Center>
-
 
                     <Center py={6}>
                         <Box

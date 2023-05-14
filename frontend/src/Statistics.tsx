@@ -12,8 +12,40 @@ import {
 } from "@chakra-ui/react";
 
 import ReactEChart from "echarts-for-react";
+import {useEffect, useState} from "react";
+import {serverUrl} from "./App";
 
 export default function Statistics() {
+
+    const [popularRoomsIds, setPopularRoomsIds] = useState([]);
+    const [popularRoomsValues, setPopularRoomsValues] = useState([]);
+
+    useEffect(() => {
+        const getMostPopularRooms = async () => {
+            fetch(`${serverUrl}/reservation/count/rooms`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                        setPopularRoomsIds(data.map((room: any) => "Room " + room.room_id));
+                        setPopularRoomsValues(data.map((room: any) => room.room_count));
+                    }
+                )
+                .catch((error) => {
+                        console.error('Error:', error);
+                    }
+                );
+        }
+        getMostPopularRooms();
+    }, []);
+
+    useEffect(() => {
+        console.log(popularRoomsIds);
+        console.log(popularRoomsValues);
+    }, [popularRoomsIds, popularRoomsValues]);
 
     const option = {
         tooltip: {
@@ -110,13 +142,13 @@ export default function Statistics() {
         },
         yAxis: {
             type: 'category',
-            data: ['Room 4', 'Room 1', 'Room 3', 'Room 2', 'Room 10', 'Room 7']
+            data: popularRoomsIds
         },
         series: [
             {
                 name: 'Number of Reservations',
                 type: 'bar',
-                data: [2, 5, 20, 13, 23, 1]
+                data: popularRoomsValues
             },
         ]
     }
