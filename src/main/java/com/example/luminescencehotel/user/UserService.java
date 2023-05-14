@@ -51,20 +51,20 @@ public class UserService implements UserDetailsService {
     public Map<String, String> deleteUser(NifRequest nifRequest) {
         Map<String, String> response = new HashMap<>();
         try {
-            userRepository.delete(userRepository.findByNif(nifRequest.toString()).get(0));
+            userRepository.delete(userRepository.findByNif(nifRequest.getNif()).get(0));
         } catch (Exception e) {
-            response.put("status", "ok");
-            response.put("message", "User deleted successfully");
+            response.put("status", "not ok");
+            response.put("message", "There was an error, try again!");
             return response;
         }
-        response.put("status", "not ok");
-        response.put("message", "There was an error, try again!");
+        response.put("status", "ok");
+        response.put("message", "User deleted successfully");
         return response;
     }
 
     public Map<String, String> updateUser(NifRequest nifRequest, NameRequest nameRequest) {
         Map<String, String> response = new HashMap<>();
-        if (userRepository.findByNif(nifRequest.toString()).size() != 0) {
+        if (userRepository.findByNif(nifRequest.getNif()).size() != 0) {
             try {
                 User u = userRepository.findByNif(nifRequest.getNif()).get(0);
                 u.setName(nameRequest.getName());
@@ -73,11 +73,11 @@ public class UserService implements UserDetailsService {
                 response.put("message", "User updated successfully");
             } catch (Exception e) {
                 response.put("status", "not ok");
-                response.put("message", "There was an error, try again!");
+                response.put("message", "There was an error 1, try again!");
             }
         } else {
             response.put("status", "not ok");
-            response.put("message", "There was an error, try again!");
+            response.put("message", "There was an error 2, try again!");
         }
         return response;
     }

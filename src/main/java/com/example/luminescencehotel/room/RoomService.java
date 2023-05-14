@@ -42,7 +42,7 @@ public class RoomService {
 
     public List<Room> findRoomById(IdRequest idRequest) {
         ArrayList<Long> id = new ArrayList<>();
-        id.add(idRequest.getId());
+        id.add(Long.parseLong(idRequest.getId()));
         return roomRepository.findAllById(id);
     }
 
@@ -51,12 +51,12 @@ public class RoomService {
         try {
             roomRepository.delete(findRoomById(idRequest).get(0));
         } catch (Exception e) {
-            response.put("status", "ok");
-            response.put("message", "Room deleted successfully");
+            response.put("status", "not ok");
+            response.put("message", "There was an error, try again!");
             return response;
         }
-        response.put("status", "not ok");
-        response.put("message", "There was an error, try again!");
+        response.put("status", "ok");
+        response.put("message", "Room deleted successfully");
         return response;
     }
 

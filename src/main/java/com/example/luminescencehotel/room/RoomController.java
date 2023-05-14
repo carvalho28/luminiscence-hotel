@@ -38,13 +38,13 @@ public class RoomController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<Map<String, String>> deleteRoom(@RequestBody IdRequest idRequest) {
-        return ResponseEntity.ok(roomService.deleteRoom(idRequest));
+    public ResponseEntity<Map<String, String>> deleteRoom(@RequestBody IdRequest id) {
+        return ResponseEntity.ok(roomService.deleteRoom(id));
     }
 
     @PostMapping("/update")
-    public ResponseEntity<Map<String, String>> updateRoom(@RequestBody IdRequest idRequest, RoomType roomType, PriceRequest priceRequest) {
-        return ResponseEntity.ok(roomService.updateRoom(idRequest, roomType, priceRequest));
+    public ResponseEntity<Map<String, String>> updateRoom(@RequestBody IdRequest id, RoomType type, PriceRequest price) {
+        return ResponseEntity.ok(roomService.updateRoom(id, type, price));
     }
 
     // count the number of rooms

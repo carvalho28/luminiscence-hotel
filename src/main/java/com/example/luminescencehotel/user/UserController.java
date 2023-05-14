@@ -42,8 +42,8 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    public ResponseEntity<Map<String, String>> updateUser(@RequestBody NifRequest nif, NameRequest nameRequest) {
-        return ResponseEntity.ok(userService.updateUser(nif, nameRequest));
+    public ResponseEntity<Map<String, String>> updateUser(@RequestBody NifRequest nif, NameRequest name) {
+        return ResponseEntity.ok(userService.updateUser(nif, name));
     }
 
     // create customer
