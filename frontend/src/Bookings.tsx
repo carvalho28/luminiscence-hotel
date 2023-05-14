@@ -33,6 +33,7 @@ export default function Bookings() {
     const [showSpinner, setShowSpinner] = useState(false);
 
     useEffect(() => {
+        setShowSpinnerLoading(true);
         fetch(`${serverUrl}/reservation/all`, {
             method: 'GET',
             headers: {
@@ -41,6 +42,7 @@ export default function Bookings() {
         })
             .then(response => response.json())
             .then(data => {
+                    setShowSpinnerLoading(false);
                     setBookings(data);
                 }
             )
@@ -81,6 +83,8 @@ export default function Bookings() {
         console.log(reservationIds);
         console.log(selectAllChecked);
     }, [reservationIds, selectAllChecked]);
+
+    const [showSpinnerLoading, setShowSpinnerLoading] = useState(false);
 
     return (
         <Layout selected="Bookings">
@@ -128,6 +132,13 @@ export default function Bookings() {
                     >
                         <Center>
                             <TableContainer width={"100%"}>
+                                {showSpinnerLoading ? (
+                                    <Center>
+                                        <Spinner size="xl"/>
+                                    </Center>
+                                ) : (
+                                    <></>
+                                )}
                                 <Table variant='simple' size={"md"}>
                                     <Thead>
                                         <Tr>

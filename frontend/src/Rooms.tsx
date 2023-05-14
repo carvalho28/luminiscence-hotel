@@ -131,11 +131,6 @@ export default function Rooms() {
                 {dateRange[0].startDate && dateRange[0].endDate && (
                     <>
                         <Text fontSize={"xl"}>Available Rooms</Text>
-                        {isLoading && (
-                            <Center>
-                                <Spinner size="xl"/>
-                            </Center>
-                        )}
                         <Center mt={"10"} mb={"10"}>
                             <Box
                                 w="100%"
@@ -150,6 +145,11 @@ export default function Rooms() {
                             >
                                 <Center mt={"5"} mb={"5"}>
                                     <TableContainer width={"100%"}>
+                                        {isLoading && (
+                                            <Center>
+                                                <Spinner size="xl"/>
+                                            </Center>
+                                        )}
                                         <Table variant='simple' size={"md"}>
                                             <Thead>
                                                 <Tr>
