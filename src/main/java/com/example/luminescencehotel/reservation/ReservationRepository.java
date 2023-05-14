@@ -4,6 +4,7 @@ import com.example.luminescencehotel.reservation.response.CheckInTodayResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,4 +34,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long>{
 
     @Query("SELECT r.user.name, count(r.user.name) FROM Reservation r GROUP BY r.user.name")
     List<Object[]> countReservationsByPeople();
+
+    // get monthly revenue for the current year, separated by month
+    @Query("SELECT MONTH(r.start_date), SUM(r.total_price) FROM Reservation r WHERE YEAR(r.start_date) = YEAR(CURRENT_DATE) GROUP BY MONTH(r.start_date)")
+    List<Object[]> getMonthlyRevenue();
 }

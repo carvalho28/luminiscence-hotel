@@ -1,10 +1,7 @@
 package com.example.luminescencehotel.reservation;
 
 import com.example.luminescencehotel.reservation.request.MakeReservationRequest;
-import com.example.luminescencehotel.reservation.response.AllReservationsResponse;
-import com.example.luminescencehotel.reservation.response.CheckInTodayResponse;
-import com.example.luminescencehotel.reservation.response.PeopleCountResponse;
-import com.example.luminescencehotel.reservation.response.RoomCountResponse;
+import com.example.luminescencehotel.reservation.response.*;
 import com.example.luminescencehotel.room.RoomRepository;
 import com.example.luminescencehotel.user.User;
 import com.example.luminescencehotel.room.Room;
@@ -61,17 +58,17 @@ public class ReservationService {
 
     // count the number of reservations that took place today
     public Long countReservationsToday() {
-    	return reservationRepository.countReservationsToday();
+        return reservationRepository.countReservationsToday();
     }
 
     // count checkins for today
     public Long countCheckinsToday() {
-    	return reservationRepository.countCheckInsToday();
+        return reservationRepository.countCheckInsToday();
     }
 
     // count checkouts for today
     public Long countCheckoutsToday() {
-    	return reservationRepository.countCheckOutsToday();
+        return reservationRepository.countCheckOutsToday();
     }
 
     // get name, nif and room number of today's check-ins
@@ -136,4 +133,22 @@ public class ReservationService {
 //        reservationRepository.deleteAll(reservations);
 //
 //    }
+
+    public List<RevenueResponse> getMonthlyRevenue() {
+        List<RevenueResponse> monthlyRevenueList = new ArrayList<>();
+        List<Object[]> monthlyRevenueData = reservationRepository.getMonthlyRevenue();
+
+        for (Object[] data : monthlyRevenueData) {
+            Integer month = Integer.parseInt(data[0].toString());
+            Double revenue = (Double) data[1];
+            RevenueResponse revenueResponse = new RevenueResponse();
+            revenueResponse.setMonth(month);
+            revenueResponse.setRevenue(revenue);
+            monthlyRevenueList.add(revenueResponse);
+        }
+
+
+        return monthlyRevenueList;
+    }
+
 }

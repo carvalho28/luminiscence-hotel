@@ -1,10 +1,7 @@
 package com.example.luminescencehotel.reservation;
 
 import com.example.luminescencehotel.reservation.request.MakeReservationRequest;
-import com.example.luminescencehotel.reservation.response.AllReservationsResponse;
-import com.example.luminescencehotel.reservation.response.CheckInTodayResponse;
-import com.example.luminescencehotel.reservation.response.PeopleCountResponse;
-import com.example.luminescencehotel.reservation.response.RoomCountResponse;
+import com.example.luminescencehotel.reservation.response.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -92,4 +89,11 @@ public class ReservationController {
 //        return ResponseEntity.ok(response);
 //
 //    }
+
+    @GetMapping(path = "/count/money")
+    public ResponseEntity<List<RevenueResponse>> monthRevenue() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("revenue", reservationService.getMonthlyRevenue());
+        return ResponseEntity.ok(reservationService.getMonthlyRevenue());
+    }
 }
