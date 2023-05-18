@@ -1,14 +1,12 @@
 package com.example.luminescencehotel.room;
 
 import com.example.luminescencehotel.reservation.Reservation;
-import com.example.luminescencehotel.room.request.AvailableRoomsRequest;
-import com.example.luminescencehotel.room.request.IdRequest;
-import com.example.luminescencehotel.room.request.PriceRequest;
-import com.example.luminescencehotel.room.request.TypeRequest;
+import com.example.luminescencehotel.room.request.*;
 import com.example.luminescencehotel.user.User;
 import com.example.luminescencehotel.user.UserRole;
 import com.example.luminescencehotel.user.request.NameRequest;
 import com.example.luminescencehotel.user.request.NifRequest;
+import com.example.luminescencehotel.user.request.UserUpdateRequest;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -60,13 +58,17 @@ public class RoomService {
         return response;
     }
 
-    public Map<String, String> updateRoom(IdRequest idRequest, RoomType roomType, PriceRequest priceRequest) {
+    public Map<String, String> updateRoom(RoomUpdateRequest roomUpdateRequest) {
         Map<String, String> response = new HashMap<>();
-        if(findRoomById(idRequest).size() != 0) {
+        System.out.println(roomUpdateRequest.getId());
+        System.out.println(roomUpdateRequest.getType());
+        System.out.println(roomUpdateRequest.getPrice());
+        if(roomUpdateRequest.getId() !=null ) {
             try {
-                Room r = findRoomById(idRequest).get(0);
-                r.setRoom_type(roomType);
-                r.setPrice(Float.parseFloat(priceRequest.getPrice()));
+                Room r = roomRepository.findById(Long.parseLong(roomUpdateRequest.getId())).get();
+                System.out.println(r.getRoom_id());
+                r.setRoom_type(roomUpdateRequest.getType());
+                r.setPrice(Float.parseFloat(roomUpdateRequest.getPrice()));
                 roomRepository.save(r);
                 response.put("status", "ok");
                 response.put("message", "Room updated successfully");

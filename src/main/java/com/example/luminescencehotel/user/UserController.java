@@ -1,10 +1,7 @@
 package com.example.luminescencehotel.user;
 
-import com.example.luminescencehotel.user.request.NameRequest;
-import com.example.luminescencehotel.user.request.NewCustomerRequest;
+import com.example.luminescencehotel.user.request.*;
 
-import com.example.luminescencehotel.user.request.NifRequest;
-import com.example.luminescencehotel.user.request.RoleRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,9 +42,9 @@ public class UserController {
 //        return ResponseEntity.ok(userService.deleteUser(nif));
 //    }
 
-    @PostMapping("/update")
-    public ResponseEntity<Map<String, String>> updateUser(@RequestBody NifRequest nif, NameRequest name) {
-        return ResponseEntity.ok(userService.updateUser(nif, name));
+    @PutMapping("/update")
+    public ResponseEntity<Map<String, String>> updateUser(@RequestBody UserUpdateRequest userUpdateRequest) {
+        return ResponseEntity.ok(userService.updateUser(userUpdateRequest));
     }
 
     // create customer

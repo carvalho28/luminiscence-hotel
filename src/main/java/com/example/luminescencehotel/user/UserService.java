@@ -1,9 +1,6 @@
 package com.example.luminescencehotel.user;
 
-import com.example.luminescencehotel.user.request.NameRequest;
-import com.example.luminescencehotel.user.request.NewCustomerRequest;
-import com.example.luminescencehotel.user.request.NifRequest;
-import com.example.luminescencehotel.user.request.RoleRequest;
+import com.example.luminescencehotel.user.request.*;
 import lombok.AllArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
@@ -62,25 +59,23 @@ public class UserService implements UserDetailsService {
         return response;
     }
 
-    public Map<String, String> updateUser(NifRequest nifRequest, NameRequest nameRequest) {
+    public Map<String, String> updateUser(UserUpdateRequest userUpdateRequest) {
         Map<String, String> response = new HashMap<>();
-        if (userRepository.findByNif(nifRequest.getNif()).size() != 0) {
-            try {
-                User u = userRepository.findByNif(nifRequest.getNif()).get(0);
-                u.setName(nameRequest.getName());
-                userRepository.save(u);
-                response.put("status", "ok");
-                response.put("message", "User updated successfully");
-            } catch (Exception e) {
-                response.put("status", "not ok");
-                response.put("message", "There was an error 1, try again!");
-            }
-        } else {
+        try {
+            User u = userRepository.findByNif(userUpdateRequest.getNif()).get(0);
+            System.out.println(userUpdateRequest.getName());
+            u.setName(userUpdateRequest.getName());
+            System.out.println(u.getName());
+            userRepository.save(u);
+            response.put("status", "ok");
+            response.put("message", "User updated successfully");
+        } catch (Exception e) {
             response.put("status", "not ok");
-            response.put("message", "There was an error 2, try again!");
+            response.put("message", "There was an error 1, try again!");
         }
         return response;
     }
+
 
     // create user
     public User createUser(NewCustomerRequest newCustomerRequest) {

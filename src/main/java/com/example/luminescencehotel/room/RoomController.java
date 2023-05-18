@@ -3,10 +3,7 @@ package com.example.luminescencehotel.room;
 import com.example.luminescencehotel.room.request.AvailableRoomsRequest;
 import com.example.luminescencehotel.room.request.IdRequest;
 import com.example.luminescencehotel.room.request.PriceRequest;
-import com.example.luminescencehotel.room.request.TypeRequest;
-import com.example.luminescencehotel.user.UserService;
-import com.example.luminescencehotel.user.request.NameRequest;
-import com.example.luminescencehotel.user.request.NifRequest;
+import com.example.luminescencehotel.room.request.RoomUpdateRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,9 +39,9 @@ public class RoomController {
         return ResponseEntity.ok(roomService.deleteRoom(id));
     }
 
-    @PostMapping("/update")
-    public ResponseEntity<Map<String, String>> updateRoom(@RequestBody IdRequest id, RoomType type, PriceRequest price) {
-        return ResponseEntity.ok(roomService.updateRoom(id, type, price));
+    @PutMapping("/update")
+    public ResponseEntity<Map<String, String>> updateRoom(@RequestBody RoomUpdateRequest roomUpdateRequest) {
+        return ResponseEntity.ok(roomService.updateRoom(roomUpdateRequest));
     }
 //    @DeleteMapping("/delete")
 //    public ResponseEntity<Boolean> deleteRoom(@RequestBody IdRequest idRequest) {
