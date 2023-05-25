@@ -60,7 +60,7 @@ export default function Login() {
             }
         } catch (e) {
             setShowError(true);
-            setErrorMessage("Could not connect to Database");
+            setErrorMessage("Could not connect to database");
             setShowSpinner(false);
         }
     }
