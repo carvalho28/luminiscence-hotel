@@ -43,22 +43,26 @@ export default function Login() {
 
         setShowError(false);
         setShowSpinner(true);
-        const response = await fetch(`${serverUrl}/auth/login`, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({username, password})
-        });
-
-        if (response.status === 200) {
-            const data = await response.json();
-            localStorage.setItem('token', data.token);
-            navigate('/dashboard');
-        } else {
+        try {
+            const response = await fetch(`${serverUrl}/auth/login`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({username, password})
+            });
+            if (response.status === 200) {
+                const data = await response.json();
+                localStorage.setItem('token', data.token);
+                navigate('/dashboard');
+            } else {
+                setShowError(true);
+                setErrorMessage('Invalid username or password');
+                setShowSpinner(false);
+            }
+        } catch (e) {
             setShowError(true);
-            setErrorMessage('Invalid username or password');
+            setErrorMessage("Could not connect to Database");
             setShowSpinner(false);
         }
-
     }
 
     return (
