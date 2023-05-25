@@ -225,8 +225,6 @@ export default function Reservation() {
                             </Box>
                         </Center>
 
-                        {/*    buttons to confirm and cancel*/
-                        }
                         <Center mt={"10"}>
                             <Button colorScheme='blue' onClick={() => makeReservation()}
                             >Confirmar</Button>
