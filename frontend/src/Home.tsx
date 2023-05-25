@@ -85,10 +85,16 @@ export default function Home() {
                                 mr="4"
                                 p={4}
                             />
-                            <Box>
+                            <Box alignItems={"center"}>
                                 <Text fontSize="lg" fontWeight="bold">
                                     {room.name}
                                 </Text>
+
+                                {/* comments */}
+                                <Text fontSize="md" fontWeight="bold">
+                                    Comments:
+                                </Text>
+
                             </Box>
                         </Flex>
                     ))}
