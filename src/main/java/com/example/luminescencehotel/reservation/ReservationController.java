@@ -142,11 +142,13 @@ public class ReservationController {
 //            return ResponseEntity.ok(response);
 //        }
 //    }
-  
+
+    @PostMapping(path = "/setCheckIn")
     public ResponseEntity<Map<String, String>> setCheckIn(@RequestBody SetCheckedInRequest req) {
         return ResponseEntity.ok(reservationService.setCheckIn(req));
     }
 
+    @PostMapping(path = "/setCheckOut")
     public ResponseEntity<Map<String, String>> setCheckOut(@RequestBody SetCheckedOutRequest req) {
         return ResponseEntity.ok(reservationService.setCheckOut(req));
     }
