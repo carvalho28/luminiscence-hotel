@@ -23,11 +23,11 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long>{
     Long countCheckOutsToday();
 
     // get name, nif and room number of today's check-ins
-    @Query("SELECT r.reservation_id, r.user.name, r.user.nif, r.room.room_id FROM Reservation r WHERE r.start_date = CURRENT_DATE")
+    @Query("SELECT r.reservation_id, r.user.name, r.user.nif, r.room.room_id, r.checked_in, r.checked_out FROM Reservation r WHERE r.start_date = CURRENT_DATE")
     List<Object[]> getCheckInsToday();
 
     // get name, nif and room number of today's check-outs
-    @Query("SELECT r.reservation_id, r.user.name, r.user.nif, r.room.room_id FROM Reservation r WHERE r.end_date = CURRENT_DATE")
+    @Query("SELECT r.reservation_id, r.user.name, r.user.nif, r.room.room_id, r.checked_in, r.checked_out FROM Reservation r WHERE r.end_date = CURRENT_DATE")
     List<Object[]> getCheckOutsToday();
 
     @Query("SELECT r.room.room_id, count(r.room.room_id) FROM Reservation r GROUP BY r.room.room_id")
@@ -38,4 +38,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long>{
 
     @Query("SELECT r FROM Reservation r WHERE r.room.room_type = :roomType ORDER BY r.reservation_id DESC")
     List<Reservation> findMostReservedRoomsByType(@Param("roomType") RoomType roomType);
+
+    @Query("SELECT r FROM Reservation r ORDER BY r.reservation_id DESC")
+    List<Reservation> findAllOrderByIDDesc();
 }

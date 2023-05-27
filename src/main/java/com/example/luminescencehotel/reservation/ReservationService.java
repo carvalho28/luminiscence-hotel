@@ -55,7 +55,7 @@ public class ReservationService {
 
     // get all reservations
     public List<AllReservationsResponse> getAllReservations() {
-        List<Reservation> reservations = reservationRepository.findAll();
+        List<Reservation> reservations = reservationRepository.findAllOrderByIDDesc();
         List<AllReservationsResponse> allReservations = new ArrayList<>();
         for (Reservation reservation : reservations) {
             AllReservationsResponse allReservationsResponse = new AllReservationsResponse();

@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import Layout from "./components/Layout";
-import { Checkbox } from "@chakra-ui/react";
+import {Checkbox} from "@chakra-ui/react";
 import {
     Text,
     Center,
@@ -77,6 +77,7 @@ export default function Dashboard() {
             })
                 .then(response => response.json())
                 .then(data => {
+                        console.log(data);
                         setNCheckoutsToday(data.length);
                         setCheckoutsToday(data);
                     }
@@ -92,6 +93,7 @@ export default function Dashboard() {
     }, []);
 
     useEffect(() => {
+        console.log(checkinsToday);
     }, [nRooms, checkinsToday, checkoutsToday]);
 
     // useEffect(() => {
@@ -280,17 +282,23 @@ export default function Dashboard() {
                                                 </Tr>
                                             </Thead>
                                             <Tbody>
-                                                {checkinsToday.map((reservation) => (
-                                                    <Tr key={reservation.reservation_id}>
-                                                        <Td>{reservation.reservation_id}</Td>
-                                                        <Td>{reservation.name}</Td>
-                                                        <Td>{reservation.nif}</Td>
-                                                        <Td>{reservation.room_id}</Td>
-                                                        <Td>{reservation.checked_in ?
-                                                            <Checkbox isDisabled defaultChecked colorScheme="green"></Checkbox> :
-                                                            <Checkbox isDisabled colorScheme="green"></Checkbox>}</Td>
-                                                    </Tr>
-                                                ))}
+                                                {checkinsToday.length !== 0 && (
+                                                    <>
+                                                        {checkinsToday.map((reservation) => (
+                                                            <Tr key={reservation.reservation_id}>
+                                                                <Td>{reservation.reservation_id}</Td>
+                                                                <Td>{reservation.name}</Td>
+                                                                <Td>{reservation.nif}</Td>
+                                                                <Td>{reservation.room_id}</Td>
+                                                                <Td>{reservation.checked_in ?
+                                                                    <Checkbox defaultChecked
+                                                                              colorScheme="green"></Checkbox> :
+                                                                    <Checkbox
+                                                                        colorScheme="green"></Checkbox>}</Td>
+                                                            </Tr>
+                                                        ))}
+                                                    </>
+                                                )}
                                             </Tbody>
                                         </Table>
                                     </TableContainer>
@@ -358,17 +366,23 @@ export default function Dashboard() {
                                                 </Tr>
                                             </Thead>
                                             <Tbody>
-                                                {checkoutsToday.map((reservation) => (
-                                                    <Tr key={reservation.reservation_id}>
-                                                        <Td>{reservation.reservation_id}</Td>
-                                                        <Td>{reservation.name}</Td>
-                                                        <Td>{reservation.nif}</Td>
-                                                        <Td>{reservation.room_id}</Td>
-                                                        <Td>{reservation.checked_out ?
-                                                            <Checkbox isDisabled defaultChecked colorScheme="green"></Checkbox> :
-                                                            <Checkbox isDisabled colorScheme="green"></Checkbox>}</Td>
-                                                    </Tr>
-                                                ))}
+                                                {checkinsToday.length !== 0 && (
+                                                    <>
+                                                        {checkoutsToday.map((reservation) => (
+                                                            <Tr key={reservation.reservation_id}>
+                                                                <Td>{reservation.reservation_id}</Td>
+                                                                <Td>{reservation.name}</Td>
+                                                                <Td>{reservation.nif}</Td>
+                                                                <Td>{reservation.room_id}</Td>
+                                                                <Td>{reservation.checked_out ?
+                                                                    <Checkbox defaultChecked
+                                                                              colorScheme="green"></Checkbox> :
+                                                                    <Checkbox
+                                                                        colorScheme="green"></Checkbox>}</Td>
+                                                            </Tr>
+                                                        ))}
+                                                    </>
+                                                )}
                                             </Tbody>
                                         </Table>
                                     </TableContainer>
