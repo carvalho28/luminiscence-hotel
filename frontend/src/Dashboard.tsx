@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import Layout from "./components/Layout";
-import { Checkbox, CheckboxGroup } from "@chakra-ui/core";
+import { Checkbox } from "@chakra-ui/react";
 import {
     Text,
     Center,
@@ -287,8 +287,8 @@ export default function Dashboard() {
                                                         <Td>{reservation.nif}</Td>
                                                         <Td>{reservation.room_id}</Td>
                                                         <Td>{reservation.checked_in ?
-                                                            <Checkbox isDisabled defaultIsChecked variantColor="green"></Checkbox> :
-                                                            <Checkbox isDisabled variantColor="green"></Checkbox>}</Td>
+                                                            <Checkbox isDisabled defaultChecked colorScheme="green"></Checkbox> :
+                                                            <Checkbox isDisabled colorScheme="green"></Checkbox>}</Td>
                                                     </Tr>
                                                 ))}
                                             </Tbody>
@@ -365,8 +365,8 @@ export default function Dashboard() {
                                                         <Td>{reservation.nif}</Td>
                                                         <Td>{reservation.room_id}</Td>
                                                         <Td>{reservation.checked_out ?
-                                                            <Checkbox isDisabled defaultIsChecked variantColor="green"></Checkbox> :
-                                                            <Checkbox isDisabled variantColor="green"></Checkbox>}</Td>
+                                                            <Checkbox isDisabled defaultChecked colorScheme="green"></Checkbox> :
+                                                            <Checkbox isDisabled colorScheme="green"></Checkbox>}</Td>
                                                     </Tr>
                                                 ))}
                                             </Tbody>
