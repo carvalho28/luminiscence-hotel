@@ -1,200 +1,485 @@
+import { Layout } from "./components/Layout";
 import {
-    Center, Container, Text, Table,
-    Thead,
-    Tbody,
-    Tr,
-    Th,
-    Td,
-    TableContainer, Spinner, useColorModeValue, Box
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  Box,
+  Button,
+  Center,
+  Container,
+  Input,
+  InputGroup,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  Text,
+  Select,
+  Tr,
+  Td,
+  Checkbox,
 } from "@chakra-ui/react";
-import {Layout} from "./components/Layout";
-import {DateRange} from 'react-date-range';
-import {addDays, subDays} from 'date-fns';
-import {useEffect, useState} from "react";
-import 'react-date-range/dist/styles.css'; // main css file
-import 'react-date-range/dist/theme/default.css';
-import {serverUrl} from "./App";
-import {BadgeRoom} from "./components/BadgeRoom";
-import {useNavigate} from "react-router-dom";
+import ReactEChart from "echarts-for-react";
+import { useEffect, useState } from "react";
+import { serverUrl } from "./App";
+
+type Cliente = {
+  id: number;
+  name: string;
+  nif: string;
+};
+
+type Room = {
+  id: string;
+  type: string;
+  price: string;
+};
+
+const RoomTypes = [
+  "SINGLE",
+  "TWIN",
+  "DOUBLE",
+  "SUITE",
+  "PREMIUM_SUITE",
+  "FAMILY",
+];
 
 export default function Rooms() {
-    const navigate = useNavigate();
+  const [nif, setNif] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [cliente, setCliente] = useState<null | Cliente>(null);
+  const [showError, setShowError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
-    const [rooms, setRooms] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+  const [id, setId] = useState<string>("");
+  const [type, setType] = useState<string>("");
+  const [price, setPrice] = useState<string>("");
+  const [room, setRoom] = useState<null | Room>(null);
 
-
-
-    const [dateRange, setDateRange] = useState([
-        {
-            startDate: new Date(),
-            endDate: addDays(new Date(), 7),
-            key: 'selection'
+  const procurarCliente = async () => {
+    setShowError(false);
+    console.log(nif);
+    console.log("Goinf to fetch");
+    fetch(`${serverUrl}/user/nif`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nif: nif,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.length == 0) {
+          setShowError(true);
+          setErrorMessage("Invalid user NIF");
+        } else {
+          console.log(data);
+          // document.getElementById('clientUpdt').removeAttribute("disabled");
+          // document.getElementById('clientDlt').removeAttribute("disabled");
+          const { id, name, nif } = data[0];
+          console.log("Received client");
+          console.log(name);
+          const newCliente: Cliente = { id, name, nif };
+          console.log("new", newCliente);
+          setCliente(newCliente);
         }
-    ]);
+      });
+  };
+  useEffect(() => {
+    setType("SINGLE");
+  }, [cliente, room]);
 
-    const getDatesFromPicker = () => {
-        // let dates: Date[] = [];
-        console.log(dateRange);
-        let startDate = dateRange[0].startDate.toLocaleDateString();
-        let endDate = dateRange[0].endDate.toLocaleDateString();
-        console.log(startDate);
-        console.log(endDate);
-        // startDate = startDate,
-        // endDate = addDays(endDate, 1);
-        // add 1 to both dates because the dateRange[0].startDate is the day before the actual start date
-        // console.log(startDate.toISOString().slice(0, 10));
-        // console.log(endDate.toISOString().slice(0, 10));
-    }
-
-    useEffect(() => {
-        getDatesFromPicker();
-    }, [dateRange]);
-
-
-    const convertDate = (date: String) => {
-        const parts = date.split("/");
-        const day = parts[0];
-        const month = parts[1];
-        const year = parts[2];
-
-        const dateStr = `${year}-${month}-${day}`;
-
-        return dateStr;
-    }
-
-
-    const getAvailableRooms = async () => {
-        fetch(`${serverUrl}/room/available`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                    startDate: convertDate(dateRange[0].startDate.toLocaleDateString()),
-                    endDate: convertDate(dateRange[0].endDate.toLocaleDateString()),
-                }
-            )
-        })
-            .then(res => res.json())
-            .then(data => {
-                setRooms(data);
-                setIsLoading(false);
-            })
-    }
-
-    useEffect(() => {
-        const getRooms7Days = async () => {
-            try {
-                await getAvailableRooms();
-            } catch (e) {
-                console.log(e);
-            }
+  const atualizarCliente = async () => {
+    setShowError(false);
+    console.log(name + " este e o nome novo");
+    fetch(`${serverUrl}/user/update`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nif: nif,
+        name: name,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // cliente = null;
+        if (data["status"] != "ok") {
+          setShowError(true);
+          setErrorMessage("There was an error! Try again!");
+        } else {
+          console.log(data["nameR"]);
+          console.log(data["User"]);
+          setShowError(true);
+          setErrorMessage("User updated successfully!");
         }
-        getRooms7Days();
-    }, []);
+      });
+  };
 
-    useEffect(() => {
-        const getRoomsSelectedDates = async () => {
-            try {
-                await getAvailableRooms();
-            } catch (e) {
-                console.log(e);
-            }
+  const apagarCliente = async () => {
+    setShowError(false);
+    fetch(`${serverUrl}/user/delete`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nif: nif,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data["status"] != "ok") {
+          setShowError(true);
+          setErrorMessage("There was an error! Try again!");
+        } else {
+          setShowError(true);
+          setErrorMessage("User deleted successfully!");
         }
-        getRoomsSelectedDates();
-    }, [dateRange]);
+      });
+  };
 
-    useEffect(() => {
+  const adicionarQuarto = async () => {
+    setShowError(false);
+    console.log(type);
+    console.log(price);
+    fetch(`${serverUrl}/room/createRoom`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        type: type,
+        price: price,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // room = null;
+        if (data["status"] != "ok") {
+          setShowError(true);
+          setErrorMessage("There was an error! Try again!");
+        } else {
+          setShowError(true);
+          setErrorMessage("Quarto criado com sucesso!");
+        }
+      });
+  };
 
-    }, [rooms]);
+  const procurarQuarto = async () => {
+    setShowError(false);
+    console.log(nif);
+    fetch(`${serverUrl}/room/room`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.length == 0) {
+          setShowError(true);
+          setErrorMessage("Invalid room number!");
+        } else {
+          const { id, type, price } = data[0];
+          const newRoom: Room = { id, type, price };
+          console.log("new", newRoom);
+          setRoom(newRoom);
+        }
+      });
+  };
 
-    const handleRoomClick = (room_id: number, room_price: number) => {
-        const state = {
-            room_id: room_id,
-            price: room_price,
-            start_date: convertDate(dateRange[0].startDate.toLocaleDateString()),
-            end_date: convertDate(dateRange[0].endDate.toLocaleDateString()),
-        };
-        console.log(state);
-        navigate('/reservation', {state: state});
-    }
+  const atualizarQuarto = async () => {
+    setShowError(false);
+    fetch(`${serverUrl}/room/update`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: id,
+        type: type,
+        price: price,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // room = null;
+        if (data.status !== "ok") {
+          setShowError(true);
+          setErrorMessage("There was an error! Try again!");
+        } else {
+          setShowError(true);
+          setErrorMessage("Room updated successfully!");
+        }
+      });
+  };
 
-    return (
-        <Layout selected="Rooms">
-            <Container maxW="container.xl" mt="10">
-                <Center>
-                    <Text fontSize="3xl" as="b">
-                        Rooms
-                    </Text>
-                </Center>
+  const apagarQuarto = async () => {
+    setShowError(false);
+    fetch(`${serverUrl}/user/delete`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // room = null;
+        if (data["status"] != "ok") {
+          setShowError(true);
+          setErrorMessage("There was an error! Try again!");
+        } else {
+          setShowError(true);
+          setErrorMessage("Room deleted successfully!");
+        }
+      });
+  };
 
-                <Text mt={"10"} fontSize={"xl"}>Select a date</Text>
-                <Center mt={"10"} mb={"10"}>
-                    <DateRange
-                        onChange={(item: any) => setDateRange([item.selection])}
-                        showSelectionPreview={true}
-                        moveRangeOnFirstSelection={false}
-                        months={2}
-                        ranges={dateRange}
-                        direction="horizontal"
-                        minDate={new Date()}
-                        maxDate={addDays(new Date(), 365)}
+  return (
+    <Layout selected="Rooms">
+      <Container maxW="container.xl" mt="10">
+        <Center>
+          <Text fontSize="3xl" as="b">
+            Settings
+          </Text>
+        </Center>
+        <Tabs size="lg" variant="enclosed" mt="10">
+          <TabList>
+            <Tab>Manage Users</Tab>
+            <Tab>Manage Rooms</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              {showError && (
+                <Alert status="error">
+                  <AlertIcon />
+                  <AlertTitle mr={2}>{errorMessage}</AlertTitle>
+                </Alert>
+              )}
+              <Text mt={"10"} fontSize={"xl"}>
+                Insert a NIF
+              </Text>
+              <Box mt="10">
+                <InputGroup w="30%" mt={10}>
+                  <Input
+                    type="text"
+                    w="70%"
+                    mr={5}
+                    placeholder="123456789"
+                    maxLength={9}
+                    value={nif}
+                    onChange={(e) => setNif(e.target.value)}
+                  />
+                  <Button w="80%" colorScheme="blue" onClick={procurarCliente}>
+                    {" "}
+                    Procurar
+                  </Button>
+                </InputGroup>
+                {/*<Text mt={10} mb={10} fontSize={"xl"}>Insert a new name</Text>*/}
+                {/*        <InputGroup>*/}
+                {/*        <Input disabled type='text' w="32%" mr={5} mb={5} placeholder="John Doe" onChange={(e) => setName(e.target.value)}/>*/}
+                {/*        </InputGroup>*/}
+                {/*    <InputGroup>*/}
+                {/*        <Button id={"clientUpdt"} colorScheme='yellow' mr={5} onClick={atualizarCliente}> Atualizar Nome</Button>*/}
+                {/*        <Button id={"clientDlt"} colorScheme='red' onClick={apagarCliente}> Eliminar Cliente</Button>*/}
+                {/*    </InputGroup>*/}
+              </Box>
+              <p id={"response"}></p>
+              {cliente ? (
+                <Box mt={10}>
+                  <Text mt={10} mb={10} fontSize={"xl"}>
+                    Insert a new name
+                  </Text>
+                  <InputGroup>
+                    <Input
+                      type="text"
+                      w="32%"
+                      mr={5}
+                      mb={5}
+                      placeholder="John Doe"
+                      onChange={(e) => setName(e.target.value)}
                     />
-                </Center>
-
-                {dateRange[0].startDate && dateRange[0].endDate && (
-                    <>
-                        <Text fontSize={"xl"}>Available Rooms</Text>
-                        <Center mt={"10"} mb={"10"}>
-                            <Box
-                                w="100%"
-                                rounded={"sm"}
-                                // mx={[0, 5]}
-                                px={'10'}
-                                overflow={"hidden"}
-                                bg="white"
-                                border={"1px"}
-                                borderColor="black"
-                                boxShadow={useColorModeValue("6px 6px 0 black", "6px 6px 0 cyan")}
+                  </InputGroup>
+                  <InputGroup>
+                    <Button
+                      id={"clientUpdt"}
+                      colorScheme="yellow"
+                      mr={5}
+                      onClick={atualizarCliente}
+                    >
+                      {" "}
+                      Atualizar Nome
+                    </Button>
+                    <Button
+                      id={"clientDlt"}
+                      colorScheme="red"
+                      onClick={apagarCliente}
+                    >
+                      {" "}
+                      Eliminar Cliente
+                    </Button>
+                  </InputGroup>
+                </Box>
+              ) : null}
+            </TabPanel>
+            <TabPanel>
+              <Tabs size="lg" variant="enclosed" mt="10">
+                <TabList>
+                  <Tab>Add Room</Tab>
+                  <Tab>Update Room</Tab>
+                </TabList>
+                <TabPanels>
+                  <TabPanel>
+                    {showError && (
+                      <Alert status="error">
+                        <AlertIcon />
+                        <AlertTitle mr={2}>{errorMessage}</AlertTitle>
+                      </Alert>
+                    )}
+                    <Text mt={"10"} fontSize={"xl"}>
+                      Insert the new room's type and price
+                    </Text>
+                    <Box mt="10">
+                      <Box mt={10}>
+                        <InputGroup>
+                          <Select
+                            placeholder="SINGLE"
+                            onChange={(e) => setType(e.target.value)}
+                          >
+                            {RoomTypes.map((rtype) => (
+                              <option value={rtype} key={rtype}>
+                                {rtype}
+                              </option>
+                            ))}
+                          </Select>
+                        </InputGroup>
+                        <InputGroup>
+                          <Input
+                            type="number"
+                            w="32%"
+                            mr={5}
+                            mb={5}
+                            placeholder="135.00"
+                            onChange={(e) => setPrice(e.target.value)}
+                          />
+                        </InputGroup>
+                        <InputGroup>
+                          <Button
+                            id={"roomUpdt"}
+                            colorScheme="green"
+                            mr={5}
+                            onClick={adicionarQuarto}
+                          >
+                            {" "}
+                            Adicionar Quarto
+                          </Button>
+                        </InputGroup>
+                        {/*    TODO: Parte bonita, funcao atualizar*/}
+                      </Box>
+                      {/*    TODO: Spinner, responses and testing on browser*/}
+                    </Box>
+                  </TabPanel>
+                  <TabPanel>
+                    {showError && (
+                      <Alert status="error">
+                        <AlertIcon />
+                        <AlertTitle mr={2}>{errorMessage}</AlertTitle>
+                      </Alert>
+                    )}
+                    <Text mt={"10"} fontSize={"xl"}>
+                      Insert a room number
+                    </Text>
+                    <Box mt="10">
+                      <InputGroup w="30%" mt={10}>
+                        <Input
+                          type="text"
+                          w="70%"
+                          placeholder="Room no."
+                          mr={5}
+                          value={id}
+                          onChange={(e) => setId(e.target.value)}
+                        />
+                        <Button
+                          w="80%"
+                          colorScheme="blue"
+                          onClick={procurarQuarto}
+                        >
+                          {" "}
+                          Procurar
+                        </Button>
+                      </InputGroup>
+                      <p id={"response"}></p>
+                      {room ? (
+                        <Box mt={10}>
+                          <InputGroup>
+                            <Text mt={10} mb={10} fontSize={"xl"}>
+                              Select a new type and/or price
+                            </Text>
+                          </InputGroup>
+                          <InputGroup>
+                            <Select
+                              placeholder="SINGLE"
+                              onChange={(e) => setType(e.target.value)}
                             >
-                                <Center mt={"5"} mb={"5"}>
-                                    {isLoading && (
-                                        <Center>
-                                            <Spinner size="xl"/>
-                                        </Center>
-                                    )}
-                                    <TableContainer width={"100%"}>
-                                        <Table variant='simple' size={"md"}>
-                                            <Thead>
-                                                <Tr>
-                                                    <Th>Room Number</Th>
-                                                    <Th>Room Type</Th>
-                                                    <Th isNumeric>Price</Th>
-                                                </Tr>
-                                            </Thead>
-                                            <Tbody>
-                                                {rooms.map((room: any) => (
-                                                    <Tr onClick={() => handleRoomClick(room.room_id, room.price)}
-                                                        _hover={{cursor: "pointer", bg: "gray.100"}}
-                                                        key={room.room_id}>
-                                                        <Td>{room.room_id}</Td>
-                                                        <Td>
-                                                            <BadgeRoom room_type={room.room_type}/>
-                                                        </Td>
-                                                        <Td isNumeric>{room.price}</Td>
-                                                    </Tr>
-                                                ))}
-                                            </Tbody>
-                                        </Table>
-                                    </TableContainer>
-                                </Center>
-                            </Box>
-                        </Center>
-                    </>
-                )}
-
-            </Container>
-        </Layout>
-    )
+                              {RoomTypes.map((rtype) => (
+                                <option value={rtype} key={rtype}>
+                                  {rtype}
+                                </option>
+                              ))}
+                            </Select>
+                          </InputGroup>
+                          <InputGroup>
+                            <Input
+                              type="text"
+                              w="32%"
+                              mr={5}
+                              mb={5}
+                              placeholder="135.00"
+                              onChange={(e) => setPrice(e.target.value)}
+                            />
+                          </InputGroup>
+                          <InputGroup>
+                            <Button
+                              id={"roomUpdt"}
+                              colorScheme="yellow"
+                              mr={5}
+                              onClick={atualizarQuarto}
+                            >
+                              {" "}
+                              Atualizar Quarto
+                            </Button>
+                            <Button
+                              id={"roomDlt"}
+                              colorScheme="red"
+                              onClick={apagarQuarto}
+                            >
+                              {" "}
+                              Eliminar Quarto
+                            </Button>
+                          </InputGroup>
+                          {/*    TODO: Parte bonita, funcao atualizar*/}
+                        </Box>
+                      ) : null}
+                      {/*    TODO: Spinner, responses and testing on browser*/}
+                    </Box>
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>{" "}
+            </TabPanel>
+          </TabPanels>
+        </Tabs>{" "}
+      </Container>
+    </Layout>
+  );
 }
