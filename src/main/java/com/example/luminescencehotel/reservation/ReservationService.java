@@ -167,27 +167,40 @@ public class ReservationService {
 
         // Find the most reserved PREMIUM_SUITE
         List<Reservation> premiumSuiteReservations = reservationRepository.findMostReservedRoomsByType(RoomType.PREMIUM_SUITE);
-        if (!premiumSuiteReservations.isEmpty()) {
-            Reservation mostReservedPremiumSuite = premiumSuiteReservations.get(0);
-            comments.add(mostReservedPremiumSuite.getComment());
+        Reservation firstPremiumSuiteWithComment = findFirstReservationWithComment(premiumSuiteReservations);
+        if (firstPremiumSuiteWithComment != null) {
+            System.out.println(firstPremiumSuiteWithComment.getReservation_id());
+            comments.add(firstPremiumSuiteWithComment.getComment());
         }
 
         // Find the most reserved SUITE
         List<Reservation> suiteReservations = reservationRepository.findMostReservedRoomsByType(RoomType.SUITE);
-        if (!suiteReservations.isEmpty()) {
-            Reservation mostReservedSuite = suiteReservations.get(0);
-            comments.add(mostReservedSuite.getComment());
+        Reservation firstSuiteWithComment = findFirstReservationWithComment(suiteReservations);
+        if (firstSuiteWithComment != null) {
+            System.out.println(firstSuiteWithComment.getReservation_id());
+            comments.add(firstSuiteWithComment.getComment());
         }
 
         // Find the most reserved FAMILY
         List<Reservation> familyReservations = reservationRepository.findMostReservedRoomsByType(RoomType.FAMILY);
-        if (!familyReservations.isEmpty()) {
-            Reservation mostReservedFamily = familyReservations.get(0);
-            comments.add(mostReservedFamily.getComment());
+        Reservation firstFamilyWithComment = findFirstReservationWithComment(familyReservations);
+        if (firstFamilyWithComment != null) {
+            System.out.println(firstFamilyWithComment.getReservation_id());
+            comments.add(firstFamilyWithComment.getComment());
         }
 
         return comments;
     }
+
+    private Reservation findFirstReservationWithComment(List<Reservation> reservations) {
+        for (Reservation reservation : reservations) {
+            if (reservation.getComment() != null) {
+                return reservation;
+            }
+        }
+        return null;
+    }
+
 
     // delete multiple reservations by reservation_id
 //    public void deleteMultipleReservations(List<String> reservationIds) {
