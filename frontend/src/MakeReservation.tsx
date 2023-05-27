@@ -22,6 +22,7 @@ import "react-date-range/dist/theme/default.css";
 import { serverUrl } from "./App";
 import { BadgeRoom } from "./components/BadgeRoom";
 import { useNavigate } from "react-router-dom";
+import {verifyAuth} from "./auth/Authenticator";
 
 export default function MakeReservation() {
   const navigate = useNavigate();
@@ -71,6 +72,7 @@ export default function MakeReservation() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
         startDate: convertDate(dateRange[0].startDate.toLocaleDateString()),
@@ -118,6 +120,12 @@ export default function MakeReservation() {
     console.log(state);
     navigate("/reservation", { state: state });
   };
+
+  useEffect(() => {
+    if (!verifyAuth()) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <Layout selected="Make Reservation">

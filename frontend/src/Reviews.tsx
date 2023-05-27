@@ -68,6 +68,7 @@ export default function Reviews() {
         method: "POST",
         headers: {
           "Content-Type": "application/json; charset=utf-8",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
           id: reservationId,
@@ -121,6 +122,7 @@ export default function Reviews() {
         method: "POST",
         headers: {
           "Content-Type": "application/json; charset=utf-8",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
           id: reservationId,

@@ -14,6 +14,7 @@ import {
 import ReactEChart from "echarts-for-react";
 import { useEffect, useState } from "react";
 import { serverUrl } from "./App";
+import {verifyAuth} from "./auth/Authenticator";
 
 type PeopleReservation = {
   value: number;
@@ -57,6 +58,7 @@ export default function Statistics() {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
         .then((response) => response.json())
@@ -73,6 +75,7 @@ export default function Statistics() {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
         .then((response) => response.json())
@@ -97,6 +100,7 @@ export default function Statistics() {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
         .then((response) => response.json())
@@ -219,6 +223,12 @@ export default function Statistics() {
       },
     ],
   };
+
+  useEffect(() => {
+    if (!verifyAuth()) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <Layout selected="Statistics">

@@ -23,6 +23,8 @@ import {
 import ReactEChart from "echarts-for-react";
 import { useEffect, useState } from "react";
 import { serverUrl } from "./App";
+import {verifyAuth} from "./auth/Authenticator";
+import {useNavigate} from "react-router-dom";
 
 type Cliente = {
   id: number;
@@ -46,6 +48,7 @@ type Cliente = {
 // ];
 
 export default function Users() {
+  const navigate = useNavigate();
   const [nif, setNif] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [cliente, setCliente] = useState<null | Cliente>(null);
@@ -65,6 +68,7 @@ export default function Users() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
         nif: nif,
@@ -88,7 +92,6 @@ export default function Users() {
         }
       });
   };
-  useEffect(() => {}, [cliente]);
 
   const atualizarCliente = async () => {
     setShowError(false);
@@ -97,6 +100,7 @@ export default function Users() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
         nif: nif,
@@ -124,6 +128,7 @@ export default function Users() {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
         nif: nif,
@@ -244,8 +249,14 @@ export default function Users() {
   //       });
   // };
 
+  useEffect(() => {
+    if (!verifyAuth()) {
+      navigate("/");
+    }
+  }, []);
+
   return (
-    <Layout selected="Rooms">
+    <Layout selected="Users">
       <Container maxW="container.xl" mt="10">
         <Center>
           <Text fontSize="4xl" as="b">
