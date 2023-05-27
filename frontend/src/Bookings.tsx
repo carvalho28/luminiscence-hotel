@@ -19,6 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { serverUrl } from "./App";
+import {verifyAuth} from "./auth/Authenticator";
 
 type Booking = {
   reservation_id: number;
@@ -43,6 +44,7 @@ export default function Bookings() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     })
       .then((response) => response.json())
@@ -62,6 +64,7 @@ export default function Bookings() {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify(reservationIds.map((id: number) => id.toString())),
     })
@@ -84,9 +87,10 @@ export default function Bookings() {
   };
 
   useEffect(() => {
-    console.log(reservationIds);
-    console.log(selectAllChecked);
-  }, [reservationIds, selectAllChecked]);
+    if (!verifyAuth()) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <Layout selected="Bookings">

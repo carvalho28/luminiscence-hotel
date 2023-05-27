@@ -24,6 +24,8 @@ import {
 import ReactEChart from "echarts-for-react";
 import { useEffect, useState } from "react";
 import { serverUrl } from "./App";
+import {verifyAuth} from "./auth/Authenticator";
+import {useNavigate} from "react-router-dom";
 
 type Room = {
   id: string;
@@ -41,6 +43,7 @@ const RoomTypes = [
 ];
 
 export default function Rooms() {
+  const navigate = useNavigate();
   const [showError, setShowError] = useState<boolean>(false);
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -62,6 +65,7 @@ export default function Rooms() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
         type: type,
@@ -88,6 +92,7 @@ export default function Rooms() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
         id: id,
@@ -114,6 +119,7 @@ export default function Rooms() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
         id: id,
@@ -141,6 +147,7 @@ export default function Rooms() {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
         id: id,
@@ -158,6 +165,12 @@ export default function Rooms() {
       });
   };
 
+  useEffect(() => {
+    if (!verifyAuth()) {
+      navigate("/");
+    }
+  }, []);
+
   return (
     <Layout selected="Rooms">
       <Container maxW="container.xl" mt="10">
@@ -174,10 +187,10 @@ export default function Rooms() {
           <TabPanels>
             <TabPanel>
               {showError && (
-                  <Alert status="error">
-                    <AlertIcon />
-                    <AlertTitle mr={2}>{errorMessage}</AlertTitle>
-                  </Alert>
+                <Alert status="error">
+                  <AlertIcon />
+                  <AlertTitle mr={2}>{errorMessage}</AlertTitle>
+                </Alert>
               )}
               {showSuccess && (
                   <Alert status="success">
@@ -192,32 +205,32 @@ export default function Rooms() {
                 <Box mt={10}>
                   <InputGroup>
                     <Select
-                        placeholder="SINGLE"
-                        onChange={(e) => setType(e.target.value)}
+                      placeholder="SINGLE"
+                      onChange={(e) => setType(e.target.value)}
                     >
                       {RoomTypes.map((rtype) => (
-                          <option value={rtype} key={rtype}>
-                            {rtype}
-                          </option>
+                        <option value={rtype} key={rtype}>
+                          {rtype}
+                        </option>
                       ))}
                     </Select>
                   </InputGroup>
                   <InputGroup>
                     <Input
-                        type="number"
-                        w="32%"
-                        mr={5}
-                        mb={5}
-                        placeholder="135.00"
-                        onChange={(e) => setPrice(e.target.value)}
+                      type="number"
+                      w="32%"
+                      mr={5}
+                      mb={5}
+                      placeholder="135.00"
+                      onChange={(e) => setPrice(e.target.value)}
                     />
                   </InputGroup>
                   <InputGroup>
                     <Button
-                        id={"roomUpdt"}
-                        colorScheme="green"
-                        mr={5}
-                        onClick={adicionarQuarto}
+                      id={"roomUpdt"}
+                      colorScheme="green"
+                      mr={5}
+                      onClick={adicionarQuarto}
                     >
                       {" "}
                       Adicionar Quarto
@@ -230,10 +243,10 @@ export default function Rooms() {
             </TabPanel>
             <TabPanel>
               {showError && (
-                  <Alert status="error">
-                    <AlertIcon />
-                    <AlertTitle mr={2}>{errorMessage}</AlertTitle>
-                  </Alert>
+                <Alert status="error">
+                  <AlertIcon />
+                  <AlertTitle mr={2}>{errorMessage}</AlertTitle>
+                </Alert>
               )}
               {showSuccess && (
                   <Alert status="success">
@@ -247,73 +260,69 @@ export default function Rooms() {
               <Box mt="10">
                 <InputGroup w="30%" mt={10}>
                   <Input
-                      type="text"
-                      w="70%"
-                      placeholder="Room no."
-                      mr={5}
-                      value={id}
-                      onChange={(e) => setId(e.target.value)}
+                    type="text"
+                    w="70%"
+                    placeholder="Room no."
+                    mr={5}
+                    value={id}
+                    onChange={(e) => setId(e.target.value)}
                   />
-                  <Button
-                      w="80%"
-                      colorScheme="blue"
-                      onClick={procurarQuarto}
-                  >
+                  <Button w="80%" colorScheme="blue" onClick={procurarQuarto}>
                     {" "}
                     Procurar
                   </Button>
                 </InputGroup>
                 <p id={"response"}></p>
                 {room ? (
-                    <Box mt={10}>
-                      <InputGroup>
-                        <Text mt={10} mb={10} fontSize={"xl"}>
-                          Selecione um novo tipo e/ou preço
-                        </Text>
-                      </InputGroup>
-                      <InputGroup>
-                        <Select
-                            placeholder="SINGLE"
-                            onChange={(e) => setType(e.target.value)}
-                        >
-                          {RoomTypes.map((rtype) => (
-                              <option value={rtype} key={rtype}>
-                                {rtype}
-                              </option>
-                          ))}
-                        </Select>
-                      </InputGroup>
-                      <InputGroup>
-                        <Input
-                            type="text"
-                            w="32%"
-                            mr={5}
-                            mb={5}
-                            placeholder="135.00"
-                            onChange={(e) => setPrice(e.target.value)}
-                        />
-                      </InputGroup>
-                      <InputGroup>
-                        <Button
-                            id={"roomUpdt"}
-                            colorScheme="yellow"
-                            mr={5}
-                            onClick={atualizarQuarto}
-                        >
-                          {" "}
-                          Atualizar Quarto
-                        </Button>
-                        <Button
-                            id={"roomDlt"}
-                            colorScheme="red"
-                            onClick={apagarQuarto}
-                        >
-                          {" "}
-                          Eliminar Quarto
-                        </Button>
-                      </InputGroup>
-                      {/*    TODO: Parte bonita, funcao atualizar*/}
-                    </Box>
+                  <Box mt={10}>
+                    <InputGroup>
+                      <Text mt={10} mb={10} fontSize={"xl"}>
+                        Selecione um novo tipo e/ou preço
+                      </Text>
+                    </InputGroup>
+                    <InputGroup>
+                      <Select
+                        placeholder="SINGLE"
+                        onChange={(e) => setType(e.target.value)}
+                      >
+                        {RoomTypes.map((rtype) => (
+                          <option value={rtype} key={rtype}>
+                            {rtype}
+                          </option>
+                        ))}
+                      </Select>
+                    </InputGroup>
+                    <InputGroup>
+                      <Input
+                        type="text"
+                        w="32%"
+                        mr={5}
+                        mb={5}
+                        placeholder="135.00"
+                        onChange={(e) => setPrice(e.target.value)}
+                      />
+                    </InputGroup>
+                    <InputGroup>
+                      <Button
+                        id={"roomUpdt"}
+                        colorScheme="yellow"
+                        mr={5}
+                        onClick={atualizarQuarto}
+                      >
+                        {" "}
+                        Atualizar Quarto
+                      </Button>
+                      <Button
+                        id={"roomDlt"}
+                        colorScheme="red"
+                        onClick={apagarQuarto}
+                      >
+                        {" "}
+                        Eliminar Quarto
+                      </Button>
+                    </InputGroup>
+                    {/*    TODO: Parte bonita, funcao atualizar*/}
+                  </Box>
                 ) : null}
                 {/*    TODO: Spinner, responses and testing on browser*/}
               </Box>

@@ -121,11 +121,12 @@ export default function Home() {
                 <Image
                   src={room.image}
                   alt={room.name}
-                  boxSize="250px"
                   objectFit="cover"
                   borderRadius="md"
                   mr="4"
                   p={4}
+                  justifyContent={"center"}
+                  w={"50%"}
                 />
                 <Box alignItems="center" w="full" p={4} h={"fit-content"}>
                   <Text
@@ -198,7 +199,7 @@ export default function Home() {
               <Image
                 src={room.image}
                 alt={room.name}
-                boxSize="200px"
+                w={"50%"}
                 objectFit="cover"
                 borderRadius="md"
                 mr="4"

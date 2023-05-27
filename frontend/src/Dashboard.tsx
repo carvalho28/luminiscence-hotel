@@ -20,6 +20,7 @@ import {
   TableContainer,
 } from "@chakra-ui/react";
 import { serverUrl } from "./App";
+import {verifyAuth} from "./auth/Authenticator";
 
 type Checkin = {
   reservation_id: number;
@@ -45,6 +46,7 @@ export default function Dashboard() {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
         .then((response) => response.json())
@@ -60,6 +62,7 @@ export default function Dashboard() {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
         .then((response) => response.json())
@@ -76,6 +79,7 @@ export default function Dashboard() {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
         .then((response) => response.json())
@@ -93,18 +97,13 @@ export default function Dashboard() {
     getNCheckoutsToday();
   }, []);
 
-  // useEffect(() => {
-  //   if (!verifyAuth()) {
-  //     navigate("/");
-  //   }
-  // }, []);
-
   const makeCheckin = async (reservationId: number, nif: string) => {
     console.log(reservationId);
     fetch(`${serverUrl}/reservation/setCheckIn`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
         reservation_id: reservationId,
@@ -126,6 +125,7 @@ export default function Dashboard() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
         reservation_id: reservationId,
@@ -141,6 +141,12 @@ export default function Dashboard() {
         console.error("Error:", error);
       });
   };
+
+  useEffect(() => {
+    if (!verifyAuth()) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <Layout selected="Dashboard">

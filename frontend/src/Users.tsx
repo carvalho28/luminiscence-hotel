@@ -24,6 +24,8 @@ import {
 import ReactEChart from "echarts-for-react";
 import { useEffect, useState } from "react";
 import { serverUrl } from "./App";
+import {verifyAuth} from "./auth/Authenticator";
+import {useNavigate} from "react-router-dom";
 
 type Cliente = {
   id: number;
@@ -32,6 +34,7 @@ type Cliente = {
 };
 
 export default function Users() {
+  const navigate = useNavigate();
   const [nif, setNif] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [cliente, setCliente] = useState<null | Cliente>(null);
@@ -46,6 +49,7 @@ export default function Users() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
         nif: nif,
@@ -63,8 +67,6 @@ export default function Users() {
           }
         });
   };
-  useEffect(() => {
-  }, [cliente]);
 
   const atualizarCliente = async () => {
     setShowError(false);
@@ -73,6 +75,7 @@ export default function Users() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
         nif: nif,
@@ -99,23 +102,30 @@ export default function Users() {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
         nif: nif,
       }),
     })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data["status"] != "ok") {
-            setShowError(true);
-            setErrorMessage("Ocorreu um erro! Tente de novo!");
-          } else {
-            setShowError(true);
-            setErrorMessage("Utilizador apagado com sucesso!");
-          }
-        });
+      .then((res) => res.json())
+      .then((data) => {
+        if (data["status"] != "ok") {
+          setShowError(true);
+          setErrorMessage("Ocorreu um erro! Tente de novo!");
+        } else {
+          setShowError(true);
+          setErrorMessage("Utilizador apagado com sucesso!");
+        }
+      });
   };
 
+
+  useEffect(() => {
+    if (!verifyAuth()) {
+      navigate("/");
+    }
+  }, []);
 
   return (
       <Layout selected="Rooms">
@@ -156,17 +166,31 @@ export default function Users() {
                 <Box mt="10">
                   <InputGroup w="30%" mt={10}>
                     <Input
-                        type="text"
-                        w="70%"
-                        mr={5}
-                        placeholder="123456789"
-                        maxLength={9}
-                        value={nif}
-                        onChange={(e) => setNif(e.target.value)}
+                      type="text"
+                      w="32%"
+                      mr={5}
+                      mb={5}
+                      placeholder="John Doe"
+                      onChange={(e) => setName(e.target.value)}
                     />
-                    <Button w="80%" colorScheme="blue" onClick={procurarCliente}>
+                  </InputGroup>
+                  <InputGroup>
+                    <Button
+                      id={"clientUpdt"}
+                      colorScheme="yellow"
+                      mr={5}
+                      onClick={atualizarCliente}
+                    >
                       {" "}
-                      Procurar
+                      Atualizar Nome
+                    </Button>
+                    <Button
+                      id={"clientDlt"}
+                      colorScheme="red"
+                      onClick={apagarCliente}
+                    >
+                      {" "}
+                      Eliminar Cliente
                     </Button>
                   </InputGroup>
                 </Box>
@@ -213,5 +237,11 @@ export default function Users() {
           </Tabs>{" "}
         </Container>
       </Layout>
+              ) : null}
+            </TabPanel>
+          </TabPanels>
+        </Tabs>{" "}
+      </Container>
+    </Layout>
   );
 }
