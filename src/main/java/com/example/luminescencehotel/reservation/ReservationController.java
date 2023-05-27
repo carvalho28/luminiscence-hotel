@@ -5,6 +5,12 @@ import com.example.luminescencehotel.reservation.request.GetReservationRequest;
 import com.example.luminescencehotel.reservation.request.MakeReservationRequest;
 import com.example.luminescencehotel.reservation.response.*;
 import com.example.luminescencehotel.room.RoomType;
+import com.example.luminescencehotel.reservation.request.SetCheckedInRequest;
+import com.example.luminescencehotel.reservation.request.SetCheckedOutRequest;
+import com.example.luminescencehotel.reservation.response.AllReservationsResponse;
+import com.example.luminescencehotel.reservation.response.CheckInTodayResponse;
+import com.example.luminescencehotel.reservation.response.PeopleCountResponse;
+import com.example.luminescencehotel.reservation.response.RoomCountResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -136,6 +142,14 @@ public class ReservationController {
 //            return ResponseEntity.ok(response);
 //        }
 //    }
+  
+    public ResponseEntity<Map<String, String>> setCheckIn(@RequestBody SetCheckedInRequest req) {
+        return ResponseEntity.ok(reservationService.setCheckIn(req));
+    }
+
+    public ResponseEntity<Map<String, String>> setCheckOut(@RequestBody SetCheckedOutRequest req) {
+        return ResponseEntity.ok(reservationService.setCheckOut(req));
+    }
 
     // delete reservations by id
 //    @DeleteMapping(path = "/delete")

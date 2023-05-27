@@ -29,8 +29,8 @@ public class Reservation {
     private LocalDate start_date;
     private LocalDate end_date;
     // already checked in and checked out
-//    private boolean checked_in;
-//    private boolean checked_out;
+    private boolean checked_in;
+    private boolean checked_out;
 
     private String comment;
     private Integer stars;
