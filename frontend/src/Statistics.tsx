@@ -15,10 +15,27 @@ import ReactEChart from "echarts-for-react";
 import {useEffect, useState} from "react";
 import {serverUrl} from "./App";
 
+type PeopleReservation = {
+    value: number,
+    name: string,
+}
+
+// convert month number to month name
+const monthNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+
+const getMonthName = (monthNumber: number) => {
+    return monthNames[monthNumber - 1];
+}
+
 export default function Statistics() {
 
     const [popularRoomsIds, setPopularRoomsIds] = useState([]);
     const [popularRoomsValues, setPopularRoomsValues] = useState([]);
+
+    const [numberOfReservations, setNumberOfReservations] = useState<PeopleReservation[]>([]);
+
+    const [financesByMonthIds, setFinancesByMonthIds] = useState([]);
+    const [financesByMonthValues, setFinancesByMonthValues] = useState([]);
 
     useEffect(() => {
         const getMostPopularRooms = async () => {
@@ -39,15 +56,63 @@ export default function Statistics() {
                     }
                 );
         }
+        const getMostReservationPeople = async () => {
+            fetch(`${serverUrl}/reservation/count/people`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                        // numberOfReservationsByPersonNames(data.map((person: any) => person.name));
+                        // numberOfReservationsByPersonValues(data.map((person: any) => person.person_count));
+                        setNumberOfReservations(data.map((person: any) => {
+                            return {
+                                value: person.person_count,
+                                name: person.name
+                            }
+                        }));
+
+                    }
+                )
+                .catch((error) => {
+                        console.error('Error:', error);
+                    }
+                );
+        }
+        const getFinancesByMonth = async () => {
+            fetch(`${serverUrl}/reservation/count/money`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                        // setFinancesByMonthIds(data.map((index: any) => index.month));
+                        setFinancesByMonthIds(data.map((index: any) => getMonthName(index.month)));
+                        setFinancesByMonthValues(data.map((index: any) => index.revenue));
+                    }
+                )
+                .catch((error) => {
+                        console.error('Error:', error);
+                    }
+                );
+        }
         getMostPopularRooms();
+        getMostReservationPeople();
+        getFinancesByMonth();
     }, []);
 
     useEffect(() => {
-        console.log(popularRoomsIds);
-        console.log(popularRoomsValues);
-    }, [popularRoomsIds, popularRoomsValues]);
+    }, [popularRoomsIds, popularRoomsValues, financesByMonthValues, financesByMonthIds, numberOfReservations]);
 
     const option = {
+        title: {
+            text: 'Finances By Month',
+            left: 'center'
+        },
         tooltip: {
             trigger: 'axis',
             axisPointer: {
@@ -63,7 +128,7 @@ export default function Statistics() {
         xAxis: [
             {
                 type: 'category',
-                data: ['May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', "April"],
+                data: financesByMonthIds,
                 axisTick: {
                     alignWithLabel: true
                 }
@@ -79,7 +144,7 @@ export default function Statistics() {
                 name: 'Direct',
                 type: 'bar',
                 barWidth: '60%',
-                data: [10, 52, 200, 334, 390, 330, 220, 10, 50]
+                data: financesByMonthValues
             }
         ]
     };
@@ -101,13 +166,7 @@ export default function Statistics() {
                 name: 'Access From',
                 type: 'pie',
                 radius: '50%',
-                data: [
-                    {value: 3, name: 'Zé'},
-                    {value: 5, name: 'Maria Antónia'},
-                    {value: 2, name: 'Email'},
-                    {value: 3, name: 'Union Ads'},
-                    {value: 7, name: 'Adelaide Piedade'}
-                ],
+                data: numberOfReservations,
                 emphasis: {
                     itemStyle: {
                         shadowBlur: 10,
@@ -193,7 +252,7 @@ export default function Statistics() {
                             </Box>
                         </TabPanel>
                     </TabPanels>
-                </Tabs>{" "}
+                </Tabs>
             </Container>
         </Layout>
     );

@@ -30,7 +30,7 @@ public class Reservation {
     private LocalDate end_date;
     private Boolean checked_in = false;
     private Boolean checked_out = false;
-
+    private Float total_price;
     private String comment;
     private Integer stars;
     @ManyToOne(fetch = FetchType.LAZY)

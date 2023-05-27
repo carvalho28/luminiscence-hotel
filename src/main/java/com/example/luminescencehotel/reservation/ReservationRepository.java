@@ -41,4 +41,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long>{
 
     @Query("SELECT r FROM Reservation r ORDER BY r.reservation_id DESC")
     List<Reservation> findAllOrderByIDDesc();
+
+    // get monthly revenue for the current year, separated by month
+    @Query("SELECT MONTH(r.start_date), SUM(r.total_price) FROM Reservation r WHERE YEAR(r.start_date) = YEAR(CURRENT_DATE) GROUP BY MONTH(r.start_date)")
+    List<Object[]> getMonthlyRevenue();
 }

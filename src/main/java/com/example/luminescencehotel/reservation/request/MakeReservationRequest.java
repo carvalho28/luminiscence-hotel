@@ -9,4 +9,5 @@ public class MakeReservationRequest {
     private String endDate;
     private Long roomId;
     private String nif;
+    private Float totalPrice;
 }

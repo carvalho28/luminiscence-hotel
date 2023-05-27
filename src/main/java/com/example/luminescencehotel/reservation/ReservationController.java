@@ -153,6 +153,13 @@ public class ReservationController {
         return ResponseEntity.ok(reservationService.setCheckOut(req));
     }
 
+    @GetMapping(path = "/count/money")
+    public ResponseEntity<List<RevenueResponse>> monthRevenue() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("revenue", reservationService.getMonthlyRevenue());
+        return ResponseEntity.ok(reservationService.getMonthlyRevenue());
+    }
+
     // delete reservations by id
 //    @DeleteMapping(path = "/delete")
 //    public ResponseEntity<Map<String, Object>> deleteReservationById(@RequestBody List<String> reservation_id) {
