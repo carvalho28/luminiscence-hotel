@@ -9,6 +9,7 @@ import Statistics from "./Statistics";
 import Rooms from "./Rooms";
 import Reservation from "./Reservation";
 import Bookings from "./Bookings";
+import Reviews from "./Reviews";
 
 export const serverUrl = import.meta.env.VITE_SERVER_URL;
 
@@ -26,6 +27,7 @@ export function AppRoutes() {
             <Route path="/rooms" element={<Rooms />} />
             <Route path="/reservation" element={<Reservation />} />
             <Route path="/bookings" element={<Bookings />} />
+            <Route path="/reviews" element={<Reviews />} />
             <Route path="*" element={<NotFound />} />
         </Routes>
     </div>

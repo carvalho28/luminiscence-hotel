@@ -1,6 +1,9 @@
 package com.example.luminescencehotel.reservation;
 
+import com.example.luminescencehotel.reservation.request.GetReservationRequest;
 import com.example.luminescencehotel.reservation.request.MakeReservationRequest;
+import com.example.luminescencehotel.reservation.request.SetCheckedInRequest;
+import com.example.luminescencehotel.reservation.request.SetCheckedOutRequest;
 import com.example.luminescencehotel.reservation.response.AllReservationsResponse;
 import com.example.luminescencehotel.reservation.response.CheckInTodayResponse;
 import com.example.luminescencehotel.reservation.response.PeopleCountResponse;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -80,6 +84,33 @@ public class ReservationController {
     @GetMapping(path = "/count/people")
     public ResponseEntity<List<PeopleCountResponse>> countReservationsByPeople() {
         return ResponseEntity.ok(reservationService.countReservationsByPeople());
+    }
+
+    @PostMapping (path = "/getReservation")
+//    public ResponseEntity<Reservation> getReservation(@RequestBody GetReservationRequest getReservationRequest) {
+//        return  ResponseEntity.ok(reservationService.getReservationById(getReservationRequest.getId(), getReservationRequest.getNif()));
+//    }
+    public ResponseEntity<Map<String, Object>> getReservation(@RequestBody GetReservationRequest getReservationRequest) {
+        Reservation reservation = reservationService.getReservationById(getReservationRequest.getId(), getReservationRequest.getNif());
+        Map<String, Object> response = new HashMap<>();
+        if (reservation != null) {
+            response.put("status", "ok");
+            response.put("message", "Reservation found");
+            response.put("reservation", reservation);
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("status", "error");
+            response.put("message", "Reservation not found");
+            return ResponseEntity.ok(response);
+        }
+    }
+
+    public ResponseEntity<Map<String, String>> setCheckIn(@RequestBody SetCheckedInRequest req) {
+        return ResponseEntity.ok(reservationService.setCheckIn(req));
+    }
+
+    public ResponseEntity<Map<String, String>> setCheckOut(@RequestBody SetCheckedOutRequest req) {
+        return ResponseEntity.ok(reservationService.setCheckOut(req));
     }
 
     // delete reservations by id

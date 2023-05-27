@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import Layout from "./components/Layout";
+import { Checkbox, CheckboxGroup } from "@chakra-ui/core";
 import {
     Text,
     Center,
@@ -9,7 +10,7 @@ import {
     Box,
     useColorModeValue,
     Img,
-    Heading, Table, Thead, Tr, Th, Tbody, Td, TableContainer, Checkbox,
+    Heading, Table, Thead, Tr, Th, Tbody, Td, TableContainer,
 } from "@chakra-ui/react";
 import {serverUrl} from "./App";
 
@@ -18,6 +19,8 @@ type Checkin = {
     name: string,
     nif: string,
     room_id: number,
+    checked_in: boolean,
+    checked_out: boolean,
 }
 
 export default function Dashboard() {
@@ -115,7 +118,7 @@ export default function Dashboard() {
                 >
                     <Center py={6}>
                         <Box
-                            w="md"
+                            w="1md"
                             rounded={"sm"}
                             my={5}
                             mx={[0, 5]}
@@ -219,7 +222,7 @@ export default function Dashboard() {
                 >
                     <Center py={6}>
                         <Box
-                            w="md"
+                            w="1.25md"
                             rounded={"sm"}
                             my={5}
                             mx={[0, 5]}
@@ -270,9 +273,10 @@ export default function Dashboard() {
                                             <Thead>
                                                 <Tr>
                                                     <Th>Reserva</Th>
-                                                    <Th>Name</Th>
+                                                    <Th>Nome</Th>
                                                     <Th>NIF</Th>
                                                     <Th>Quarto</Th>
+                                                    <Th>Check In</Th>
                                                 </Tr>
                                             </Thead>
                                             <Tbody>
@@ -282,6 +286,9 @@ export default function Dashboard() {
                                                         <Td>{reservation.name}</Td>
                                                         <Td>{reservation.nif}</Td>
                                                         <Td>{reservation.room_id}</Td>
+                                                        <Td>{reservation.checked_in ?
+                                                            <Checkbox isDisabled defaultIsChecked variantColor="green"></Checkbox> :
+                                                            <Checkbox isDisabled variantColor="green"></Checkbox>}</Td>
                                                     </Tr>
                                                 ))}
                                             </Tbody>
@@ -294,7 +301,7 @@ export default function Dashboard() {
 
                     <Center py={6}>
                         <Box
-                            w="md"
+                            w="1.25md"
                             rounded={"sm"}
                             my={5}
                             mx={[0, 5]}
@@ -344,9 +351,10 @@ export default function Dashboard() {
                                             <Thead>
                                                 <Tr>
                                                     <Th>Reserva</Th>
-                                                    <Th>Name</Th>
+                                                    <Th>Nome</Th>
                                                     <Th>NIF</Th>
                                                     <Th>Quarto</Th>
+                                                    <Th>Check Out</Th>
                                                 </Tr>
                                             </Thead>
                                             <Tbody>
@@ -356,6 +364,9 @@ export default function Dashboard() {
                                                         <Td>{reservation.name}</Td>
                                                         <Td>{reservation.nif}</Td>
                                                         <Td>{reservation.room_id}</Td>
+                                                        <Td>{reservation.checked_out ?
+                                                            <Checkbox isDisabled defaultIsChecked variantColor="green"></Checkbox> :
+                                                            <Checkbox isDisabled variantColor="green"></Checkbox>}</Td>
                                                     </Tr>
                                                 ))}
                                             </Tbody>
