@@ -1,5 +1,6 @@
 package com.example.luminescencehotel.reservation;
 
+import com.example.luminescencehotel.reservation.request.GetReservationRequest;
 import com.example.luminescencehotel.reservation.request.MakeReservationRequest;
 import com.example.luminescencehotel.reservation.response.AllReservationsResponse;
 import com.example.luminescencehotel.reservation.response.CheckInTodayResponse;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -127,6 +128,24 @@ public class ReservationService {
             peopleCounts.add(pcr);
         }
         return peopleCounts;
+    }
+
+    // get reservation by id
+    public Reservation getReservationById(Long id, String nif) {
+        if (id == null) {
+            return null;
+        }
+        if (nif == null) {
+            return null;
+        }
+        Optional<Reservation> reservationOptional = reservationRepository.findById(id);
+        if (reservationOptional.isPresent()) {
+            Reservation reservation = reservationOptional.get();
+            if (reservation.getUser().getNif().equals(nif)) {
+                return reservation;
+            }
+        }
+        return null;
     }
 
     // delete multiple reservations by reservation_id

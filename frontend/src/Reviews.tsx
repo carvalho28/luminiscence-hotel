@@ -5,16 +5,24 @@ import {
     AlertTitle, Box,
     Button,
     Center,
-    Container, Divider, Image,
+    Container, HStack, Image,
     Input,
     InputGroup,
-    Text
+    Text, Textarea, useColorModeValue, Flex
 } from "@chakra-ui/react";
-import {Layout} from "./components/Layout";
+import {CalendarIcon, AtSignIcon} from "@chakra-ui/icons";
+import {serverUrl} from "./App";
 import {AlertPopup} from "./components/AlertPopup";
-import {useLocation, useNavigate} from "react-router-dom";
-import {useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
 
+
+type Reservation = {
+    end_date: string,
+    reservation_id: string,
+    start_date: string,
+    user_id: string,
+}
 
 export default function Reviews() {
     const navigate = useNavigate();
@@ -25,8 +33,9 @@ export default function Reviews() {
     const [showCheckReservation, setShowCheckReservation] = useState<boolean>(false);
     const [showPopup, setShowPopup] = useState<boolean>(false);
 
-    const [reservation, setReservation] = useState<string>("");
+    const [reservation, setReservation] = useState<null | Reservation>(null);
     const [reservationId, setReservationId] = useState<string>("");
+    const [nif, setNif] = useState<string>("");
 
     const onPopupCloseSuccess = () => {
         setShowSuccess(false);
@@ -40,12 +49,63 @@ export default function Reviews() {
         setShowError(false);
     }
 
+    const procurarReserva = async () => {
+        if (reservationId === "") {
+            setShowError(true);
+            setErrorMessage("Insira o número da reserva");
+            return;
+        }
+        if (nif === "") {
+            setShowError(true);
+            setErrorMessage("Insira o NIF");
+            return;
+        }
+
+        try {
+            const response = await fetch(`${serverUrl}/reservation/getReservation`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                },
+                body: JSON.stringify({
+                    id: reservationId,
+                    nif: nif
+                }),
+            }).then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.status.toString() === 'ok') {
+                        setReservation(data.reservation);
+                        setShowCheckReservation(true);
+                    } else {
+                        setShowError(true);
+                        setErrorMessage("Não foi possível encontrar a reserva");
+                    }
+                }).catch((error) => {
+                        console.log(error);
+                        setShowError(true);
+                        setErrorMessage("Não foi possível encontrar a reserva");
+                    }
+                );
+        } catch (err) {
+            console.log(err);
+            setShowError(true);
+            setErrorMessage("Não foi possível encontrar a reserva");
+        }
+    }
+
+    // useEffect(() => {
+    //     console.log(reservation);
+    // }, [reservation]);
+
+    const [comment, setComment] = useState<string>("");
+
     return (
-        <Layout>
+        <>
             <Container maxW="container.xl" mt="10">
                 <Center>
                     <Text fontSize="3xl" as="b">
-                        Reservation
+                        Feedback
                     </Text>
                 </Center>
 
@@ -53,12 +113,29 @@ export default function Reviews() {
                     Procurar reserva
                 </Text>
                 <Center>
-                    <InputGroup w="29%" mt={10}>
+                    <InputGroup w="20%" mt={10}>
                         <Input type='text' placeholder='Número da reserva' value={reservationId}
                                onChange={(e) => setReservationId(e.target.value)}/>
-                        <Button colorScheme='blue' ml={"6"} w={"50%"}> Procurar</Button>
+                        {/*<Button colorScheme='blue' ml={"6"} w={"50%"} onClick={procurarReserva}> Procurar</Button>*/}
+                    </InputGroup>
+                    {/*    spacing */}
+                    <InputGroup w="5%"/>
+                    <InputGroup w="29%" mt={10}>
+                        <Input type='text' placeholder='Nif' value={nif}
+                               onChange={(e) => setNif(e.target.value)}/>
+                        <Button colorScheme='blue' ml={"6"} w={"50%"} onClick={procurarReserva}> Procurar</Button>
                     </InputGroup>
                 </Center>
+
+                {showError ? (
+                    <Center>
+                        <Alert status='error' w={"35%"} mt={10}>
+                            <AlertIcon/>
+                            <AlertTitle mr={2}>Erro!</AlertTitle>
+                            <AlertDescription>{errorMessage}</AlertDescription>
+                        </Alert>
+                    </Center>
+                ) : null}
 
                 {/*{showPopup ? (*/}
                 {/*    <ModalNewCustomer isOpen={true} onClose={() => onPopupClose()} setCliente={setCliente}/>*/}
@@ -70,7 +147,7 @@ export default function Reviews() {
                     <Center mt={20}>
                         <Box maxW="lg" borderWidth="1px" borderRadius="lg" overflow="hidden">
                             <Image
-                                src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+                                src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHBhcGVyc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
                                 alt="hotel"/>
                         </Box>
                     </Center>
@@ -79,40 +156,59 @@ export default function Reviews() {
                 {reservation ? (
                     <>
                         <Text fontSize="xl" mt={20}>
-                            Resumo da reserva
+                            Reserva:
                         </Text>
                         <Center>
-                            <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
-                                <Image
-                                    src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
-                                    alt="hotel"/>
-                                <Box p="6">
-                                    {/* show client name and nif*/}
-                                    {/*<Box color="gray.500" fontWeight="semibold" letterSpacing="wide" fontSize="md"*/}
-                                    {/*     textTransform="uppercase" ml="2">*/}
-                                    {/*    {cliente.name} &bull; {cliente.nif}*/}
-                                    {/*</Box>*/}
-
-                                    <Divider orientation='horizontal' borderWidth={'1px'} borderColor={'gray.400'}
-                                             mt={2} mb={2}/>
-
-
-                                    {/*<Box alignItems="baseline">*/}
-                                    {/*    <Box*/}
-                                    {/*        color="gray.500"*/}
-                                    {/*        fontWeight="semibold"*/}
-                                    {/*        letterSpacing="wide"*/}
-                                    {/*        fontSize="md"*/}
-                                    {/*        textTransform="uppercase"*/}
-                                    {/*        ml="2"*/}
-                                    {/*    >*/}
-                                    {/*        /!*n days &bull; n nights*!/*/}
-                                    {/*        {nDays} dias &bull; {nNights} noites &bull; {Math.abs(totalPrice)}€*/}
-                                    {/*    </Box>*/}
-                                    {/*</Box>*/}
-                                </Box>
+                            <Box
+                                w="md"
+                                rounded={"sm"}
+                                my={5}
+                                mx={[0, 5]}
+                                overflow={"hidden"}
+                                bg="white"
+                                border={"1px"}
+                                borderColor="black"
+                                p={5}
+                                boxShadow={useColorModeValue("6px 6px 0 black", "6px 6px 0 cyan")}
+                            >
+                                {/* Reservation info */}
+                                <Text fontSize="2xl" mt={5} ml={5} fontWeight="bold" color="black">
+                                    Número da reserva: {reservation.reservation_id}
+                                </Text>
+                                <HStack mt={3} ml={5}>
+                                    <AtSignIcon boxSize={6}/>
+                                    <Text fontSize="xl" color="black">
+                                        Cliente: {reservation.user.name}
+                                    </Text>
+                                </HStack>
+                                <HStack mt={3} ml={5}>
+                                    <CalendarIcon boxSize={6}/>
+                                    <Text fontSize="xl" color="black">
+                                        Check-in: {reservation.start_date}
+                                    </Text>
+                                </HStack>
+                                <HStack mt={3} ml={5}>
+                                    <CalendarIcon boxSize={6}/>
+                                    <Text fontSize="xl" color="black">
+                                        Check-out: {reservation.end_date}
+                                    </Text>
+                                </HStack>
                             </Box>
                         </Center>
+
+                        <Text fontSize="xl">
+                            Feedback da reserva
+                        </Text>
+                        <Center w={"100%"} mt={5}>
+                            <Flex flexDirection="column" width={"50%"}>
+
+                            <InputGroup w="100%" mt={10}>
+                                <Textarea placeholder='Comentário' value={comment}
+                                        onChange={(e) => setComment(e.target.value)}/>
+                            </InputGroup>
+                            </Flex>
+                        </Center>
+
                         <Center mt={"10"}>
                             <Button colorScheme='blue'
                             >Confirmar</Button>
@@ -120,13 +216,13 @@ export default function Reviews() {
                         </Center>
 
                         {showSuccess ? (
-                            <AlertPopup message={"Reserva efetuada com sucesso!"} onClose={() => onPopupCloseSuccess()}
+                            <AlertPopup message={"Obrigado pelo feedback!"} onClose={() => onPopupCloseSuccess()}
                                         title={"Sucesso!"}/>
                         ) : null}
 
                     </>
                 ) : null}
             </Container>
-        </Layout>
-    )
+        </>
+    );
 }

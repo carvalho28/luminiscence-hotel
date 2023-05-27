@@ -2,7 +2,7 @@ package com.example.luminescencehotel.reservation;
 
 import com.example.luminescencehotel.room.Room;
 import com.example.luminescencehotel.user.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +23,7 @@ public class Reservation {
     private Long reservation_id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer"})
     private User user;
     private LocalDate start_date;
     private LocalDate end_date;
