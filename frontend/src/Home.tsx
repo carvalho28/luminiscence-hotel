@@ -6,12 +6,12 @@ import {Logo} from "./components/Logo";
 export default function Home() {
     const topRooms = [
         {
-            name: "Deluxe Suite",
+            name: "Premium Suite",
             stars: 5,
             image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGhvdGVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=1200&q=60"
         },
         {
-            name: "Premium Suite",
+            name: "Normal Suite",
             stars: 4,
             image: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8aG90ZWwlMjByb29tfGVufDB8fDB8fHww&auto=format&fit=crop&w=1200&q=60"
         },

@@ -7,6 +7,7 @@ import com.example.luminescencehotel.reservation.response.CheckInTodayResponse;
 import com.example.luminescencehotel.reservation.response.PeopleCountResponse;
 import com.example.luminescencehotel.reservation.response.RoomCountResponse;
 import com.example.luminescencehotel.room.RoomRepository;
+import com.example.luminescencehotel.room.RoomType;
 import com.example.luminescencehotel.user.User;
 import com.example.luminescencehotel.room.Room;
 import com.example.luminescencehotel.user.UserRepository;
@@ -159,6 +160,33 @@ public class ReservationService {
         } else {
             return 0;
         }
+    }
+
+    public List<String> getCommentsForMostReservedRooms() {
+        List<String> comments = new ArrayList<>();
+
+        // Find the most reserved PREMIUM_SUITE
+        List<Reservation> premiumSuiteReservations = reservationRepository.findMostReservedRoomsByType(RoomType.PREMIUM_SUITE);
+        if (!premiumSuiteReservations.isEmpty()) {
+            Reservation mostReservedPremiumSuite = premiumSuiteReservations.get(0);
+            comments.add(mostReservedPremiumSuite.getComment());
+        }
+
+        // Find the most reserved SUITE
+        List<Reservation> suiteReservations = reservationRepository.findMostReservedRoomsByType(RoomType.SUITE);
+        if (!suiteReservations.isEmpty()) {
+            Reservation mostReservedSuite = suiteReservations.get(0);
+            comments.add(mostReservedSuite.getComment());
+        }
+
+        // Find the most reserved FAMILY
+        List<Reservation> familyReservations = reservationRepository.findMostReservedRoomsByType(RoomType.FAMILY);
+        if (!familyReservations.isEmpty()) {
+            Reservation mostReservedFamily = familyReservations.get(0);
+            comments.add(mostReservedFamily.getComment());
+        }
+
+        return comments;
     }
 
     // delete multiple reservations by reservation_id

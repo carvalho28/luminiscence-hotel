@@ -115,6 +115,14 @@ public class ReservationController {
             return ResponseEntity.ok(response);
         }
     }
+
+
+    @GetMapping(path = "/commentsTopRooms")
+    public ResponseEntity<List<String>> getCommentsForMostReservedRooms() {
+        return ResponseEntity.ok(reservationService.getCommentsForMostReservedRooms());
+    }
+
+
 //
 //    @PostMapping(path = "/delete")
 //    public ResponseEntity<Map<String, Object>> deleteReservation(@RequestBody GetReservationRequest getReservationRequest) {

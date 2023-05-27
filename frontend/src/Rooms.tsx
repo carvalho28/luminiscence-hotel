@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import {Layout} from "./components/Layout";
 import {DateRange} from 'react-date-range';
-import {addDays} from 'date-fns';
+import {addDays, subDays} from 'date-fns';
 import {useEffect, useState} from "react";
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css';
@@ -22,6 +22,8 @@ export default function Rooms() {
 
     const [rooms, setRooms] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+
+
 
     const [dateRange, setDateRange] = useState([
         {
@@ -111,8 +113,8 @@ export default function Rooms() {
         const state = {
             room_id: room_id,
             price: room_price,
-            start_date: addDays(dateRange[0].startDate, 1).toISOString().slice(0, 10),
-            end_date: addDays(dateRange[0].endDate, 1).toISOString().slice(0, 10),
+            start_date: convertDate(dateRange[0].startDate.toLocaleDateString()),
+            end_date: convertDate(dateRange[0].endDate.toLocaleDateString()),
         };
         console.log(state);
         navigate('/reservation', {state: state});

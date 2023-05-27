@@ -1,8 +1,10 @@
 package com.example.luminescencehotel.reservation;
 
 import com.example.luminescencehotel.reservation.response.CheckInTodayResponse;
+import com.example.luminescencehotel.room.RoomType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,4 +35,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long>{
 
     @Query("SELECT r.user.name, count(r.user.name) FROM Reservation r GROUP BY r.user.name")
     List<Object[]> countReservationsByPeople();
+
+    @Query("SELECT r FROM Reservation r WHERE r.room.room_type = :roomType ORDER BY r.reservation_id DESC")
+    List<Reservation> findMostReservedRoomsByType(@Param("roomType") RoomType roomType);
 }
