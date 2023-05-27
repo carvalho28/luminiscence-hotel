@@ -15,9 +15,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -162,44 +160,60 @@ public class ReservationService {
         }
     }
 
-    public List<String> getCommentsForMostReservedRooms() {
-        List<String> comments = new ArrayList<>();
+    public Map<RoomType, List<String>> getCommentsForMostReservedRooms() {
+        Map<RoomType, List<String>> commentsMap = new HashMap<>();
 
         // Find the most reserved PREMIUM_SUITE
         List<Reservation> premiumSuiteReservations = reservationRepository.findMostReservedRoomsByType(RoomType.PREMIUM_SUITE);
-        Reservation firstPremiumSuiteWithComment = findFirstReservationWithComment(premiumSuiteReservations);
-        if (firstPremiumSuiteWithComment != null) {
-            System.out.println(firstPremiumSuiteWithComment.getReservation_id());
-            comments.add(firstPremiumSuiteWithComment.getComment());
-        }
+        List<Reservation> recentPremiumSuiteReservations = findRecentReservations(premiumSuiteReservations, 3);
+        List<String> premiumSuiteComments = getCommentsList(recentPremiumSuiteReservations);
+        commentsMap.put(RoomType.PREMIUM_SUITE, premiumSuiteComments);
 
         // Find the most reserved SUITE
         List<Reservation> suiteReservations = reservationRepository.findMostReservedRoomsByType(RoomType.SUITE);
-        Reservation firstSuiteWithComment = findFirstReservationWithComment(suiteReservations);
-        if (firstSuiteWithComment != null) {
-            System.out.println(firstSuiteWithComment.getReservation_id());
-            comments.add(firstSuiteWithComment.getComment());
-        }
+        List<Reservation> recentSuiteReservations = findRecentReservations(suiteReservations, 3);
+        List<String> suiteComments = getCommentsList(recentSuiteReservations);
+        commentsMap.put(RoomType.SUITE, suiteComments);
 
         // Find the most reserved FAMILY
         List<Reservation> familyReservations = reservationRepository.findMostReservedRoomsByType(RoomType.FAMILY);
-        Reservation firstFamilyWithComment = findFirstReservationWithComment(familyReservations);
-        if (firstFamilyWithComment != null) {
-            System.out.println(firstFamilyWithComment.getReservation_id());
-            comments.add(firstFamilyWithComment.getComment());
-        }
+        List<Reservation> recentFamilyReservations = findRecentReservations(familyReservations, 3);
+        List<String> familyComments = getCommentsList(recentFamilyReservations);
+        commentsMap.put(RoomType.FAMILY, familyComments);
 
+        return commentsMap;
+    }
+
+    private List<String> getCommentsList(List<Reservation> reservations) {
+        List<String> comments = new ArrayList<>();
+        for (Reservation reservation : reservations) {
+            if (reservation.getComment() != null) {
+                comments.add(reservation.getComment());
+            }
+        }
         return comments;
     }
 
-    private Reservation findFirstReservationWithComment(List<Reservation> reservations) {
+
+    private List<Reservation> findRecentReservations(List<Reservation> reservations, int limit) {
+        List<Reservation> recentReservations = new ArrayList<>();
+        reservations.sort(Comparator.comparing(Reservation::getEnd_date).reversed());
+
+        int count = 0;
         for (Reservation reservation : reservations) {
+            if (count >= limit) {
+                break;
+            }
             if (reservation.getComment() != null) {
-                return reservation;
+                recentReservations.add(reservation);
+                count++;
             }
         }
-        return null;
+
+        return recentReservations;
     }
+
+
 
 
     // delete multiple reservations by reservation_id

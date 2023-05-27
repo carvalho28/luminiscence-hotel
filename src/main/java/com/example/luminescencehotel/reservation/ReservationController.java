@@ -7,6 +7,7 @@ import com.example.luminescencehotel.reservation.response.AllReservationsRespons
 import com.example.luminescencehotel.reservation.response.CheckInTodayResponse;
 import com.example.luminescencehotel.reservation.response.PeopleCountResponse;
 import com.example.luminescencehotel.reservation.response.RoomCountResponse;
+import com.example.luminescencehotel.room.RoomType;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -118,7 +119,7 @@ public class ReservationController {
 
 
     @GetMapping(path = "/commentsTopRooms")
-    public ResponseEntity<List<String>> getCommentsForMostReservedRooms() {
+    public ResponseEntity<Map<RoomType, List<String>>> getCommentsTopRooms() {
         return ResponseEntity.ok(reservationService.getCommentsForMostReservedRooms());
     }
 

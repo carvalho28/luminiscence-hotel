@@ -2,6 +2,8 @@ import {Box, VStack, Heading, Text, Button, Image, Flex, useColorModeValue, Cent
 import {StarIcon} from "@chakra-ui/icons";
 import {useNavigate} from "react-router-dom";
 import {Logo} from "./components/Logo";
+import {serverUrl} from "./App";
+import {useEffect, useState} from "react";
 
 export default function Home() {
     const topRooms = [
@@ -20,12 +22,43 @@ export default function Home() {
             stars: 3,
             image: "https://www.riversideparkhotel.com/wp-content/uploads/2022/02/Photo-071-1366x768-fp_mm-fpoff_0_0.jpg"
         },
-        // {
-        //     name: "Standard Room",
-        //     stars: 3,
-        //     image: "https://images.unsplash.com/flagged/photo-1556438758-8d49568ce18e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8aG90ZWwlMjByb29tfGVufDB8fDB8fHww&auto=format&fit=crop&w=1200&q=60"
-        // },
     ];
+
+    const [commentsPremium, setCommentsPremium] = useState([]);
+    const [commentsNormal, setCommentsNormal] = useState([]);
+    const [commentsFamily, setCommentsFamily] = useState([]);
+
+    const getComments = async () => {
+        await fetch(`${serverUrl}/reservation/commentsTopRooms`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                    console.log(data);
+                    setCommentsPremium(data.PREMIUM_SUITE || []);
+                    setCommentsNormal(data.SUITE || []);
+                    setCommentsFamily(data.FAMILY || []);
+                }
+            )
+            .catch((error) => {
+                    console.error("Error:", error);
+                }
+            );
+    };
+
+    useEffect(() => {
+        getComments();
+    }, []);
+
+    useEffect(() => {
+        console.log(commentsPremium);
+        console.log(commentsNormal);
+        console.log(commentsFamily);
+    }, [commentsPremium, commentsNormal, commentsFamily]);
+
 
     const navigate = useNavigate();
     return (
@@ -67,27 +100,65 @@ export default function Home() {
                 <Flex direction="column" alignItems="center">
                     <Flex direction="row" alignItems="center">
                         {topRooms.slice(0, 2).map((room, index) => (
-                            <Flex key={index} w="md" rounded={"sm"} my={5} mx={[0, 5]} overflow={"hidden"} bg="white" border={"1px"} borderColor="black" boxShadow={useColorModeValue("6px 6px 0 black", "6px 6px 0 cyan")}>
-                                <Image src={room.image} alt={room.name} boxSize="200px" objectFit="cover" borderRadius="md" mr="4" p={4} />
+                            <Flex key={index} w="md" rounded={"sm"} my={5} mx={[0, 5]} overflow={"hidden"} bg="white"
+                                  border={"1px"} borderColor="black"
+                                  boxShadow={useColorModeValue("6px 6px 0 black", "6px 6px 0 cyan")}>
+                                <Image src={room.image} alt={room.name} boxSize="200px" objectFit="cover"
+                                       borderRadius="md"
+                                       mr="4" p={4}/>
                                 <Box alignItems={"center"}>
                                     <Text fontSize="lg" fontWeight="bold">{room.name}</Text>
                                     <Text fontSize="md" fontWeight="bold">Comments:</Text>
+                                    <Center>
+                                        {/*    print comments only if they exist for the index */}
+                                        {index === 0 && commentsPremium.length > 0 && (
+                                            <Text>
+                                                {commentsPremium.map((comment, index) => (
+                                                    <Text key={index}>
+                                                        {comment}
+                                                    </Text>
+                                                ))}
+                                            </Text>
+                                        )}
+                                        {index === 1 && commentsNormal.length > 0 && (
+                                            <Text>
+                                                {commentsNormal.map((comment, index) => (
+                                                    <Text key={index}>
+                                                        {comment}
+                                                    </Text>
+                                                ))}
+                                            </Text>
+                                        )}
+                                    </Center>
                                 </Box>
                             </Flex>
                         ))}
                     </Flex>
                     {topRooms.slice(2, 3).map((room, index) => (
-                        <Flex key={index} w="md" rounded={"sm"} my={5} mx={[0, 5]} overflow={"hidden"} bg="white" border={"1px"} borderColor="black" boxShadow={useColorModeValue("6px 6px 0 black", "6px 6px 0 cyan")}>
-                            <Image src={room.image} alt={room.name} boxSize="200px" objectFit="cover" borderRadius="md" mr="4" p={4} />
+                        <Flex key={index} w="md" rounded={"sm"} my={5} mx={[0, 5]} overflow={"hidden"} bg="white"
+                              border={"1px"} borderColor="black"
+                              boxShadow={useColorModeValue("6px 6px 0 black", "6px 6px 0 cyan")}>
+                            <Image src={room.image} alt={room.name} boxSize="200px" objectFit="cover" borderRadius="md"
+                                   mr="4" p={4}/>
                             <Box alignItems={"center"}>
                                 <Text fontSize="lg" fontWeight="bold">{room.name}</Text>
                                 <Text fontSize="md" fontWeight="bold">Comments:</Text>
+                                <Center>
+                                    {commentsFamily.length > 0 && (
+                                        <Text>
+                                            {commentsFamily.map((comment, index) => (
+                                                <Text key={index}>
+                                                    {comment}
+                                                </Text>
+                                            ))}
+                                        </Text>
+                                    )}
+                                </Center>
                             </Box>
                         </Flex>
                     ))}
                 </Flex>
-
             </VStack>
         </Box>
     );
-}
+};
