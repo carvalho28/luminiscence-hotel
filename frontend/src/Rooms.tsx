@@ -33,33 +33,46 @@ export default function Rooms() {
 
     const getDatesFromPicker = () => {
         // let dates: Date[] = [];
-        let startDate = dateRange[0].startDate;
-        let endDate = dateRange[0].endDate;
-        startDate = addDays(startDate, 1);
-        endDate = addDays(endDate, 1);
+        console.log(dateRange);
+        let startDate = dateRange[0].startDate.toLocaleDateString();
+        let endDate = dateRange[0].endDate.toLocaleDateString();
+        console.log(startDate);
+        console.log(endDate);
+        // startDate = startDate,
+        // endDate = addDays(endDate, 1);
         // add 1 to both dates because the dateRange[0].startDate is the day before the actual start date
-        console.log(startDate.toISOString().slice(0, 10));
-        console.log(endDate.toISOString().slice(0, 10));
+        // console.log(startDate.toISOString().slice(0, 10));
+        // console.log(endDate.toISOString().slice(0, 10));
     }
 
     useEffect(() => {
         getDatesFromPicker();
     }, [dateRange]);
 
+
+    const convertDate = (date: String) => {
+        const parts = date.split("/");
+        const day = parts[0];
+        const month = parts[1];
+        const year = parts[2];
+
+        const dateStr = `${year}-${month}-${day}`;
+
+        return dateStr;
+    }
+
+
     const getAvailableRooms = async () => {
-        console.log(JSON.stringify({
-            startDate: addDays(dateRange[0].startDate, 1).toISOString().slice(0, 10),
-            endDate: addDays(dateRange[0].endDate, 1).toISOString().slice(0, 10),
-        }));
         fetch(`${serverUrl}/room/available`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                startDate: addDays(dateRange[0].startDate, 1).toISOString().slice(0, 10),
-                endDate: addDays(dateRange[0].endDate, 1).toISOString().slice(0, 10),
-            })
+                    startDate: convertDate(dateRange[0].startDate.toLocaleDateString()),
+                    endDate: convertDate(dateRange[0].endDate.toLocaleDateString()),
+                }
+            )
         })
             .then(res => res.json())
             .then(data => {
