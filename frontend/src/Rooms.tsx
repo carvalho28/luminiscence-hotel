@@ -7,6 +7,7 @@ import {
   Button,
   Center,
   Container,
+    Flex,
   Input,
   InputGroup,
   Tab,
@@ -26,12 +27,6 @@ import { serverUrl } from "./App";
 import {verifyAuth} from "./auth/Authenticator";
 import {useNavigate} from "react-router-dom";
 
-// type Cliente = {
-//   id: number;
-//   name: string;
-//   nif: string;
-// };
-
 type Room = {
   id: string;
   type: string;
@@ -49,10 +44,8 @@ const RoomTypes = [
 
 export default function Rooms() {
   const navigate = useNavigate();
-  // const [nif, setNif] = useState<string>("");
-  // const [name, setName] = useState<string>("");
-  // const [cliente, setCliente] = useState<null | Cliente>(null);
   const [showError, setShowError] = useState<boolean>(false);
+  const [showSuccess, setShowSuccess] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const [id, setId] = useState<string>("");
@@ -60,94 +53,14 @@ export default function Rooms() {
   const [price, setPrice] = useState<string>("");
   const [room, setRoom] = useState<null | Room>(null);
 
-  // const procurarCliente = async () => {
-  //   setShowError(false);
-  //   console.log(nif);
-  //   console.log("Goinf to fetch");
-  //   fetch(`${serverUrl}/user/nif`, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       nif: nif,
-  //     }),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       if (data.length == 0) {
-  //         setShowError(true);
-  //         setErrorMessage("Invalid user NIF");
-  //       } else {
-  //         console.log(data);
-  //         // document.getElementById('clientUpdt').removeAttribute("disabled");
-  //         // document.getElementById('clientDlt').removeAttribute("disabled");
-  //         const { id, name, nif } = data[0];
-  //         console.log("Received client");
-  //         console.log(name);
-  //         const newCliente: Cliente = { id, name, nif };
-  //         console.log("new", newCliente);
-  //         setCliente(newCliente);
-  //       }
-  //     });
-  // };
   useEffect(() => {
     setType("SINGLE");
   }, [room]);
-  //
-  // const atualizarCliente = async () => {
-  //   setShowError(false);
-  //   console.log(name + " este e o nome novo");
-  //   fetch(`${serverUrl}/user/update`, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       nif: nif,
-  //       name: name,
-  //     }),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       // cliente = null;
-  //       if (data["status"] != "ok") {
-  //         setShowError(true);
-  //         setErrorMessage("There was an error! Try again!");
-  //       } else {
-  //         console.log(data["nameR"]);
-  //         console.log(data["User"]);
-  //         setShowError(true);
-  //         setErrorMessage("User updated successfully!");
-  //       }
-  //     });
-  // };
-  //
-  // const apagarCliente = async () => {
-  //   setShowError(false);
-  //   fetch(`${serverUrl}/user/delete`, {
-  //     method: "DELETE",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       nif: nif,
-  //     }),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       if (data["status"] != "ok") {
-  //         setShowError(true);
-  //         setErrorMessage("There was an error! Try again!");
-  //       } else {
-  //         setShowError(true);
-  //         setErrorMessage("User deleted successfully!");
-  //       }
-  //     });
-  // };
+
 
   const adicionarQuarto = async () => {
     setShowError(false);
+    setShowSuccess(false);
     fetch(`${serverUrl}/room/createRoom`, {
       method: "POST",
       headers: {
@@ -166,7 +79,7 @@ export default function Rooms() {
           setShowError(true);
           setErrorMessage("Ocorreu um erro! Tente novamente!");
         } else {
-          setShowError(true);
+          setShowSuccess(true);
           setErrorMessage("Quarto criado com sucesso!");
         }
       });
@@ -174,7 +87,7 @@ export default function Rooms() {
 
   const procurarQuarto = async () => {
     setShowError(false);
-    // console.log(nif);
+    setShowSuccess(false);
     fetch(`${serverUrl}/room/room`, {
       method: "POST",
       headers: {
@@ -201,6 +114,7 @@ export default function Rooms() {
 
   const atualizarQuarto = async () => {
     setShowError(false);
+    setShowSuccess(false);
     fetch(`${serverUrl}/room/update`, {
       method: "POST",
       headers: {
@@ -220,7 +134,7 @@ export default function Rooms() {
           setShowError(true);
           setErrorMessage("Ocorreu um erro! Tente novamente!");
         } else {
-          setShowError(true);
+          setShowSuccess(true);
           setErrorMessage("Quarto atualizado com sucesso!");
         }
       });
@@ -228,6 +142,7 @@ export default function Rooms() {
 
   const apagarQuarto = async () => {
     setShowError(false);
+    setShowSuccess(false);
     fetch(`${serverUrl}/user/delete`, {
       method: "DELETE",
       headers: {
@@ -240,12 +155,11 @@ export default function Rooms() {
     })
       .then((res) => res.json())
       .then((data) => {
-        // room = null;
         if (data["status"] != "ok") {
           setShowError(true);
           setErrorMessage("Ocorreu um erro! Tente novamente!");
         } else {
-          setShowError(true);
+          setShowSuccess(true);
           setErrorMessage("Quarto apagado com sucesso!");
         }
       });
@@ -262,7 +176,7 @@ export default function Rooms() {
       <Container maxW="container.xl" mt="10">
         <Center>
           <Text fontSize="3xl" as="b">
-            Rooms
+            Quartos
           </Text>
         </Center>
         <Tabs size="lg" variant="enclosed" mt="10">
@@ -278,8 +192,14 @@ export default function Rooms() {
                   <AlertTitle mr={2}>{errorMessage}</AlertTitle>
                 </Alert>
               )}
+              {showSuccess && (
+                  <Alert status="success">
+                    <AlertIcon />
+                    <AlertTitle mr={2}>{errorMessage}</AlertTitle>
+                  </Alert>
+              )}
               <Text mt={"10"} fontSize={"xl"}>
-                Insira o tipo e o preço do novo quarto.
+                Insira o tipo e o preço do novo quarto
               </Text>
               <Box mt="10">
                 <Box mt={10}>
@@ -328,8 +248,14 @@ export default function Rooms() {
                   <AlertTitle mr={2}>{errorMessage}</AlertTitle>
                 </Alert>
               )}
+              {showSuccess && (
+                  <Alert status="success">
+                    <AlertIcon />
+                    <AlertTitle mr={2}>{errorMessage}</AlertTitle>
+                  </Alert>
+              )}
               <Text mt={"10"} fontSize={"xl"}>
-                Insert a room number
+                Insira o número de um quarto
               </Text>
               <Box mt="10">
                 <InputGroup w="30%" mt={10}>
