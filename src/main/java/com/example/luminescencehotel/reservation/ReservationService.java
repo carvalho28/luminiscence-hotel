@@ -43,6 +43,7 @@ public class ReservationService {
         Reservation reservation = new Reservation();
         reservation.setStart_date(LocalDate.parse(makeReservationRequest.getStartDate()));
         reservation.setEnd_date(LocalDate.parse(makeReservationRequest.getEndDate()));
+        reservation.setTotal_price(makeReservationRequest.getTotalPrice());
         // Find the user by nif and set it on the reservation
         User user = userRepository.findByNif(makeReservationRequest.getNif()).get(0);
         reservation.setUser(user);
@@ -89,7 +90,6 @@ public class ReservationService {
     // get name, nif and room number of today's check-ins
     public List<CheckInTodayResponse> getCheckInsToday() {
         List<CheckInTodayResponse> checkInsToday = new ArrayList<>();
-//        TODO: Update getCheckIns e Outs para a query devolvelos
         List<Object[]> checkInsTodayObjects = reservationRepository.getCheckInsToday();
 
         for (Object[] checkInTodayObject : checkInsTodayObjects) {
@@ -146,6 +146,23 @@ public class ReservationService {
             peopleCounts.add(pcr);
         }
         return peopleCounts;
+    }
+
+    public List<RevenueResponse> getMonthlyRevenue() {
+        List<RevenueResponse> monthlyRevenueList = new ArrayList<>();
+        List<Object[]> monthlyRevenueData = reservationRepository.getMonthlyRevenue();
+
+        for (Object[] data : monthlyRevenueData) {
+            Integer month = Integer.parseInt(data[0].toString());
+            Double revenue = (Double) data[1];
+            RevenueResponse revenueResponse = new RevenueResponse();
+            revenueResponse.setMonth(month);
+            revenueResponse.setRevenue(revenue);
+            monthlyRevenueList.add(revenueResponse);
+        }
+
+
+        return monthlyRevenueList;
     }
 
     // get reservation by id
