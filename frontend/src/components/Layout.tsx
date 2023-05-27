@@ -12,6 +12,8 @@ import {
   useDisclosure,
   BoxProps,
   FlexProps,
+  Center,
+  Button,
 } from "@chakra-ui/react";
 import { FiMenu } from "react-icons/fi";
 import {
@@ -21,6 +23,7 @@ import {
   RiSettings2Line,
   RiFileListLine,
   RiUser2Line,
+  RiLogoutBoxLine,
 } from "react-icons/ri";
 import { IconType } from "react-icons";
 import { Logo } from "./Logo";
@@ -77,6 +80,12 @@ export default function SimpleSidebar({
   );
 }
 
+const logout = () => {
+  // clear token from local storage
+  localStorage.removeItem("token");
+  window.location.href = "/";
+};
+
 interface SidebarProps extends BoxProps {
   onClose: () => void;
   selected?: string;
@@ -103,7 +112,9 @@ const SidebarContent = ({ onClose, selected, ...rest }: SidebarProps) => {
           p="0"
           flex="1"
         >
-          <Logo h="200" />
+          <Link href="/" _hover={{ cursor: "pointer" }}>
+            <Logo h="150" />
+          </Link>
         </Flex>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
@@ -119,6 +130,18 @@ const SidebarContent = ({ onClose, selected, ...rest }: SidebarProps) => {
           {link.name}
         </NavItem>
       ))}
+      {/* icon to logout */}
+      <Center>
+        {/* <NavItem icon={RiLogoutBoxLine} href="/logout" mt={20}></NavItem> */}
+        <Button
+          mt={20}
+          onClick={() => logout()}
+          size={"lg"}
+          _hover={{ bg: "red.300" }}
+        >
+          <RiLogoutBoxLine />
+        </Button>
+      </Center>
     </Box>
   );
 };
@@ -188,7 +211,9 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         aria-label="open menu"
         icon={<FiMenu />}
       />
-      <Logo h="50" marginLeft="4" />
+      <Link href="/" _hover={{ cursor: "pointer" }}>
+        <Logo h="50" marginLeft="4" />
+      </Link>
     </Flex>
   );
 };

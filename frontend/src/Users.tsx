@@ -70,26 +70,25 @@ export default function Users() {
         nif: nif,
       }),
     })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.length == 0) {
-            setShowError(true);
-            setErrorMessage("NIF Inválido");
-          } else {
-            // console.log(data);
-            // document.getElementById('clientUpdt').removeAttribute("disabled");
-            // document.getElementById('clientDlt').removeAttribute("disabled");
-            const { id, name, nif } = data[0];
-            // console.log("Received client");
-            // console.log(name);
-            const newCliente: Cliente = { id, name, nif };
-            // console.log("new", newCliente);
-            setCliente(newCliente);
-          }
-        });
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.length == 0) {
+          setShowError(true);
+          setErrorMessage("NIF Inválido");
+        } else {
+          // console.log(data);
+          // document.getElementById('clientUpdt').removeAttribute("disabled");
+          // document.getElementById('clientDlt').removeAttribute("disabled");
+          const { id, name, nif } = data[0];
+          // console.log("Received client");
+          // console.log(name);
+          const newCliente: Cliente = { id, name, nif };
+          // console.log("new", newCliente);
+          setCliente(newCliente);
+        }
+      });
   };
-  useEffect(() => {
-  }, [cliente]);
+  useEffect(() => {}, [cliente]);
 
   const atualizarCliente = async () => {
     setShowError(false);
@@ -104,19 +103,19 @@ export default function Users() {
         name: name,
       }),
     })
-        .then((res) => res.json())
-        .then((data) => {
-          // cliente = null;
-          if (data["status"] != "ok") {
-            setShowError(true);
-            setErrorMessage("Ocorreu um erro! Tente de novo!");
-          } else {
-            console.log(data["nameR"]);
-            console.log(data["User"]);
-            setShowError(true);
-            setErrorMessage("Utilizador atualizado com sucesso!");
-          }
-        });
+      .then((res) => res.json())
+      .then((data) => {
+        // cliente = null;
+        if (data["status"] != "ok") {
+          setShowError(true);
+          setErrorMessage("Ocorreu um erro! Tente de novo!");
+        } else {
+          console.log(data["nameR"]);
+          console.log(data["User"]);
+          setShowError(true);
+          setErrorMessage("Utilizador atualizado com sucesso!");
+        }
+      });
   };
 
   const apagarCliente = async () => {
@@ -130,16 +129,16 @@ export default function Users() {
         nif: nif,
       }),
     })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data["status"] != "ok") {
-            setShowError(true);
-            setErrorMessage("Ocorreu um erro! Tente de novo!");
-          } else {
-            setShowError(true);
-            setErrorMessage("Utilizador apagado com sucesso!");
-          }
-        });
+      .then((res) => res.json())
+      .then((data) => {
+        if (data["status"] != "ok") {
+          setShowError(true);
+          setErrorMessage("Ocorreu um erro! Tente de novo!");
+        } else {
+          setShowError(true);
+          setErrorMessage("Utilizador apagado com sucesso!");
+        }
+      });
   };
 
   // const adicionarQuarto = async () => {
@@ -246,94 +245,94 @@ export default function Users() {
   // };
 
   return (
-      <Layout selected="Rooms">
-        <Container maxW="container.xl" mt="10">
-          <Center>
-            <Text fontSize="3xl" as="b">
-              Settings
-            </Text>
-          </Center>
-          <Tabs size="lg" variant="enclosed" mt="10">
-            <TabList>
-              <Tab>Manage Users</Tab>
-            </TabList>
-            <TabPanels>
-              <TabPanel>
-                {showError && (
-                    <Alert status="error">
-                      <AlertIcon />
-                      <AlertTitle mr={2}>{errorMessage}</AlertTitle>
-                    </Alert>
-                )}
-                <Text mt={"10"} fontSize={"xl"}>
-                  Insert a NIF
-                </Text>
-                <Box mt="10">
-                  <InputGroup w="30%" mt={10}>
+    <Layout selected="Rooms">
+      <Container maxW="container.xl" mt="10">
+        <Center>
+          <Text fontSize="4xl" as="b">
+            Users
+          </Text>
+        </Center>
+        <Tabs size="lg" variant="enclosed" mt="10">
+          <TabList>
+            <Tab>Manage Users</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              {showError && (
+                <Alert status="error">
+                  <AlertIcon />
+                  <AlertTitle mr={2}>{errorMessage}</AlertTitle>
+                </Alert>
+              )}
+              <Text mt={"10"} fontSize={"xl"}>
+                Insert a NIF
+              </Text>
+              <Box mt="10">
+                <InputGroup w="30%" mt={10}>
+                  <Input
+                    type="text"
+                    w="70%"
+                    mr={5}
+                    placeholder="123456789"
+                    maxLength={9}
+                    value={nif}
+                    onChange={(e) => setNif(e.target.value)}
+                  />
+                  <Button w="80%" colorScheme="blue" onClick={procurarCliente}>
+                    {" "}
+                    Procurar
+                  </Button>
+                </InputGroup>
+                {/*<Text mt={10} mb={10} fontSize={"xl"}>Insert a new name</Text>*/}
+                {/*        <InputGroup>*/}
+                {/*        <Input disabled type='text' w="32%" mr={5} mb={5} placeholder="John Doe" onChange={(e) => setName(e.target.value)}/>*/}
+                {/*        </InputGroup>*/}
+                {/*    <InputGroup>*/}
+                {/*        <Button id={"clientUpdt"} colorScheme='yellow' mr={5} onClick={atualizarCliente}> Atualizar Nome</Button>*/}
+                {/*        <Button id={"clientDlt"} colorScheme='red' onClick={apagarCliente}> Eliminar Cliente</Button>*/}
+                {/*    </InputGroup>*/}
+              </Box>
+              <p id={"response"}></p>
+              {cliente ? (
+                <Box mt={10}>
+                  <Text mt={10} mb={10} fontSize={"xl"}>
+                    Insert a new name
+                  </Text>
+                  <InputGroup>
                     <Input
-                        type="text"
-                        w="70%"
-                        mr={5}
-                        placeholder="123456789"
-                        maxLength={9}
-                        value={nif}
-                        onChange={(e) => setNif(e.target.value)}
+                      type="text"
+                      w="32%"
+                      mr={5}
+                      mb={5}
+                      placeholder="John Doe"
+                      onChange={(e) => setName(e.target.value)}
                     />
-                    <Button w="80%" colorScheme="blue" onClick={procurarCliente}>
+                  </InputGroup>
+                  <InputGroup>
+                    <Button
+                      id={"clientUpdt"}
+                      colorScheme="yellow"
+                      mr={5}
+                      onClick={atualizarCliente}
+                    >
                       {" "}
-                      Procurar
+                      Atualizar Nome
+                    </Button>
+                    <Button
+                      id={"clientDlt"}
+                      colorScheme="red"
+                      onClick={apagarCliente}
+                    >
+                      {" "}
+                      Eliminar Cliente
                     </Button>
                   </InputGroup>
-                  {/*<Text mt={10} mb={10} fontSize={"xl"}>Insert a new name</Text>*/}
-                  {/*        <InputGroup>*/}
-                  {/*        <Input disabled type='text' w="32%" mr={5} mb={5} placeholder="John Doe" onChange={(e) => setName(e.target.value)}/>*/}
-                  {/*        </InputGroup>*/}
-                  {/*    <InputGroup>*/}
-                  {/*        <Button id={"clientUpdt"} colorScheme='yellow' mr={5} onClick={atualizarCliente}> Atualizar Nome</Button>*/}
-                  {/*        <Button id={"clientDlt"} colorScheme='red' onClick={apagarCliente}> Eliminar Cliente</Button>*/}
-                  {/*    </InputGroup>*/}
                 </Box>
-                <p id={"response"}></p>
-                {cliente ? (
-                    <Box mt={10}>
-                      <Text mt={10} mb={10} fontSize={"xl"}>
-                        Insert a new name
-                      </Text>
-                      <InputGroup>
-                        <Input
-                            type="text"
-                            w="32%"
-                            mr={5}
-                            mb={5}
-                            placeholder="John Doe"
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                      </InputGroup>
-                      <InputGroup>
-                        <Button
-                            id={"clientUpdt"}
-                            colorScheme="yellow"
-                            mr={5}
-                            onClick={atualizarCliente}
-                        >
-                          {" "}
-                          Atualizar Nome
-                        </Button>
-                        <Button
-                            id={"clientDlt"}
-                            colorScheme="red"
-                            onClick={apagarCliente}
-                        >
-                          {" "}
-                          Eliminar Cliente
-                        </Button>
-                      </InputGroup>
-                    </Box>
-                ) : null}
-              </TabPanel>
-            </TabPanels>
-          </Tabs>{" "}
-        </Container>
-      </Layout>
+              ) : null}
+            </TabPanel>
+          </TabPanels>
+        </Tabs>{" "}
+      </Container>
+    </Layout>
   );
 }
