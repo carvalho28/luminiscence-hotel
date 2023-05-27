@@ -92,15 +92,51 @@ export default function Dashboard() {
         getNCheckoutsToday();
     }, []);
 
-    useEffect(() => {
-        console.log(checkinsToday);
-    }, [nRooms, checkinsToday, checkoutsToday]);
-
     // useEffect(() => {
     //   if (!verifyAuth()) {
     //     navigate("/");
     //   }
     // }, []);
+
+
+    const makeCheckin = async (reservationId: number, nif: string) => {
+        console.log(reservationId);
+        fetch(`${serverUrl}/reservation/setCheckIn`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({reservation_id: reservationId, nif: nif, flag: true})
+        })
+            .then(response => response.json())
+            .then(data => {
+                    console.log(data);
+                }
+            )
+            .catch((error) => {
+                    console.error('Error:', error);
+                }
+            );
+    }
+
+    const makeCheckout = async (reservationId: number, nif: string) => {
+        fetch(`${serverUrl}/reservation/setCheckOut`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({reservation_id: reservationId, nif: nif, flag: true})
+        })
+            .then(response => response.json())
+            .then(data => {
+                    console.log(data);
+                }
+            )
+            .catch((error) => {
+                    console.error('Error:', error);
+                }
+            );
+    }
 
     return (
         <Layout selected="Dashboard">
@@ -120,7 +156,7 @@ export default function Dashboard() {
                 >
                     <Center py={6}>
                         <Box
-                            w="1md"
+                            w="2xl"
                             rounded={"sm"}
                             my={5}
                             mx={[0, 5]}
@@ -219,12 +255,12 @@ export default function Dashboard() {
                     justifyContent="center"
                     alignItems="center"
                     gap={"50"}
-                    mt={"10"}
+                    mt={"4"}
                     flexDir={"row"}
                 >
                     <Center py={6}>
                         <Box
-                            w="1.25md"
+                            w="xl"
                             rounded={"sm"}
                             my={5}
                             mx={[0, 5]}
@@ -291,10 +327,12 @@ export default function Dashboard() {
                                                                 <Td>{reservation.nif}</Td>
                                                                 <Td>{reservation.room_id}</Td>
                                                                 <Td>{reservation.checked_in ?
-                                                                    <Checkbox defaultChecked
+                                                                    <Checkbox defaultChecked isDisabled
                                                                               colorScheme="green"></Checkbox> :
                                                                     <Checkbox
+                                                                        onChange={() => makeCheckin(reservation.reservation_id, reservation.nif)}
                                                                         colorScheme="green"></Checkbox>}</Td>
+
                                                             </Tr>
                                                         ))}
                                                     </>
@@ -309,7 +347,7 @@ export default function Dashboard() {
 
                     <Center py={6}>
                         <Box
-                            w="1.25md"
+                            w="xl"
                             rounded={"sm"}
                             my={5}
                             mx={[0, 5]}
@@ -378,6 +416,7 @@ export default function Dashboard() {
                                                                     <Checkbox defaultChecked
                                                                               colorScheme="green"></Checkbox> :
                                                                     <Checkbox
+                                                                        onChange={() => makeCheckout(reservation.reservation_id, reservation.nif)}
                                                                         colorScheme="green"></Checkbox>}</Td>
                                                             </Tr>
                                                         ))}
@@ -394,5 +433,6 @@ export default function Dashboard() {
 
             </Container>
         </Layout>
-    );
+    )
+        ;
 }
