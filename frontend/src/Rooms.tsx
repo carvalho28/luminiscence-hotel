@@ -7,7 +7,6 @@ import {
   Button,
   Center,
   Container,
-    Flex,
   Input,
   InputGroup,
   Tab,
@@ -17,15 +16,11 @@ import {
   Tabs,
   Text,
   Select,
-  Tr,
-  Td,
-  Checkbox,
+  Flex,
 } from "@chakra-ui/react";
 import ReactEChart from "echarts-for-react";
 import { useEffect, useState } from "react";
 import { serverUrl } from "./App";
-import {verifyAuth} from "./auth/Authenticator";
-import {useNavigate} from "react-router-dom";
 
 type Room = {
   id: string;
@@ -43,7 +38,6 @@ const RoomTypes = [
 ];
 
 export default function Rooms() {
-  const navigate = useNavigate();
   const [showError, setShowError] = useState<boolean>(false);
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -56,7 +50,6 @@ export default function Rooms() {
   useEffect(() => {
     setType("SINGLE");
   }, [room]);
-
 
   const adicionarQuarto = async () => {
     setShowError(false);
@@ -85,6 +78,9 @@ export default function Rooms() {
       });
   };
 
+  const [placeholderPrice, setPlaceholderPrice] = useState<string>("");
+  const [placeholderType, setPlaceholderType] = useState<string>("");
+
   const procurarQuarto = async () => {
     setShowError(false);
     setShowSuccess(false);
@@ -104,9 +100,12 @@ export default function Rooms() {
           setShowError(true);
           setErrorMessage("Número de quarto inválido!");
         } else {
-          const { id, type, price } = data[0];
-          const newRoom: Room = { id, type, price };
-          // console.log("new", newRoom);
+          console.log(data);
+          const { id, room_type, price } = data[0];
+          const newRoom: Room = { id, type: room_type, price };
+          setPlaceholderPrice(price);
+          setPlaceholderType(room_type);
+          console.log(room_type);
           setRoom(newRoom);
         }
       });
@@ -147,7 +146,6 @@ export default function Rooms() {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
         id: id,
@@ -164,12 +162,6 @@ export default function Rooms() {
         }
       });
   };
-
-  useEffect(() => {
-    if (!verifyAuth()) {
-      navigate("/");
-    }
-  }, []);
 
   return (
     <Layout selected="Rooms">
@@ -193,95 +185,27 @@ export default function Rooms() {
                 </Alert>
               )}
               {showSuccess && (
-                  <Alert status="success">
-                    <AlertIcon />
-                    <AlertTitle mr={2}>{errorMessage}</AlertTitle>
-                  </Alert>
-              )}
-              <Text mt={"10"} fontSize={"xl"}>
-                Insira o tipo e o preço do novo quarto
-              </Text>
-              <Box mt="10">
-                <Box mt={10}>
-                  <InputGroup>
-                    <Select
-                      placeholder="SINGLE"
-                      onChange={(e) => setType(e.target.value)}
-                    >
-                      {RoomTypes.map((rtype) => (
-                        <option value={rtype} key={rtype}>
-                          {rtype}
-                        </option>
-                      ))}
-                    </Select>
-                  </InputGroup>
-                  <InputGroup>
-                    <Input
-                      type="number"
-                      w="32%"
-                      mr={5}
-                      mb={5}
-                      placeholder="135.00"
-                      onChange={(e) => setPrice(e.target.value)}
-                    />
-                  </InputGroup>
-                  <InputGroup>
-                    <Button
-                      id={"roomUpdt"}
-                      colorScheme="green"
-                      mr={5}
-                      onClick={adicionarQuarto}
-                    >
-                      {" "}
-                      Adicionar Quarto
-                    </Button>
-                  </InputGroup>
-                  {/*    TODO: Parte bonita, funcao atualizar*/}
-                </Box>
-                {/*    TODO: Spinner, responses and testing on browser*/}
-              </Box>
-            </TabPanel>
-            <TabPanel>
-              {showError && (
-                <Alert status="error">
+                <Alert status="success">
                   <AlertIcon />
                   <AlertTitle mr={2}>{errorMessage}</AlertTitle>
                 </Alert>
               )}
-              {showSuccess && (
-                  <Alert status="success">
-                    <AlertIcon />
-                    <AlertTitle mr={2}>{errorMessage}</AlertTitle>
-                  </Alert>
-              )}
-              <Text mt={"10"} fontSize={"xl"}>
-                Insira o número de um quarto
-              </Text>
+              <Center>
+                <Text mt={"10"} fontSize={"xl"}>
+                  Insira o tipo e o preço do novo quarto
+                </Text>
+              </Center>
               <Box mt="10">
-                <InputGroup w="30%" mt={10}>
-                  <Input
-                    type="text"
-                    w="70%"
-                    placeholder="Room no."
-                    mr={5}
-                    value={id}
-                    onChange={(e) => setId(e.target.value)}
-                  />
-                  <Button w="80%" colorScheme="blue" onClick={procurarQuarto}>
-                    {" "}
-                    Procurar
-                  </Button>
-                </InputGroup>
-                <p id={"response"}></p>
-                {room ? (
-                  <Box mt={10}>
-                    <InputGroup>
-                      <Text mt={10} mb={10} fontSize={"xl"}>
-                        Selecione um novo tipo e/ou preço
-                      </Text>
-                    </InputGroup>
+                <Center>
+                  <Flex
+                    direction="column"
+                    justify={"center"}
+                    align="center"
+                    // w="50%"
+                  >
                     <InputGroup>
                       <Select
+                        w="100%"
                         placeholder="SINGLE"
                         onChange={(e) => setType(e.target.value)}
                       >
@@ -294,10 +218,10 @@ export default function Rooms() {
                     </InputGroup>
                     <InputGroup>
                       <Input
-                        type="text"
-                        w="32%"
-                        mr={5}
+                        type="number"
+                        w="100%"
                         mb={5}
+                        mt={5}
                         placeholder="135.00"
                         onChange={(e) => setPrice(e.target.value)}
                       />
@@ -305,24 +229,111 @@ export default function Rooms() {
                     <InputGroup>
                       <Button
                         id={"roomUpdt"}
-                        colorScheme="yellow"
-                        mr={5}
-                        onClick={atualizarQuarto}
+                        colorScheme="green"
+                        w="100%"
+                        mx={5}
+                        onClick={adicionarQuarto}
                       >
                         {" "}
-                        Atualizar Quarto
-                      </Button>
-                      <Button
-                        id={"roomDlt"}
-                        colorScheme="red"
-                        onClick={apagarQuarto}
-                      >
-                        {" "}
-                        Eliminar Quarto
+                        Adicionar Quarto
                       </Button>
                     </InputGroup>
-                    {/*    TODO: Parte bonita, funcao atualizar*/}
-                  </Box>
+                  </Flex>
+                </Center>
+
+                {/*    TODO: Parte bonita, funcao atualizar*/}
+                {/*    TODO: Spinner, responses and testing on browser*/}
+              </Box>
+            </TabPanel>
+            <TabPanel>
+              {showError && (
+                <Alert status="error">
+                  <AlertIcon />
+                  <AlertTitle mr={2}>{errorMessage}</AlertTitle>
+                </Alert>
+              )}
+              {showSuccess && (
+                <Alert status="success">
+                  <AlertIcon />
+                  <AlertTitle mr={2}>{errorMessage}</AlertTitle>
+                </Alert>
+              )}
+              <Center>
+                <Text mt={"10"} fontSize={"xl"}>
+                  Insira o número de um quarto
+                </Text>
+              </Center>
+              <Box mt="10">
+                <Center>
+                  <InputGroup w="30%">
+                    <Input
+                      type="text"
+                      w="90%"
+                      placeholder="Room no."
+                      mr={5}
+                      value={id}
+                      onChange={(e) => setId(e.target.value)}
+                    />
+                    <Button w="80%" colorScheme="blue" onClick={procurarQuarto}>
+                      {" "}
+                      Procurar
+                    </Button>
+                  </InputGroup>
+                </Center>
+                <p id={"response"}></p>
+                {room ? (
+                  <Center>
+                    <Flex direction="column" justify={"center"} align="center">
+                      <Center>
+                        <Text mt={10} mb={10} fontSize={"xl"}>
+                          Selecione um novo tipo e/ou preço
+                        </Text>
+                      </Center>
+                      <Center>
+                        <Select
+                          w="100%"
+                          placeholder={room.type}
+                          onChange={(e) => setType(e.target.value)}
+                        >
+                          {RoomTypes.map((rtype) => (
+                            <option value={rtype} key={rtype}>
+                              {rtype}
+                            </option>
+                          ))}
+                        </Select>
+                      </Center>
+                      <Center>
+                        <Input
+                          type="text"
+                          w="80%"
+                          mb={5}
+                          mt={5}
+                          placeholder={room.price}
+                          onChange={(e) => setPrice(e.target.value)}
+                        />
+                      </Center>
+                      <InputGroup>
+                        <Button
+                          id={"roomUpdt"}
+                          colorScheme="yellow"
+                          mr={5}
+                          onClick={atualizarQuarto}
+                        >
+                          {" "}
+                          Atualizar Quarto
+                        </Button>
+                        <Button
+                          id={"roomDlt"}
+                          colorScheme="red"
+                          onClick={apagarQuarto}
+                        >
+                          {" "}
+                          Eliminar Quarto
+                        </Button>
+                      </InputGroup>
+                      {/*    TODO: Parte bonita, funcao atualizar*/}
+                    </Flex>
+                  </Center>
                 ) : null}
                 {/*    TODO: Spinner, responses and testing on browser*/}
               </Box>

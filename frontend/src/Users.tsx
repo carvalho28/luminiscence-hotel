@@ -7,7 +7,7 @@ import {
   Button,
   Center,
   Container,
-    Flex,
+  Flex,
   Input,
   InputGroup,
   Tab,
@@ -24,8 +24,8 @@ import {
 import ReactEChart from "echarts-for-react";
 import { useEffect, useState } from "react";
 import { serverUrl } from "./App";
-import {verifyAuth} from "./auth/Authenticator";
-import {useNavigate} from "react-router-dom";
+import { verifyAuth } from "./auth/Authenticator";
+import { useNavigate } from "react-router-dom";
 
 type Cliente = {
   id: number;
@@ -42,6 +42,8 @@ export default function Users() {
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
+  const [placeholderName, setPlaceholderName] = useState<string>("");
+
   const procurarCliente = async () => {
     setShowError(false);
     setShowSuccess(false);
@@ -55,17 +57,19 @@ export default function Users() {
         nif: nif,
       }),
     })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.length == 0) {
-            setShowError(true);
-            setErrorMessage("NIF Inválido");
-          } else {
-            const { id, name, nif } = data[0];
-            const newCliente: Cliente = { id, name, nif };
-            setCliente(newCliente);
-          }
-        });
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setPlaceholderName(data[0].name);
+        if (data.length == 0) {
+          setShowError(true);
+          setErrorMessage("NIF Inválido");
+        } else {
+          const { id, name, nif } = data[0];
+          const newCliente: Cliente = { id, name, nif };
+          setCliente(newCliente);
+        }
+      });
   };
 
   const atualizarCliente = async () => {
@@ -82,18 +86,19 @@ export default function Users() {
         name: name,
       }),
     })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data["status"] != "ok") {
-            setShowError(true);
-            setErrorMessage("Ocorreu um erro! Tente de novo!");
-          } else {
-            console.log(data["nameR"]);
-            console.log(data["User"]);
-            setShowError(true);
-            setErrorMessage("Utilizador atualizado com sucesso!");
-          }
-        });
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.status !== "ok") {
+          setShowError(true);
+          setErrorMessage("Ocorreu um erro! Tente de novo!");
+        } else {
+          console.log(data["nameR"]);
+          console.log(data["User"]);
+          setShowError(true);
+          setErrorMessage("Utilizador atualizado com sucesso!");
+        }
+      });
   };
 
   const apagarCliente = async () => {
@@ -120,7 +125,6 @@ export default function Users() {
       });
   };
 
-
   useEffect(() => {
     if (!verifyAuth()) {
       navigate("/");
@@ -128,116 +132,101 @@ export default function Users() {
   }, []);
 
   return (
-      <Layout selected="Rooms">
-        <Container maxW="container.xl" mt="10">
-          <Center>
-            <Text fontSize="3xl" as="b">
-              Utilizadores
-            </Text>
-          </Center>
-          <Tabs size="lg" variant="enclosed" mt="10">
-            <TabList>
-              <Tab>Gerir Utilizadores</Tab>
-            </TabList>
-            <TabPanels>
-              <TabPanel>
-                <Flex
-                    justifyContent="center"
-                    alignItems="center"
-                    gap={"50"}
-                    mt={"10"}
-                    flexDir={"row"}
-                >
+    <Layout selected="Users">
+      <Container maxW="container.xl" mt="10">
+        <Center>
+          <Text fontSize="3xl" as="b">
+            Utilizadores
+          </Text>
+        </Center>
+        <Tabs size="lg" variant="enclosed" mt="10">
+          <TabList>
+            <Tab>Gerir Utilizadores</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              <Flex
+                justifyContent="center"
+                alignItems="center"
+                mt={"10"}
+                flexDir={"column"}
+              >
                 {showError && (
-                    <Alert status="error">
-                      <AlertIcon />
-                      <AlertTitle mr={2}>{errorMessage}</AlertTitle>
-                    </Alert>
+                  <Alert status="error">
+                    <AlertIcon />
+                    <AlertTitle mr={2}>{errorMessage}</AlertTitle>
+                  </Alert>
                 )}
                 {showSuccess && (
-                    <Alert status="success">
-                      <AlertIcon />
-                      <AlertTitle mr={2}>{errorMessage}</AlertTitle>
-                    </Alert>
+                  <Alert status="success">
+                    <AlertIcon />
+                    <AlertTitle mr={2}>{errorMessage}</AlertTitle>
+                  </Alert>
                 )}
                 <Text mt={"10"} fontSize={"xl"}>
                   Insira um NIF
                 </Text>
-                <Box mt="10">
-                  <InputGroup w="30%" mt={10}>
+                <Box>
+                  <InputGroup mt={10}>
                     <Input
                       type="text"
-                      w="32%"
+                      w="70%"
                       mr={5}
-                      mb={5}
-                      placeholder="John Doe"
-                      onChange={(e) => setName(e.target.value)}
+                      placeholder="123456789"
+                      maxLength={9}
+                      value={nif}
+                      onChange={(e) => setNif(e.target.value)}
                     />
-                  </InputGroup>
-                  <InputGroup>
                     <Button
-                      id={"clientUpdt"}
-                      colorScheme="yellow"
-                      mr={5}
-                      onClick={atualizarCliente}
+                      w="40%"
+                      colorScheme="blue"
+                      onClick={procurarCliente}
                     >
                       {" "}
-                      Atualizar Nome
-                    </Button>
-                    <Button
-                      id={"clientDlt"}
-                      colorScheme="red"
-                      onClick={apagarCliente}
-                    >
-                      {" "}
-                      Eliminar Cliente
+                      Procurar
                     </Button>
                   </InputGroup>
                 </Box>
                 <p id={"response"}></p>
                 {cliente ? (
-                    <Box mt={10}>
+                  <Box mt={10}>
+                    <Center>
                       <Text mt={10} mb={10} fontSize={"xl"}>
                         Insira um nome novo
                       </Text>
-                      <InputGroup>
-                        <Input
-                            type="text"
-                            w="32%"
-                            mr={5}
-                            mb={5}
-                            placeholder="John Doe"
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                      </InputGroup>
-                      <InputGroup>
-                        <Button
-                            id={"clientUpdt"}
-                            colorScheme="yellow"
-                            mr={5}
-                            onClick={atualizarCliente}
-                        >
-                          {" "}
-                          Atualizar Nome
-                        </Button>
-                        <Button
-                            id={"clientDlt"}
-                            colorScheme="red"
-                            onClick={apagarCliente}
-                        >
-                          {" "}
-                          Eliminar Cliente
-                        </Button>
-                      </InputGroup>
-                    </Box>
+                    </Center>
+                    <InputGroup>
+                      <Input
+                        type="text"
+                        w="100%"
+                        mr={5}
+                        mb={5}
+                        placeholder={placeholderName}
+                        onChange={(e) => setName(e.target.value)}
+                      />
+                    </InputGroup>
+                    <InputGroup>
+                      <Button
+                        id={"clientUpdt"}
+                        colorScheme="yellow"
+                        mr={5}
+                        onClick={atualizarCliente}
+                      >
+                        {" "}
+                        Atualizar Nome
+                      </Button>
+                      <Button
+                        id={"clientDlt"}
+                        colorScheme="red"
+                        onClick={apagarCliente}
+                      >
+                        {" "}
+                        Eliminar Cliente
+                      </Button>
+                    </InputGroup>
+                  </Box>
                 ) : null}
-                </Flex>
-              </TabPanel>
-            </TabPanels>
-          </Tabs>{" "}
-        </Container>
-      </Layout>
-              ) : null}
+              </Flex>
             </TabPanel>
           </TabPanels>
         </Tabs>{" "}

@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { serverUrl } from "./App";
-import {verifyAuth} from "./auth/Authenticator";
+import { verifyAuth } from "./auth/Authenticator";
 
 type Booking = {
   reservation_id: number;
@@ -218,7 +218,6 @@ export default function Bookings() {
             </Center>
           </Box>
         </Center>
-
         <Center mt={"20"}>
           <Box p={4} w="50%">
             <Img
