@@ -85,6 +85,7 @@ public class ReservationService {
     // get name, nif and room number of today's check-ins
     public List<CheckInTodayResponse> getCheckInsToday() {
         List<CheckInTodayResponse> checkInsToday = new ArrayList<>();
+//        TODO: Update getCheckIns e Outs para a query devolvelos
         List<Object[]> checkInsTodayObjects = reservationRepository.getCheckInsToday();
 
         for (Object[] checkInTodayObject : checkInsTodayObjects) {
@@ -93,6 +94,8 @@ public class ReservationService {
             checkInTodayResponse.setName((String) checkInTodayObject[1]);
             checkInTodayResponse.setNif((String) checkInTodayObject[2]);
             checkInTodayResponse.setRoom_id((Long) checkInTodayObject[3]);
+            checkInTodayResponse.setChecked_in((Boolean) checkInTodayObject[4]);
+            checkInTodayResponse.setChecked_out((Boolean) checkInTodayObject[5]);
             checkInsToday.add(checkInTodayResponse);
         }
 
@@ -102,6 +105,7 @@ public class ReservationService {
     // get name, nif and room number of today's check-outs
     public List<CheckInTodayResponse> getCheckOutsToday() {
         List<CheckInTodayResponse> checkOutsToday = new ArrayList<>();
+        //        TODO: Update getCheckIns e Outs para a query devolvelos
         List<Object[]> checkOutsTodayObjects = reservationRepository.getCheckOutsToday();
 
         for (Object[] checkOutsTodayObject : checkOutsTodayObjects) {
@@ -110,6 +114,8 @@ public class ReservationService {
             checkOutsTodayResponse.setName((String) checkOutsTodayObject[1]);
             checkOutsTodayResponse.setNif((String) checkOutsTodayObject[2]);
             checkOutsTodayResponse.setRoom_id((Long) checkOutsTodayObject[3]);
+            checkOutsTodayResponse.setChecked_in((Boolean) checkOutsTodayObject[4]);
+            checkOutsTodayResponse.setChecked_out((Boolean) checkOutsTodayObject[5]);
             checkOutsToday.add(checkOutsTodayResponse);
         }
 
