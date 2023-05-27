@@ -2,11 +2,16 @@ package com.example.luminescencehotel.reservation;
 
 import com.example.luminescencehotel.reservation.request.GetReservationRequest;
 import com.example.luminescencehotel.reservation.request.MakeReservationRequest;
+import com.example.luminescencehotel.reservation.request.SetCheckedInRequest;
+import com.example.luminescencehotel.reservation.request.SetCheckedOutRequest;
 import com.example.luminescencehotel.reservation.response.AllReservationsResponse;
 import com.example.luminescencehotel.reservation.response.CheckInTodayResponse;
 import com.example.luminescencehotel.reservation.response.PeopleCountResponse;
 import com.example.luminescencehotel.reservation.response.RoomCountResponse;
 import com.example.luminescencehotel.room.RoomRepository;
+import com.example.luminescencehotel.room.RoomType;
+import com.example.luminescencehotel.room.request.IdRequest;
+import com.example.luminescencehotel.room.request.PriceRequest;
 import com.example.luminescencehotel.user.User;
 import com.example.luminescencehotel.room.Room;
 import com.example.luminescencehotel.user.UserRepository;
@@ -15,7 +20,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.Optional;
 
 @Service
@@ -146,6 +154,36 @@ public class ReservationService {
             }
         }
         return null;
+    }
+
+    public Map<String, String> setCheckIn(SetCheckedInRequest req) {
+        Map<String, String> response = new HashMap<>();
+        try {
+            Reservation r = getReservationById(req.getReservation_id(), req.getNif());
+            r.setChecked_in(req.getFlag());
+            reservationRepository.save(r);
+            response.put("status", "ok");
+            response.put("message", "Reservation updated successfully");
+        } catch (Exception e) {
+            response.put("status", "not ok");
+            response.put("message", "There was an error, try again!");
+        }
+        return response;
+    }
+
+    public Map<String, String> setCheckOut(SetCheckedOutRequest req) {
+        Map<String, String> response = new HashMap<>();
+        try {
+            Reservation r = getReservationById(req.getReservation_id(), req.getNif());
+            r.setChecked_out(req.getFlag());
+            reservationRepository.save(r);
+            response.put("status", "ok");
+            response.put("message", "Reservation updated successfully");
+        } catch (Exception e) {
+            response.put("status", "not ok");
+            response.put("message", "There was an error, try again!");
+        }
+        return response;
     }
 
     // delete multiple reservations by reservation_id

@@ -2,6 +2,8 @@ package com.example.luminescencehotel.reservation;
 
 import com.example.luminescencehotel.reservation.request.GetReservationRequest;
 import com.example.luminescencehotel.reservation.request.MakeReservationRequest;
+import com.example.luminescencehotel.reservation.request.SetCheckedInRequest;
+import com.example.luminescencehotel.reservation.request.SetCheckedOutRequest;
 import com.example.luminescencehotel.reservation.response.AllReservationsResponse;
 import com.example.luminescencehotel.reservation.response.CheckInTodayResponse;
 import com.example.luminescencehotel.reservation.response.PeopleCountResponse;
@@ -101,6 +103,14 @@ public class ReservationController {
             response.put("message", "Reservation not found");
             return ResponseEntity.ok(response);
         }
+    }
+
+    public ResponseEntity<Map<String, String>> setCheckIn(@RequestBody SetCheckedInRequest req) {
+        return ResponseEntity.ok(reservationService.setCheckIn(req));
+    }
+
+    public ResponseEntity<Map<String, String>> setCheckOut(@RequestBody SetCheckedOutRequest req) {
+        return ResponseEntity.ok(reservationService.setCheckOut(req));
     }
 
     // delete reservations by id
