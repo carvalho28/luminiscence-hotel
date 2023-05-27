@@ -11,6 +11,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
+import jakarta.servlet.ServletOutputStream;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,7 +69,9 @@ public class RoomService {
                 Room r = roomRepository.findById(Long.parseLong(roomUpdateRequest.getId())).get();
                 System.out.println(r.getRoom_id());
                 r.setRoom_type(roomUpdateRequest.getType());
+                System.out.println(r.getRoom_type());
                 r.setPrice(Float.parseFloat(roomUpdateRequest.getPrice()));
+                System.out.println(r.getPrice());
                 roomRepository.save(r);
                 response.put("status", "ok");
                 response.put("message", "Room updated successfully");
@@ -85,8 +88,11 @@ public class RoomService {
 
     public Room createRoom(CreateRoomRequest createRoomRequest) {
         Room r = new Room();
+        System.out.println(createRoomRequest);
         r.setRoom_type(createRoomRequest.getType());
-        r.setPrice(createRoomRequest.getPrice());
+        r.setPrice(Float.parseFloat(createRoomRequest.getPrice()));
+        System.out.println(r.getRoom_type());
+        System.out.println(r.getPrice());
         return roomRepository.save(r);
     }
 
