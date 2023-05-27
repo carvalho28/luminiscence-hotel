@@ -256,7 +256,7 @@ export default function Users() {
   }, []);
 
   return (
-    <Layout selected="Rooms">
+    <Layout selected="Users">
       <Container maxW="container.xl" mt="10">
         <Center>
           <Text fontSize="4xl" as="b">
