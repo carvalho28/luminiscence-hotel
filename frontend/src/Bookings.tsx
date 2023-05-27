@@ -31,8 +31,10 @@ export default function Bookings() {
     const [selectAllChecked, setSelectAllChecked] = useState(false);
 
     const [showSpinner, setShowSpinner] = useState(false);
+    const [showSpinnerLoading, setShowSpinnerLoading] = useState(false);
 
     useEffect(() => {
+        setShowSpinnerLoading(true);
         fetch(`${serverUrl}/reservation/all`, {
             method: 'GET',
             headers: {
@@ -42,6 +44,7 @@ export default function Bookings() {
             .then(response => response.json())
             .then(data => {
                     setBookings(data);
+                    setShowSpinnerLoading(false);
                 }
             )
             .catch((error) => {
@@ -128,6 +131,13 @@ export default function Bookings() {
                     >
                         <Center>
                             <TableContainer width={"100%"}>
+                                {showSpinnerLoading ? (
+                                    <Center>
+                                        <Spinner size="xl"/>
+                                    </Center>
+                                ) : (
+                                    <></>
+                                )}
                                 <Table variant='simple' size={"md"}>
                                     <Thead>
                                         <Tr>
