@@ -2,10 +2,7 @@ package com.example.luminescencehotel.reservation;
 
 import com.example.luminescencehotel.reservation.request.GetReservationRequest;
 import com.example.luminescencehotel.reservation.request.MakeReservationRequest;
-import com.example.luminescencehotel.reservation.response.AllReservationsResponse;
-import com.example.luminescencehotel.reservation.response.CheckInTodayResponse;
-import com.example.luminescencehotel.reservation.response.PeopleCountResponse;
-import com.example.luminescencehotel.reservation.response.RoomCountResponse;
+import com.example.luminescencehotel.reservation.response.*;
 import com.example.luminescencehotel.room.RoomRepository;
 import com.example.luminescencehotel.room.RoomType;
 import com.example.luminescencehotel.user.User;
@@ -161,35 +158,36 @@ public class ReservationService {
         }
     }
 
-    public Map<RoomType, List<String>> getCommentsForMostReservedRooms() {
-        Map<RoomType, List<String>> commentsMap = new HashMap<>();
+    public Map<RoomType, List<CommentResponse>> getCommentsForMostReservedRooms() {
+        Map<RoomType, List<CommentResponse>> commentsMap = new HashMap<>();
 
         // Find the most reserved PREMIUM_SUITE
         List<Reservation> premiumSuiteReservations = reservationRepository.findMostReservedRoomsByType(RoomType.PREMIUM_SUITE);
         List<Reservation> recentPremiumSuiteReservations = findRecentReservations(premiumSuiteReservations, 3);
-        List<String> premiumSuiteComments = getCommentsList(recentPremiumSuiteReservations);
+        List<CommentResponse> premiumSuiteComments = getCommentsList(recentPremiumSuiteReservations);
         commentsMap.put(RoomType.PREMIUM_SUITE, premiumSuiteComments);
 
         // Find the most reserved SUITE
         List<Reservation> suiteReservations = reservationRepository.findMostReservedRoomsByType(RoomType.SUITE);
         List<Reservation> recentSuiteReservations = findRecentReservations(suiteReservations, 3);
-        List<String> suiteComments = getCommentsList(recentSuiteReservations);
+        List<CommentResponse> suiteComments = getCommentsList(recentSuiteReservations);
         commentsMap.put(RoomType.SUITE, suiteComments);
 
         // Find the most reserved FAMILY
         List<Reservation> familyReservations = reservationRepository.findMostReservedRoomsByType(RoomType.FAMILY);
         List<Reservation> recentFamilyReservations = findRecentReservations(familyReservations, 3);
-        List<String> familyComments = getCommentsList(recentFamilyReservations);
+        List<CommentResponse> familyComments = getCommentsList(recentFamilyReservations);
         commentsMap.put(RoomType.FAMILY, familyComments);
 
         return commentsMap;
     }
 
-    private List<String> getCommentsList(List<Reservation> reservations) {
-        List<String> comments = new ArrayList<>();
+    private List<CommentResponse> getCommentsList(List<Reservation> reservations) {
+        List<CommentResponse> comments = new ArrayList<>();
         for (Reservation reservation : reservations) {
             if (reservation.getComment() != null) {
-                comments.add(reservation.getComment());
+                CommentResponse commentInfo = new CommentResponse(reservation.getComment(), reservation.getStars());
+                comments.add(commentInfo);
             }
         }
         return comments;

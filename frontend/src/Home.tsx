@@ -13,7 +13,7 @@ export default function Home() {
             image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGhvdGVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=1200&q=60"
         },
         {
-            name: "Normal Suite",
+            name: "Suite",
             stars: 4,
             image: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8aG90ZWwlMjByb29tfGVufDB8fDB8fHww&auto=format&fit=crop&w=1200&q=60"
         },
@@ -52,13 +52,6 @@ export default function Home() {
     useEffect(() => {
         getComments();
     }, []);
-
-    useEffect(() => {
-        console.log(commentsPremium);
-        console.log(commentsNormal);
-        console.log(commentsFamily);
-    }, [commentsPremium, commentsNormal, commentsFamily]);
-
 
     const navigate = useNavigate();
     return (
@@ -100,60 +93,77 @@ export default function Home() {
                 <Flex direction="column" alignItems="center">
                     <Flex direction="row" alignItems="center">
                         {topRooms.slice(0, 2).map((room, index) => (
-                            <Flex key={index} w="md" rounded={"sm"} my={5} mx={[0, 5]} overflow={"hidden"} bg="white"
+                            <Flex key={index} w="xl" rounded={"sm"} my={5} mx={[0, 5]} overflow={"hidden"} bg="white"
                                   border={"1px"} borderColor="black"
                                   boxShadow={useColorModeValue("6px 6px 0 black", "6px 6px 0 cyan")}>
-                                <Image src={room.image} alt={room.name} boxSize="200px" objectFit="cover"
+                                <Image src={room.image} alt={room.name} boxSize="250px" objectFit="cover"
                                        borderRadius="md"
                                        mr="4" p={4}/>
-                                <Box alignItems={"center"}>
-                                    <Text fontSize="lg" fontWeight="bold">{room.name}</Text>
-                                    <Text fontSize="md" fontWeight="bold">Comments:</Text>
-                                    <Center>
-                                        {/*    print comments only if they exist for the index */}
-                                        {index === 0 && commentsPremium.length > 0 && (
-                                            <Text>
-                                                {commentsPremium.map((comment, index) => (
-                                                    <Text key={index}>
-                                                        {comment}
-                                                    </Text>
-                                                ))}
-                                            </Text>
-                                        )}
-                                        {index === 1 && commentsNormal.length > 0 && (
-                                            <Text>
-                                                {commentsNormal.map((comment, index) => (
-                                                    <Text key={index}>
-                                                        {comment}
-                                                    </Text>
-                                                ))}
-                                            </Text>
-                                        )}
-                                    </Center>
+                                <Box alignItems="center" w="full" p={4} h={"fit-content"}>
+                                    <Text fontSize="2xl" fontWeight="bold" textAlign="center" mb={4}>{room.name}</Text>
+                                    {commentsPremium.length > 0 && index == 0 && (
+                                        <>
+                                            {
+                                                commentsPremium.map((val : any, index) => (
+                                                    <Flex direction="column" alignItems="center" border={"1px"} p={2}
+                                                          key={index} mb={2}>
+                                                        <Flex alignItems="center" direction={"row"}>
+                                                        {Array.from({length: val.stars}, (_, i) => (
+                                                            <StarIcon key={i} color="yellow.400"/>
+                                                        ))}
+                                                        </Flex>
+                                                        <Text ml={2}>{val.comment}</Text>
+                                                    </Flex>
+                                                ))
+                                            }
+                                        </>
+                                    )}
+                                    {commentsNormal.length > 0 && index == 1 && (
+                                        <>
+                                            {
+                                                commentsNormal.map((val : any, index) => (
+                                                    <Flex direction="column" alignItems="center" border={"1px"} p={2}
+                                                          key={index} mb={2}>
+                                                        <Flex alignItems="center" direction={"row"}>
+                                                            {Array.from({length: val.stars}, (_, i) => (
+                                                                <StarIcon key={i} color="yellow.400"/>
+                                                            ))}
+                                                        </Flex>
+                                                        <Text ml={2}>{val.comment}</Text>
+                                                    </Flex>
+                                                ))
+                                            }
+                                        </>
+                                    )}
                                 </Box>
                             </Flex>
                         ))}
                     </Flex>
                     {topRooms.slice(2, 3).map((room, index) => (
-                        <Flex key={index} w="md" rounded={"sm"} my={5} mx={[0, 5]} overflow={"hidden"} bg="white"
+                        <Flex key={index} w="xl" rounded={"sm"} my={5} mx={[0, 5]} overflow={"hidden"} bg="white"
                               border={"1px"} borderColor="black"
                               boxShadow={useColorModeValue("6px 6px 0 black", "6px 6px 0 cyan")}>
                             <Image src={room.image} alt={room.name} boxSize="200px" objectFit="cover" borderRadius="md"
                                    mr="4" p={4}/>
-                            <Box alignItems={"center"}>
-                                <Text fontSize="lg" fontWeight="bold">{room.name}</Text>
-                                <Text fontSize="md" fontWeight="bold">Comments:</Text>
-                                <Center>
-                                    {commentsFamily.length > 0 && (
-                                        <Text>
-                                            {commentsFamily.map((comment, index) => (
-                                                <Text key={index}>
-                                                    {comment}
-                                                </Text>
-                                            ))}
-                                        </Text>
-                                    )}
-                                </Center>
+                            <Box alignItems="center" w="full" p={4} h={"fit-content"}>
+                                <Text fontSize="2xl" fontWeight="bold" textAlign="center" mb={4}>{room.name}</Text>
+                                {commentsFamily.length !== 0 && (
+                                    <>
+                                        {
+                                            commentsPremium.map((val : any, index) => (
+                                                <Flex direction="column" alignItems="center" border={"1px"} p={2}
+                                                      key={index} mb={2}>
+                                                    <Flex alignItems="center" direction={"row"}>
+                                                        {Array.from({length: val.stars}, (_, i) => (
+                                                            <StarIcon key={i} color="yellow.400"/>
+                                                        ))}
+                                                    </Flex>
+                                                    <Text ml={2}>{val.comment}</Text>
+                                                </Flex>
+                                            ))
+                                        }
+                                    </>
+                                )}
                             </Box>
                         </Flex>
                     ))}
