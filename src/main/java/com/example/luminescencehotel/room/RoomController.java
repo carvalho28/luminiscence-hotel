@@ -1,9 +1,6 @@
 package com.example.luminescencehotel.room;
 
-import com.example.luminescencehotel.room.request.AvailableRoomsRequest;
-import com.example.luminescencehotel.room.request.IdRequest;
-import com.example.luminescencehotel.room.request.PriceRequest;
-import com.example.luminescencehotel.room.request.RoomUpdateRequest;
+import com.example.luminescencehotel.room.request.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -69,6 +66,15 @@ public class RoomController {
     public ResponseEntity<Map<String, Object>> countRooms() {
         Map<String, Object> response = new HashMap<>();
         response.put("count", roomService.countRooms());
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(path = "/createRoom")
+    public ResponseEntity<Map<String, String>> createRoom(CreateRoomRequest createRoomRequest) {
+        roomService.createRoom(createRoomRequest);
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "ok");
+        response.put("message", "Reservation deleted successfully");
         return ResponseEntity.ok(response);
     }
 }

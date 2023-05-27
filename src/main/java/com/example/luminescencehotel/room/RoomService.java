@@ -83,6 +83,13 @@ public class RoomService {
         return response;
     }
 
+    public Room createRoom(CreateRoomRequest createRoomRequest) {
+        Room r = new Room();
+        r.setRoom_type(createRoomRequest.getType());
+        r.setPrice(createRoomRequest.getPrice());
+        return roomRepository.save(r);
+    }
+
     // count the number of rooms
     public Long countRooms() {
     	return roomRepository.count();
