@@ -11,7 +11,8 @@ import {
     TabPanel,
     TabPanels,
     Tabs,
-    Text
+    Text,
+    Select, Tr, Td, Checkbox
 } from "@chakra-ui/react";
 import ReactEChart from "echarts-for-react";
 import {useEffect, useState} from "react";
@@ -28,6 +29,8 @@ type Room = {
     type: string,
     price: string
 }
+
+const RoomTypes = ["SINGLE", "TWIN", "DOUBLE", "SUITE", "PREMIUM_SUITE", "FAMILY"];
 
 export default function Settings() {
 
@@ -74,6 +77,7 @@ export default function Settings() {
             })
     }
     useEffect(() => {
+        setType("SINGLE")
     }, [cliente, room])
 
     const atualizarCliente = async () => {
@@ -125,6 +129,32 @@ export default function Settings() {
             })
     }
 
+    const adicionarQuarto = async () => {
+        setShowError(false);
+        console.log(type);
+        console.log(price);
+        fetch(`${serverUrl}/room/createRoom`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                type: type,
+                price: price
+            })
+        }).then(res => res.json())
+            .then(data => {
+                // room = null;
+                if (data["status"] != "ok") {
+                    setShowError(true);
+                    setErrorMessage("There was an error! Try again!");
+                } else {
+                    setShowError(true);
+                    setErrorMessage("Quarto criado com sucesso!");
+                }
+            })
+    }
+
     const procurarQuarto = async () => {
         setShowError(false);
         console.log(nif);
@@ -165,7 +195,7 @@ export default function Settings() {
         }).then(res => res.json())
             .then(data => {
                 // room = null;
-                if (data["status"] != "ok") {
+                if (data.status !== "ok") {
                     setShowError(true);
                     setErrorMessage("There was an error! Try again!");
                 } else {
@@ -250,53 +280,82 @@ export default function Settings() {
                                     ) :  null}
                         </TabPanel>
                         <TabPanel>
-                            {showError && (
-                                <Alert status="error">
-                                    <AlertIcon/>
-                                    <AlertTitle mr={2}>{errorMessage}</AlertTitle>
-                                </Alert>
-                            )}
-                            <Text mt={"10"} fontSize={"xl"}>Insert a room number</Text>
-                            <Box mt="10">
-                                    <InputGroup w="30%" mt={10}>
-                                        <Input type='text' w="70%" placeholder='Room no.' mr={5} value={id}
-                                               onChange={(e) => setId(e.target.value)}/>
-                                        <Button w="80%" colorScheme='blue' onClick={procurarQuarto}> Procurar</Button>
-                                    </InputGroup>
-                                {/*    <InputGroup>*/}
-                                {/*<Text mt={10} mb={10} fontSize={"xl"}>Select a new type and/or price</Text>*/}
-                                {/*</InputGroup>*/}
-                                {/*    <InputGroup>*/}
-                                {/*        <Input disabled type='text' w="32%" mr={5} mb={5} placeholder="Lounge" onChange={(e) => setType(e.target.value)}/>*/}
-                                {/*    </InputGroup>*/}
-                                {/*<InputGroup>*/}
-                                {/*    <Input disabled type='text' w="32%" mr={5} mb={5} placeholder="135.00" onChange={(e) => setPrice(e.target.value)}/>*/}
-                                {/*</InputGroup>*/}
-                                {/*    <InputGroup>*/}
-                                {/*        <Button id={"roomUpdt"} colorScheme='yellow' mr={5} onClick={atualizarQuarto}> Atualizar Quarto</Button>*/}
-                                {/*        <Button id={"roomDlt"} colorScheme='red' onClick={apagarQuarto}> Eliminar Quarto</Button>*/}
-                                {/*    </InputGroup>*/}
-                                <p id={"response"}></p>
-                                {room ? (
-                                    <Box mt={10}>
-                                        <InputGroup>
-                                            <Text mt={10} mb={10} fontSize={"xl"}>Select a new type and/or price</Text>
-                                        </InputGroup>
-                                        <InputGroup>
-                                            <Input type='text' w="32%" mr={5} mb={5} placeholder="Lounge" onChange={(e) => setType(e.target.value)}/>
-                                        </InputGroup>
-                                        <InputGroup>
-                                            <Input type='text' w="32%" mr={5} mb={5} placeholder="135.00" onChange={(e) => setPrice(e.target.value)}/>
-                                        </InputGroup>
-                                        <InputGroup>
-                                            <Button id={"roomUpdt"} colorScheme='yellow' mr={5} onClick={atualizarQuarto}> Atualizar Quarto</Button>
-                                            <Button id={"roomDlt"} colorScheme='red' onClick={apagarQuarto}> Eliminar Quarto</Button>
-                                        </InputGroup>
-                                        {/*    TODO: Parte bonita, funcao atualizar*/}
-                                    </Box>
-                                ) :  null}
-                            {/*    TODO: Spinner, responses and testing on browser*/}
-                            </Box>
+                            <Tabs size="lg" variant="enclosed" mt="10">
+                                <TabList>
+                                    <Tab>Add Room</Tab>
+                                    <Tab>Update Room</Tab>
+                                </TabList>
+                                <TabPanels>
+                                    <TabPanel>
+                                        {showError && (
+                                            <Alert status="error">
+                                                <AlertIcon/>
+                                                <AlertTitle mr={2}>{errorMessage}</AlertTitle>
+                                            </Alert>
+                                        )}
+                                        <Text mt={"10"} fontSize={"xl"}>Insert the new room's type and price</Text>
+                                        <Box mt="10">
+                                            <Box mt={10}>
+                                                <InputGroup>
+                                                    <Select placeholder='SINGLE' onChange={(e) => setType(e.target.value)}>
+                                                        {RoomTypes.map((rtype) => (
+                                                            <option value={rtype} key={rtype}>{rtype}</option>
+                                                        ))}
+                                                    </Select>
+                                                </InputGroup>
+                                                <InputGroup>
+                                                    <Input type='number' w="32%" mr={5} mb={5} placeholder="135.00" onChange={(e) => setPrice(e.target.value)}/>
+                                                </InputGroup>
+                                                <InputGroup>
+                                                    <Button id={"roomUpdt"} colorScheme='green' mr={5} onClick={adicionarQuarto}> Adicionar Quarto</Button>
+                                                </InputGroup>
+                                                {/*    TODO: Parte bonita, funcao atualizar*/}
+                                            </Box>
+                                            {/*    TODO: Spinner, responses and testing on browser*/}
+                                        </Box>
+                                    </TabPanel>
+                                    <TabPanel>
+                                        {showError && (
+                                            <Alert status="error">
+                                                <AlertIcon/>
+                                                <AlertTitle mr={2}>{errorMessage}</AlertTitle>
+                                            </Alert>
+                                        )}
+                                        <Text mt={"10"} fontSize={"xl"}>Insert a room number</Text>
+                                        <Box mt="10">
+                                            <InputGroup w="30%" mt={10}>
+                                                <Input type='text' w="70%" placeholder='Room no.' mr={5} value={id}
+                                                       onChange={(e) => setId(e.target.value)}/>
+                                                <Button w="80%" colorScheme='blue' onClick={procurarQuarto}> Procurar</Button>
+                                            </InputGroup>
+                                            <p id={"response"}></p>
+                                            {room ? (
+                                                <Box mt={10}>
+                                                    <InputGroup>
+                                                        <Text mt={10} mb={10} fontSize={"xl"}>Select a new type and/or price</Text>
+                                                    </InputGroup>
+                                                    <InputGroup>
+                                                        <Select placeholder='SINGLE' onChange={(e) => setType(e.target.value)}>
+                                                            {RoomTypes.map((rtype) => (
+                                                                <option value={rtype} key={rtype}>{rtype}</option>
+                                                            ))}
+                                                        </Select>
+                                                    </InputGroup>
+                                                    <InputGroup>
+                                                        <Input type='text' w="32%" mr={5} mb={5} placeholder="135.00" onChange={(e) => setPrice(e.target.value)}/>
+                                                    </InputGroup>
+                                                    <InputGroup>
+                                                        <Button id={"roomUpdt"} colorScheme='yellow' mr={5} onClick={atualizarQuarto}> Atualizar Quarto</Button>
+                                                        <Button id={"roomDlt"} colorScheme='red' onClick={apagarQuarto}> Eliminar Quarto</Button>
+                                                    </InputGroup>
+                                                    {/*    TODO: Parte bonita, funcao atualizar*/}
+                                                </Box>
+                                            ) :  null}
+                                            {/*    TODO: Spinner, responses and testing on browser*/}
+                                        </Box>
+                                    </TabPanel>
+                                </TabPanels>
+                            </Tabs>{" "}
                         </TabPanel>
                     </TabPanels>
                 </Tabs>{" "}

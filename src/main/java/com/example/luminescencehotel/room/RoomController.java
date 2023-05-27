@@ -36,7 +36,7 @@ public class RoomController {
         return ResponseEntity.ok(roomService.deleteRoom(id));
     }
 
-    @PutMapping("/update")
+    @PostMapping("/update")
     public ResponseEntity<Map<String, String>> updateRoom(@RequestBody RoomUpdateRequest roomUpdateRequest) {
         return ResponseEntity.ok(roomService.updateRoom(roomUpdateRequest));
     }
@@ -69,8 +69,10 @@ public class RoomController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping(path = "/createRoom")
-    public ResponseEntity<Map<String, String>> createRoom(CreateRoomRequest createRoomRequest) {
+    @PostMapping(path = "/createRoom")
+    public ResponseEntity<Map<String, String>> createRoom(@RequestBody CreateRoomRequest createRoomRequest) {
+        System.out.println(createRoomRequest.getPrice());
+        System.out.println(createRoomRequest.getType());
         roomService.createRoom(createRoomRequest);
         Map<String, String> response = new HashMap<>();
         response.put("status", "ok");
