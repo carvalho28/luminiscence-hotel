@@ -85,18 +85,20 @@ const SidebarContent = ({onClose, selected, ...rest}: SidebarProps) => {
             paddingTop="10"
             {...rest}
         >
-            <Flex h="150" alignItems="center" mx="8" justifyContent="space-between">
+            <Flex h="150" alignItems="center" mx="8" justifyContent="center">
                 <Flex
                     direction="column"
                     alignItems="center"
                     h="100%"
                     justifyContent="center"
                     p="0"
+                    flex="1"
                 >
-                    <Logo h="200"/>
+                    <Logo h="200" />
                 </Flex>
-                <CloseButton display={{base: "flex", md: "none"}} onClick={onClose}/>
+                <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
             </Flex>
+
             <Flex paddingTop="8"></Flex>
             {LinkItems.map((link) => (
                 <NavItem key={link.name} icon={link.icon} href={link.href} bg={link.name === selected ? "blue.100" : ""}>
