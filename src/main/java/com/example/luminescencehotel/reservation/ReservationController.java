@@ -104,7 +104,7 @@ public class ReservationController {
 
     @PostMapping(path = "/addComment")
     public ResponseEntity<Map<String, Object>> addComment(@RequestBody AddCommentRequest addCommentRequest) {
-        int result = reservationService.addCommentToReservation(addCommentRequest.getId(), addCommentRequest.getComment());
+        int result = reservationService.addCommentToReservation(addCommentRequest.getId(), addCommentRequest.getComment(), addCommentRequest.getStars());
         Map<String, Object> response = new HashMap<>();
         if (result == 1) {
             response.put("status", "ok");

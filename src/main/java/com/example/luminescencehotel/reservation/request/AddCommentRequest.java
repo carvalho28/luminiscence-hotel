@@ -8,4 +8,5 @@ import lombok.Setter;
 public class AddCommentRequest {
     Long id;
     String comment;
+    Integer stars;
 }

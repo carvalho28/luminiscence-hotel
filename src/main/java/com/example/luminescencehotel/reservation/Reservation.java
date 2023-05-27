@@ -33,6 +33,7 @@ public class Reservation {
 //    private boolean checked_out;
 
     private String comment;
+    private Integer stars;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "room_id", name = "room_id")
     private Room room;

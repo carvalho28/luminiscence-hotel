@@ -15,6 +15,7 @@ import {serverUrl} from "./App";
 import {AlertPopup} from "./components/AlertPopup";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
+import StarRatingComponent from "./components/StarRatingComponent";
 
 
 type Reservation = {
@@ -96,6 +97,11 @@ export default function Reviews() {
     }
 
     const [comment, setComment] = useState<string>("");
+    const [nStars, setNStars] = useState<number>(0);
+
+    const onStarClick = (value: number) => {
+        setNStars(value);
+    }
 
     const addReview = async () => {
         if (comment === "") {
@@ -112,6 +118,7 @@ export default function Reviews() {
                 body: JSON.stringify({
                     id: reservationId,
                     comment: comment,
+                    stars: nStars
                 }),
             }).then(response => response.json())
                 .then(data => {
@@ -240,13 +247,36 @@ export default function Reviews() {
                         <Text fontSize="xl">
                             Feedback da reserva
                         </Text>
+                        {/*stars*/}
                         <Center w={"100%"} mt={5}>
                             <Flex flexDirection="column" width={"50%"}>
-
-                                <InputGroup w="100%" mt={10}>
-                                    <Textarea placeholder='Comentário' value={comment}
-                                              onChange={(e) => setComment(e.target.value)}/>
-                                </InputGroup>
+                                <Center>
+                                    <Text fontSize="xl" as="b">
+                                        Qual a sua avaliação?
+                                    </Text>
+                                </Center>
+                                <Center>
+                                    <StarRatingComponent
+                                        nStars={5}
+                                        value={nStars}
+                                        onChange={onStarClick}
+                                    />
+                                </Center>
+                            </Flex>
+                        </Center>
+                        <Center w={"100%"} mt={5}>
+                            <Flex flexDirection="column" width={"50%"}>
+                                <Center>
+                                    <Text fontSize="xl" as="b">
+                                        Por favor, deixe um comentário sobre a sua estadia.
+                                    </Text>
+                                </Center>
+                                <Flex flexDirection="column">
+                                    <InputGroup mt={10}>
+                                        <Textarea placeholder='Comentário' value={comment}
+                                                  onChange={(e) => setComment(e.target.value)}/>
+                                    </InputGroup>
+                                </Flex>
                             </Flex>
                         </Center>
 

@@ -148,11 +148,12 @@ public class ReservationService {
     }
 
     // add comment to reservation
-    public int addCommentToReservation(Long id, String comment) {
+    public int addCommentToReservation(Long id, String comment, Integer stars) {
         Optional<Reservation> reservationOptional = reservationRepository.findById(id);
         if (reservationOptional.isPresent()) {
             Reservation reservation = reservationOptional.get();
             reservation.setComment(comment);
+            reservation.setStars(stars);
             reservationRepository.save(reservation);
             return 1;
         } else {
