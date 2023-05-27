@@ -14,7 +14,7 @@ import {CalendarIcon, AtSignIcon} from "@chakra-ui/icons";
 import {serverUrl} from "./App";
 import {AlertPopup} from "./components/AlertPopup";
 import {useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 
 
 type Reservation = {
@@ -38,15 +38,10 @@ export default function Reviews() {
     const [nif, setNif] = useState<string>("");
 
     const onPopupCloseSuccess = () => {
-        setShowSuccess(false);
-        navigate("/");
-    }
-
-    const onPopupClose = () => {
         setShowPopup(false);
         setShowCheckReservation(false);
-        setErrorMessage('');
-        setShowError(false);
+        setShowSuccess(false);
+        navigate("/");
     }
 
     const procurarReserva = async () => {
@@ -62,7 +57,7 @@ export default function Reviews() {
         }
 
         try {
-            const response = await fetch(`${serverUrl}/reservation/getReservation`, {
+            await fetch(`${serverUrl}/reservation/getReservation`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
@@ -75,6 +70,12 @@ export default function Reviews() {
                 .then(data => {
                     console.log(data);
                     if (data.status.toString() === 'ok') {
+                        if (data.reservation.comment !== null) {
+                            setShowError(true);
+                            setErrorMessage("Já fez a review para esta reserva!");
+                            return;
+                        }
+                        setShowError(false);
                         setReservation(data.reservation);
                         setShowCheckReservation(true);
                     } else {
@@ -94,11 +95,45 @@ export default function Reviews() {
         }
     }
 
-    // useEffect(() => {
-    //     console.log(reservation);
-    // }, [reservation]);
-
     const [comment, setComment] = useState<string>("");
+
+    const addReview = async () => {
+        if (comment === "") {
+            setShowError(true);
+            setErrorMessage("Insira um comentário");
+            return;
+        }
+        try {
+            await fetch(`${serverUrl}/reservation/addComment`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                },
+                body: JSON.stringify({
+                    id: reservationId,
+                    comment: comment,
+                }),
+            }).then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.status.toString() === 'ok') {
+                        setShowSuccess(true);
+                    } else {
+                        setShowError(true);
+                        setErrorMessage("Não foi possível adicionar o comentário");
+                    }
+                }).catch((error) => {
+                        console.log(error);
+                        setShowError(true);
+                        setErrorMessage("Não foi possível adicionar o comentário");
+                    }
+                );
+        } catch (err) {
+            console.log(err);
+            setShowError(true);
+            setErrorMessage("Não foi possível adicionar o comentário");
+        }
+    }
 
     return (
         <>
@@ -137,11 +172,6 @@ export default function Reviews() {
                     </Center>
                 ) : null}
 
-                {/*{showPopup ? (*/}
-                {/*    <ModalNewCustomer isOpen={true} onClose={() => onPopupClose()} setCliente={setCliente}/>*/}
-                {/*) : null}*/}
-
-
                 {reservation === null ? (
                     // render the image
                     <Center mt={20}>
@@ -160,7 +190,7 @@ export default function Reviews() {
                         </Text>
                         <Center>
                             <Box
-                                w="md"
+                                w="3xl"
                                 rounded={"sm"}
                                 my={5}
                                 mx={[0, 5]}
@@ -171,28 +201,39 @@ export default function Reviews() {
                                 p={5}
                                 boxShadow={useColorModeValue("6px 6px 0 black", "6px 6px 0 cyan")}
                             >
-                                {/* Reservation info */}
-                                <Text fontSize="2xl" mt={5} ml={5} fontWeight="bold" color="black">
-                                    Número da reserva: {reservation.reservation_id}
-                                </Text>
-                                <HStack mt={3} ml={5}>
-                                    <AtSignIcon boxSize={6}/>
-                                    <Text fontSize="xl" color="black">
-                                        Cliente: {reservation.user.name}
-                                    </Text>
-                                </HStack>
-                                <HStack mt={3} ml={5}>
-                                    <CalendarIcon boxSize={6}/>
-                                    <Text fontSize="xl" color="black">
-                                        Check-in: {reservation.start_date}
-                                    </Text>
-                                </HStack>
-                                <HStack mt={3} ml={5}>
-                                    <CalendarIcon boxSize={6}/>
-                                    <Text fontSize="xl" color="black">
-                                        Check-out: {reservation.end_date}
-                                    </Text>
-                                </HStack>
+                                <Flex flexDirection={"row"}>
+                                    <Flex flexDirection={"column"}>
+                                        {/* Reservation info */}
+                                        <Text fontSize="2xl" mt={5} ml={5} fontWeight="bold" color="black">
+                                            Número da reserva: {reservation.reservation_id}
+                                        </Text>
+                                        <HStack mt={3} ml={5}>
+                                            <AtSignIcon boxSize={6}/>
+                                            <Text fontSize="xl" color="black">
+                                                Cliente: {reservation.user.name}
+                                            </Text>
+                                        </HStack>
+                                        <HStack mt={3} ml={5}>
+                                            <CalendarIcon boxSize={6}/>
+                                            <Text fontSize="xl" color="black">
+                                                Check-in: {reservation.start_date}
+                                            </Text>
+                                        </HStack>
+                                        <HStack mt={3} ml={5}>
+                                            <CalendarIcon boxSize={6}/>
+                                            <Text fontSize="xl" color="black">
+                                                Check-out: {reservation.end_date}
+                                            </Text>
+                                        </HStack>
+                                    </Flex>
+                                    <Box ml={20} w={"50%"}>
+                                        <Center>
+                                            <Image
+                                                src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHBhcGVyc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                                                alt="hotel"/>
+                                        </Center>
+                                    </Box>
+                                </Flex>
                             </Box>
                         </Center>
 
@@ -202,15 +243,15 @@ export default function Reviews() {
                         <Center w={"100%"} mt={5}>
                             <Flex flexDirection="column" width={"50%"}>
 
-                            <InputGroup w="100%" mt={10}>
-                                <Textarea placeholder='Comentário' value={comment}
-                                        onChange={(e) => setComment(e.target.value)}/>
-                            </InputGroup>
+                                <InputGroup w="100%" mt={10}>
+                                    <Textarea placeholder='Comentário' value={comment}
+                                              onChange={(e) => setComment(e.target.value)}/>
+                                </InputGroup>
                             </Flex>
                         </Center>
 
                         <Center mt={"10"}>
-                            <Button colorScheme='blue'
+                            <Button colorScheme='blue' onClick={addReview}
                             >Confirmar</Button>
                             <Button colorScheme='red' ml={"4"}>Cancelar</Button>
                         </Center>

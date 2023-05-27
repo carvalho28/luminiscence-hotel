@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDate;
 
@@ -31,6 +32,7 @@ public class Reservation {
 //    private boolean checked_in;
 //    private boolean checked_out;
 
+    private String comment;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "room_id", name = "room_id")
     private Room room;

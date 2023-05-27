@@ -148,6 +148,19 @@ public class ReservationService {
         return null;
     }
 
+    // add comment to reservation
+    public int addCommentToReservation(Long id, String comment) {
+        Optional<Reservation> reservationOptional = reservationRepository.findById(id);
+        if (reservationOptional.isPresent()) {
+            Reservation reservation = reservationOptional.get();
+            reservation.setComment(comment);
+            reservationRepository.save(reservation);
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
     // delete multiple reservations by reservation_id
 //    public void deleteMultipleReservations(List<String> reservationIds) {
 //        List<Reservation> reservations = reservationRepository.findAllById(reservationIds.stream().map(Long::parseLong).collect(Collectors.toList()));
