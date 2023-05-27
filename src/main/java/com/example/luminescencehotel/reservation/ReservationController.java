@@ -1,7 +1,10 @@
 package com.example.luminescencehotel.reservation;
 
+import com.example.luminescencehotel.reservation.request.AddCommentRequest;
 import com.example.luminescencehotel.reservation.request.GetReservationRequest;
 import com.example.luminescencehotel.reservation.request.MakeReservationRequest;
+import com.example.luminescencehotel.reservation.response.*;
+import com.example.luminescencehotel.room.RoomType;
 import com.example.luminescencehotel.reservation.request.SetCheckedInRequest;
 import com.example.luminescencehotel.reservation.request.SetCheckedOutRequest;
 import com.example.luminescencehotel.reservation.response.AllReservationsResponse;
@@ -86,10 +89,7 @@ public class ReservationController {
         return ResponseEntity.ok(reservationService.countReservationsByPeople());
     }
 
-    @PostMapping (path = "/getReservation")
-//    public ResponseEntity<Reservation> getReservation(@RequestBody GetReservationRequest getReservationRequest) {
-//        return  ResponseEntity.ok(reservationService.getReservationById(getReservationRequest.getId(), getReservationRequest.getNif()));
-//    }
+    @PostMapping(path = "/getReservation")
     public ResponseEntity<Map<String, Object>> getReservation(@RequestBody GetReservationRequest getReservationRequest) {
         Reservation reservation = reservationService.getReservationById(getReservationRequest.getId(), getReservationRequest.getNif());
         Map<String, Object> response = new HashMap<>();
@@ -105,6 +105,44 @@ public class ReservationController {
         }
     }
 
+    @PostMapping(path = "/addComment")
+    public ResponseEntity<Map<String, Object>> addComment(@RequestBody AddCommentRequest addCommentRequest) {
+        int result = reservationService.addCommentToReservation(addCommentRequest.getId(), addCommentRequest.getComment(), addCommentRequest.getStars());
+        Map<String, Object> response = new HashMap<>();
+        if (result == 1) {
+            response.put("status", "ok");
+            response.put("message", "Comment added successfully");
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("status", "error");
+            response.put("message", "Comment not added");
+            return ResponseEntity.ok(response);
+        }
+    }
+
+
+    @GetMapping(path = "/commentsTopRooms")
+    public ResponseEntity<Map<RoomType, List<CommentResponse>>> getCommentsTopRooms() {
+        return ResponseEntity.ok(reservationService.getCommentsForMostReservedRooms());
+    }
+
+
+//
+//    @PostMapping(path = "/delete")
+//    public ResponseEntity<Map<String, Object>> deleteReservation(@RequestBody GetReservationRequest getReservationRequest) {
+//        int result = reservationService.deleteReservationById(getReservationRequest.getId(), getReservationRequest.getNif());
+//        Map<String, Object> response = new HashMap<>();
+//        if (result == 1) {
+//            response.put("status", "ok");
+//            response.put("message", "Reservation deleted successfully");
+//            return ResponseEntity.ok(response);
+//        } else {
+//            response.put("status", "error");
+//            response.put("message", "Reservation not deleted");
+//            return ResponseEntity.ok(response);
+//        }
+//    }
+  
     public ResponseEntity<Map<String, String>> setCheckIn(@RequestBody SetCheckedInRequest req) {
         return ResponseEntity.ok(reservationService.setCheckIn(req));
     }

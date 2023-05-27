@@ -1,17 +1,19 @@
-import {Box, VStack, Heading, Text, Button, Image, Flex, useColorModeValue} from "@chakra-ui/react";
+import {Box, VStack, Heading, Text, Button, Image, Flex, useColorModeValue, Center} from "@chakra-ui/react";
 import {StarIcon} from "@chakra-ui/icons";
 import {useNavigate} from "react-router-dom";
 import {Logo} from "./components/Logo";
+import {serverUrl} from "./App";
+import {useEffect, useState} from "react";
 
 export default function Home() {
     const topRooms = [
         {
-            name: "Deluxe Suite",
+            name: "Premium Suite",
             stars: 5,
             image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGhvdGVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=1200&q=60"
         },
         {
-            name: "Premium Suite",
+            name: "Suite",
             stars: 4,
             image: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8aG90ZWwlMjByb29tfGVufDB8fDB8fHww&auto=format&fit=crop&w=1200&q=60"
         },
@@ -20,12 +22,36 @@ export default function Home() {
             stars: 3,
             image: "https://www.riversideparkhotel.com/wp-content/uploads/2022/02/Photo-071-1366x768-fp_mm-fpoff_0_0.jpg"
         },
-        {
-            name: "Standard Room",
-            stars: 3,
-            image: "https://images.unsplash.com/flagged/photo-1556438758-8d49568ce18e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8aG90ZWwlMjByb29tfGVufDB8fDB8fHww&auto=format&fit=crop&w=1200&q=60"
-        },
     ];
+
+    const [commentsPremium, setCommentsPremium] = useState([]);
+    const [commentsNormal, setCommentsNormal] = useState([]);
+    const [commentsFamily, setCommentsFamily] = useState([]);
+
+    const getComments = async () => {
+        await fetch(`${serverUrl}/reservation/commentsTopRooms`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                    console.log(data);
+                    setCommentsPremium(data.PREMIUM_SUITE || []);
+                    setCommentsNormal(data.SUITE || []);
+                    setCommentsFamily(data.FAMILY || []);
+                }
+            )
+            .catch((error) => {
+                    console.error("Error:", error);
+                }
+            );
+    };
+
+    useEffect(() => {
+        getComments();
+    }, []);
 
     const navigate = useNavigate();
     return (
@@ -58,43 +84,86 @@ export default function Home() {
                     boxShadow="lg"
                 />
 
-                {/* Top 5 Rooms */}
-                <Flex direction="column" alignItems="center">
-                    <Heading as="h2" size="lg" mt="8">
-                        Top 4 Rooms
+                {/* Top 3 Rooms */}
+                <Box style={{marginTop: "100px"}} textAlign="center">
+                    <Heading as="h2" size="lg">
+                        Top 3 Rooms
                     </Heading>
-                    {topRooms.map((room, index) => (
-                        <Flex
-                            key={index}
-                            w="md"
-                            rounded={"sm"}
-                            my={5}
-                            mx={[0, 5]}
-                            overflow={"hidden"}
-                            bg="white"
-                            border={"1px"}
-                            borderColor="black"
-                            boxShadow={useColorModeValue("6px 6px 0 black", "6px 6px 0 cyan")}
-                        >
-                            <Image
-                                src={room.image}
-                                alt={room.name}
-                                boxSize="200px"
-                                objectFit="cover"
-                                borderRadius="md"
-                                mr="4"
-                                p={4}
-                            />
-                            <Box alignItems={"center"}>
-                                <Text fontSize="lg" fontWeight="bold">
-                                    {room.name}
-                                </Text>
-
-                                {/* comments */}
-                                <Text fontSize="md" fontWeight="bold">
-                                    Comments:
-                                </Text>
-
+                </Box>
+                <Flex direction="column" alignItems="center">
+                    <Flex direction="row" alignItems="center">
+                        {topRooms.slice(0, 2).map((room, index) => (
+                            <Flex key={index} w="xl" rounded={"sm"} my={5} mx={[0, 5]} overflow={"hidden"} bg="white"
+                                  border={"1px"} borderColor="black"
+                                  boxShadow={useColorModeValue("6px 6px 0 black", "6px 6px 0 cyan")}>
+                                <Image src={room.image} alt={room.name} boxSize="250px" objectFit="cover"
+                                       borderRadius="md"
+                                       mr="4" p={4}/>
+                                <Box alignItems="center" w="full" p={4} h={"fit-content"}>
+                                    <Text fontSize="2xl" fontWeight="bold" textAlign="center" mb={4}>{room.name}</Text>
+                                    {commentsPremium.length > 0 && index == 0 && (
+                                        <>
+                                            {
+                                                commentsPremium.map((val : any, index) => (
+                                                    <Flex direction="column" alignItems="center" border={"1px"} p={2}
+                                                          key={index} mb={2}>
+                                                        <Flex alignItems="center" direction={"row"}>
+                                                        {Array.from({length: val.stars}, (_, i) => (
+                                                            <StarIcon key={i} color="yellow.400"/>
+                                                        ))}
+                                                        </Flex>
+                                                        <Text ml={2}>{val.comment}</Text>
+                                                    </Flex>
+                                                ))
+                                            }
+                                        </>
+                                    )}
+                                    {commentsNormal.length > 0 && index == 1 && (
+                                        <>
+                                            {
+                                                commentsNormal.map((val : any, index) => (
+                                                    <Flex direction="column" alignItems="center" border={"1px"} p={2}
+                                                          key={index} mb={2}>
+                                                        <Flex alignItems="center" direction={"row"}>
+                                                            {Array.from({length: val.stars}, (_, i) => (
+                                                                <StarIcon key={i} color="yellow.400"/>
+                                                            ))}
+                                                        </Flex>
+                                                        <Text ml={2}>{val.comment}</Text>
+                                                    </Flex>
+                                                ))
+                                            }
+                                        </>
+                                    )}
+                                </Box>
+                            </Flex>
+                        ))}
+                    </Flex>
+                    {topRooms.slice(2, 3).map((room, index) => (
+                        <Flex key={index} w="xl" rounded={"sm"} my={5} mx={[0, 5]} overflow={"hidden"} bg="white"
+                              border={"1px"} borderColor="black"
+                              boxShadow={useColorModeValue("6px 6px 0 black", "6px 6px 0 cyan")}>
+                            <Image src={room.image} alt={room.name} boxSize="200px" objectFit="cover" borderRadius="md"
+                                   mr="4" p={4}/>
+                            <Box alignItems="center" w="full" p={4} h={"fit-content"}>
+                                <Text fontSize="2xl" fontWeight="bold" textAlign="center" mb={4}>{room.name}</Text>
+                                {commentsFamily.length !== 0 && (
+                                    <>
+                                        {
+                                            commentsPremium.map((val : any, index) => (
+                                                <Flex direction="column" alignItems="center" border={"1px"} p={2}
+                                                      key={index} mb={2}>
+                                                    <Flex alignItems="center" direction={"row"}>
+                                                        {Array.from({length: val.stars}, (_, i) => (
+                                                            <StarIcon key={i} color="yellow.400"/>
+                                                        ))}
+                                                    </Flex>
+                                                    <Text ml={2}>{val.comment}</Text>
+                                                </Flex>
+                                            ))
+                                        }
+                                    </>
+                                )}
                             </Box>
                         </Flex>
                     ))}
@@ -102,4 +171,4 @@ export default function Home() {
             </VStack>
         </Box>
     );
-}
+};

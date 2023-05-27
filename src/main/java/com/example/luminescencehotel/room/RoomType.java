@@ -13,4 +13,8 @@ public enum RoomType {
     DOUBLE,
     // bigger room, normally with a couch
     SUITE,
+    // bigger room, normally with a couch and a balcony
+    PREMIUM_SUITE,
+    // famil
+    FAMILY,
 }

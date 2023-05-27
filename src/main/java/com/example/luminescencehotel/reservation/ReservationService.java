@@ -2,6 +2,9 @@ package com.example.luminescencehotel.reservation;
 
 import com.example.luminescencehotel.reservation.request.GetReservationRequest;
 import com.example.luminescencehotel.reservation.request.MakeReservationRequest;
+import com.example.luminescencehotel.reservation.response.*;
+import com.example.luminescencehotel.room.RoomRepository;
+import com.example.luminescencehotel.room.RoomType;
 import com.example.luminescencehotel.reservation.request.SetCheckedInRequest;
 import com.example.luminescencehotel.reservation.request.SetCheckedOutRequest;
 import com.example.luminescencehotel.reservation.response.AllReservationsResponse;
@@ -19,6 +22,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -161,6 +165,75 @@ public class ReservationService {
         }
         return null;
     }
+
+    // add comment to reservation
+    public int addCommentToReservation(Long id, String comment, Integer stars) {
+        Optional<Reservation> reservationOptional = reservationRepository.findById(id);
+        if (reservationOptional.isPresent()) {
+            Reservation reservation = reservationOptional.get();
+            reservation.setComment(comment);
+            reservation.setStars(stars);
+            reservationRepository.save(reservation);
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public Map<RoomType, List<CommentResponse>> getCommentsForMostReservedRooms() {
+        Map<RoomType, List<CommentResponse>> commentsMap = new HashMap<>();
+
+        // Find the most reserved PREMIUM_SUITE
+        List<Reservation> premiumSuiteReservations = reservationRepository.findMostReservedRoomsByType(RoomType.PREMIUM_SUITE);
+        List<Reservation> recentPremiumSuiteReservations = findRecentReservations(premiumSuiteReservations, 3);
+        List<CommentResponse> premiumSuiteComments = getCommentsList(recentPremiumSuiteReservations);
+        commentsMap.put(RoomType.PREMIUM_SUITE, premiumSuiteComments);
+
+        // Find the most reserved SUITE
+        List<Reservation> suiteReservations = reservationRepository.findMostReservedRoomsByType(RoomType.SUITE);
+        List<Reservation> recentSuiteReservations = findRecentReservations(suiteReservations, 3);
+        List<CommentResponse> suiteComments = getCommentsList(recentSuiteReservations);
+        commentsMap.put(RoomType.SUITE, suiteComments);
+
+        // Find the most reserved FAMILY
+        List<Reservation> familyReservations = reservationRepository.findMostReservedRoomsByType(RoomType.FAMILY);
+        List<Reservation> recentFamilyReservations = findRecentReservations(familyReservations, 3);
+        List<CommentResponse> familyComments = getCommentsList(recentFamilyReservations);
+        commentsMap.put(RoomType.FAMILY, familyComments);
+
+        return commentsMap;
+    }
+
+    private List<CommentResponse> getCommentsList(List<Reservation> reservations) {
+        List<CommentResponse> comments = new ArrayList<>();
+        for (Reservation reservation : reservations) {
+            if (reservation.getComment() != null) {
+                CommentResponse commentInfo = new CommentResponse(reservation.getComment(), reservation.getStars());
+                comments.add(commentInfo);
+            }
+        }
+        return comments;
+    }
+
+
+    private List<Reservation> findRecentReservations(List<Reservation> reservations, int limit) {
+        List<Reservation> recentReservations = new ArrayList<>();
+        reservations.sort(Comparator.comparing(Reservation::getEnd_date).reversed());
+
+        int count = 0;
+        for (Reservation reservation : reservations) {
+            if (count >= limit) {
+                break;
+            }
+            if (reservation.getComment() != null) {
+                recentReservations.add(reservation);
+                count++;
+            }
+        }
+
+        return recentReservations;
+    }
+
 
     public Map<String, String> setCheckIn(SetCheckedInRequest req) {
         Map<String, String> response = new HashMap<>();
