@@ -63,7 +63,7 @@ export default function Statistics() {
       })
         .then((response) => response.json())
         .then((data) => {
-          setPopularRoomsIds(data.map((room: any) => "Room " + room.room_id));
+          setPopularRoomsIds(data.map((room: any) => "Quarto " + room.room_id));
           setPopularRoomsValues(data.map((room: any) => room.room_count));
         })
         .catch((error) => {
@@ -122,7 +122,7 @@ export default function Statistics() {
 
   const option = {
     title: {
-      text: "Finances By Month",
+      text: "Receitas por Mês",
       left: "center",
     },
     tooltip: {
@@ -163,7 +163,7 @@ export default function Statistics() {
 
   const option2 = {
     title: {
-      text: "Number of Reservations By Person",
+      text: "Número de Reservas por Pessoa",
       left: "center",
     },
     tooltip: {
@@ -175,7 +175,7 @@ export default function Statistics() {
     },
     series: [
       {
-        name: "Access From",
+        name: "Feita(s) por:",
         type: "pie",
         radius: "50%",
         data: numberOfReservations,
@@ -192,7 +192,7 @@ export default function Statistics() {
 
   const option3 = {
     title: {
-      text: "Most Popular Rooms",
+      text: "Quartos Mais Populares",
     },
     tooltip: {
       trigger: "axis",
@@ -217,7 +217,7 @@ export default function Statistics() {
     },
     series: [
       {
-        name: "Number of Reservations",
+        name: "Número de Reservas",
         type: "bar",
         data: popularRoomsValues,
       },
@@ -235,14 +235,14 @@ export default function Statistics() {
       <Container maxW="container.xl" mt="10">
         <Center>
           <Text fontSize="4xl" as="b">
-            Statistics
+            Estatísticas
           </Text>
         </Center>
         <Tabs size="lg" variant="enclosed" mt="10">
           <TabList>
-            <Tab>Rooms</Tab>
-            <Tab>People</Tab>
-            <Tab>Finances</Tab>
+            <Tab>Quartos</Tab>
+            <Tab>Clientes</Tab>
+            <Tab>Finanças</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
