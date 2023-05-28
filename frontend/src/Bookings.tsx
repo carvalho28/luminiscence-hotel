@@ -98,7 +98,7 @@ export default function Bookings() {
       <Container maxW="container.xl" mt="10">
         <Center>
           <Text fontSize="3xl" as="b">
-            Bookings
+            Marcações
           </Text>
         </Center>
 
@@ -114,7 +114,7 @@ export default function Bookings() {
               }}
             >
               {" "}
-              Delete
+              Eliminar
             </Button>
             {showSpinner ? <Spinner ml={"3"} size="sm" /> : <></>}
           </Center>
@@ -160,12 +160,12 @@ export default function Bookings() {
                           }}
                         />
                       </Th>
-                      <Th>Reservation ID</Th>
+                      <Th>ID da Reserva</Th>
                       <Th>Check In</Th>
                       <Th>Check Out</Th>
-                      <Th>Room Number</Th>
-                      <Th>Customer ID</Th>
-                      <Th>Customer Name</Th>
+                      <Th>Número do Quarto</Th>
+                      <Th>NIF do Client</Th>
+                      <Th>Nome do Client</Th>
                     </Tr>
                   </Thead>
                   <Tbody>
