@@ -42,7 +42,7 @@ public class UserController {
 //        return ResponseEntity.ok(userService.deleteUser(nif));
 //    }
 
-    @PutMapping("/update")
+    @PostMapping("/update")
     public ResponseEntity<Map<String, String>> updateUser(@RequestBody UserUpdateRequest userUpdateRequest) {
         return ResponseEntity.ok(userService.updateUser(userUpdateRequest));
     }
