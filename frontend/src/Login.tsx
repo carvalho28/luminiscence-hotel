@@ -32,12 +32,12 @@ export default function Login() {
     const login = async () => {
         if (username === "") {
             setShowError(true);
-            setErrorMessage("Name cannot be empty");
+            setErrorMessage("O username não pode estar vazio!");
             return;
         }
         if (password === "") {
             setShowError(true);
-            setErrorMessage("Password cannot be empty");
+            setErrorMessage("A password não pode estar vazia!");
             return;
         }
 
@@ -55,12 +55,12 @@ export default function Login() {
                 navigate('/dashboard');
             } else {
                 setShowError(true);
-                setErrorMessage('Invalid username or password');
+                setErrorMessage('Username ou password incorretos! Tente de novo!');
                 setShowSpinner(false);
             }
         } catch (e) {
             setShowError(true);
-            setErrorMessage("Could not connect to database");
+            setErrorMessage("Conexão à base de dados não estabelecida! Tente de novo!");
             setShowSpinner(false);
         }
     }
@@ -71,11 +71,11 @@ export default function Login() {
                 <Stack spacing="6">
                     <Logo h="200"/>
                     <Stack spacing={{base: '2', md: '3'}} textAlign="center">
-                        <Heading size={{base: 'xs', md: 'sm'}}>Log in to your account</Heading>
+                        <Heading size={{base: 'xs', md: 'sm'}}>Faça log in na sua conta</Heading>
                         <HStack spacing="1" justify="center">
-                            <Text color="muted">Don't have an account?</Text>
+                            <Text color="muted">Não tem uma conta?</Text>
                             <Button variant="link" colorScheme="blue" onClick={() => navigate('/register')}>
-                                Sign up
+                                Registe-se aqui!
                             </Button>
                         </HStack>
                     </Stack>
@@ -97,12 +97,6 @@ export default function Login() {
                             <PasswordField name="password" label="Password" value={password}
                                            onChange={(e) => setPassword(e.target.value)}/>
                         </Stack>
-                        <HStack justify="space-between">
-                            <Checkbox defaultChecked>Remember me</Checkbox>
-                            <Button variant="link" colorScheme="blue" size="sm">
-                                Forgot password?
-                            </Button>
-                        </HStack>
                         <Button colorScheme="blue" size="lg" fontSize="md" onClick={login}>
                             Log in
                         </Button>

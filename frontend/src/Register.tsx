@@ -80,11 +80,11 @@ export default function Register() {
       } else {
         setShowSpinner(false);
         setShowError(true);
-        setErrorMessage("An error occurred");
+        setErrorMessage("Ocorreu um erro! Tente de novo!");
       }
     } catch (e) {
       setShowError(true);
-      setErrorMessage("Could not connect to database");
+      setErrorMessage("Conexão à base de dados não estabelecida! Tente de novo!");
       setShowSpinner(false);
     }
   };
@@ -99,9 +99,9 @@ export default function Register() {
         <Stack spacing="6">
           <Logo h="180" />
           <Stack spacing={{ base: "2", md: "3" }} textAlign="center">
-            <Heading size={{ base: "xs", md: "sm" }}>Create an account</Heading>
+            <Heading size={{ base: "xs", md: "sm" }}>Crie uma conta</Heading>
             <HStack spacing="1" justify="center">
-              <Text color="muted">Already have an account?</Text>
+              <Text color="muted">Já tem uma conta?</Text>
               <Button
                 variant="link"
                 colorScheme="blue"
@@ -122,7 +122,7 @@ export default function Register() {
           <Stack spacing="6">
             <Stack spacing="5">
               <FormControl>
-                <FormLabel htmlFor="name">Name</FormLabel>
+                <FormLabel htmlFor="name">Nome</FormLabel>
                 <Input
                   id="name"
                   type="name"
@@ -147,7 +147,7 @@ export default function Register() {
               />
               <PasswordField
                 name="ConfirmPassword"
-                label="Confirm Password"
+                label="Confirmar Password"
                 value={passwordConfirmation}
                 onChange={(e) => setPasswordConfirmation(e.target.value)}
               />
@@ -158,7 +158,7 @@ export default function Register() {
               fontSize="md"
               onClick={register}
             >
-              Sign up
+              Registar
             </Button>
             {showSpinner && (
               <Center>
@@ -183,8 +183,8 @@ export default function Register() {
       </Stack>
       {showDialog && (
         <AlertPopup
-          title="Registration Successful"
-          message="You can now log in."
+          title="Registo efetuado com sucesso!"
+          message="Pode agora fazer login.."
           onClose={() => navigate("/login")}
         />
       )}
