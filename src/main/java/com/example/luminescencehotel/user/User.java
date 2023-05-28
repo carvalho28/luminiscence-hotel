@@ -34,7 +34,7 @@ public class User implements UserDetails {
     private LocalDate created_at;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Reservation> reservations;
 
     @Override

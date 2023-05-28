@@ -60,11 +60,11 @@ export default function Users() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        setPlaceholderName(data[0].name);
         if (data.length == 0) {
           setShowError(true);
           setErrorMessage("NIF Inválido");
         } else {
+          setPlaceholderName(data[0].name);
           const { id, name, nif } = data[0];
           const newCliente: Cliente = { id, name, nif };
           setCliente(newCliente);
@@ -103,6 +103,7 @@ export default function Users() {
 
   const apagarCliente = async () => {
     setShowError(false);
+    console.log(nif);
     fetch(`${serverUrl}/user/delete`, {
       method: "DELETE",
       headers: {
@@ -119,7 +120,7 @@ export default function Users() {
           setShowError(true);
           setErrorMessage("Ocorreu um erro! Tente de novo!");
         } else {
-          setShowError(true);
+          setShowSuccess(true);
           setErrorMessage("Utilizador apagado com sucesso!");
         }
       });

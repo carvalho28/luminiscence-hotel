@@ -48,7 +48,8 @@ public class UserService implements UserDetailsService {
     public Map<String, String> deleteUser(NifRequest nifRequest) {
         Map<String, String> response = new HashMap<>();
         try {
-            userRepository.delete(userRepository.findByNif(nifRequest.getNif()).get(0));
+            System.out.println(nifRequest);
+            userRepository.delete(findByNif(nifRequest).get(0));
         } catch (Exception e) {
             response.put("status", "not ok");
             response.put("message", "There was an error, try again!");
