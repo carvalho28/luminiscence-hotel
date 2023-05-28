@@ -35,12 +35,12 @@ interface LinkItemProps {
 }
 
 const LinkItems: Array<LinkItemProps> = [
-  { name: "Dashboard", icon: RiHome4Line, href: "/dashboard" },
-  { name: "Make Reservation", icon: RiHotelBedLine, href: "/make-reservation" },
-  { name: "Bookings", icon: RiFileListLine, href: "/bookings" },
-  { name: "Users", icon: RiUser2Line, href: "/users" },
-  { name: "Rooms", icon: RiSettings2Line, href: "/rooms" },
-  { name: "Statistics", icon: RiBarChartFill, href: "/statistics" },
+  { name: "Painel de Controlo", icon: RiHome4Line, href: "/dashboard" },
+  { name: "Efetuar Reserva", icon: RiHotelBedLine, href: "/make-reservation" },
+  { name: "Marcações", icon: RiFileListLine, href: "/bookings" },
+  { name: "Utilizadores", icon: RiUser2Line, href: "/users" },
+  { name: "Quartos", icon: RiSettings2Line, href: "/rooms" },
+  { name: "Estatísticas", icon: RiBarChartFill, href: "/statistics" },
 ];
 
 export default function SimpleSidebar({
