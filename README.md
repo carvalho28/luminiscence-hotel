@@ -46,3 +46,23 @@ luminescence-hotel
 
 <br />
 <br />
+
+## Setup
+
+### What you need
+
+- [Gradle](https://gradle.org/)
+
+### Clone
+
+```bash
+git clone git@github.com:carvalho28/luminiscence-hotel.git
+```
+
+#### Build Backend
+
+```bash
+gradle build
+```
+
+### Frontend
