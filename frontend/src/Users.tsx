@@ -95,8 +95,8 @@ export default function Users() {
         } else {
           console.log(data["nameR"]);
           console.log(data["User"]);
-          setShowError(true);
-          setShowSuccess("Utilizador atualizado com sucesso!");
+          setShowSuccess(true);
+          setErrorMessage("Utilizador atualizado com sucesso!");
         }
       });
   };

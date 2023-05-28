@@ -81,9 +81,9 @@ export default function Home() {
         <Text fontSize="xl" color="gray.600">
           Enjoy a luxurious stay with breathtaking views.
         </Text>
-        <Button colorScheme="blue" size="lg" onClick={() => navigate("/login")}>
-          Book Now
-        </Button>
+        {/*<Button colorScheme="blue" size="lg" onClick={() => navigate("/login")}>*/}
+        {/*  Book Now*/}
+        {/*</Button>*/}
 
         {/* Hotel Image */}
         <Image
