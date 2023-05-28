@@ -132,13 +132,13 @@ export default function MakeReservation() {
       <Container maxW="container.xl" mt="10">
         <Center>
           <Text fontSize="4xl" as="b">
-            Rooms
+            Quartos
           </Text>
         </Center>
 
         <Center mt={"4"}>
           <Text mt={"10"} fontSize={"xl"} as="b">
-            Select a date
+            Escolha um intervalo de datas
           </Text>
         </Center>
         <Center mt={"10"} mb={"10"}>
@@ -158,7 +158,7 @@ export default function MakeReservation() {
           <>
             <Center mt={"10"}>
               <Text fontSize={"xl"} as="b">
-                Available Rooms
+                Quartos disponíveis
               </Text>
             </Center>
             <Center mt={"10"} mb={"10"}>
@@ -186,9 +186,9 @@ export default function MakeReservation() {
                     <Table variant="simple" size={"md"}>
                       <Thead>
                         <Tr>
-                          <Th>Room Number</Th>
-                          <Th>Room Type</Th>
-                          <Th isNumeric>Price</Th>
+                          <Th>Número do Quarto</Th>
+                          <Th>Tipo do quarto</Th>
+                          <Th isNumeric>Preço</Th>
                         </Tr>
                       </Thead>
                       <Tbody>
