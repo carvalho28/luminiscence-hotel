@@ -22,7 +22,7 @@ import "react-date-range/dist/theme/default.css";
 import { serverUrl } from "./App";
 import { BadgeRoom } from "./components/BadgeRoom";
 import { useNavigate } from "react-router-dom";
-import {verifyAuth} from "./auth/Authenticator";
+import { verifyAuth } from "./auth/Authenticator";
 
 export default function MakeReservation() {
   const navigate = useNavigate();
@@ -108,8 +108,6 @@ export default function MakeReservation() {
     getRoomsSelectedDates();
   }, [dateRange]);
 
-  useEffect(() => {}, [rooms]);
-
   const handleRoomClick = (room_id: number, room_price: number) => {
     const state = {
       room_id: room_id,
@@ -128,7 +126,7 @@ export default function MakeReservation() {
   }, []);
 
   return (
-    <Layout selected="Make Reservation">
+    <Layout selected="Efetuar Reserva">
       <Container maxW="container.xl" mt="10">
         <Center>
           <Text fontSize="4xl" as="b">

@@ -20,7 +20,7 @@ import {
   TableContainer,
 } from "@chakra-ui/react";
 import { serverUrl } from "./App";
-import {verifyAuth} from "./auth/Authenticator";
+import { verifyAuth } from "./auth/Authenticator";
 
 type Checkin = {
   reservation_id: number;
@@ -149,7 +149,7 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <Layout selected="Dashboard">
+    <Layout selected="Painel de Controlo">
       <Container maxW="container.xl" mt="10">
         <Center>
           <Text fontSize="4xl" as="b">

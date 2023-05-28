@@ -20,7 +20,7 @@ import {
 import { useEffect, useState } from "react";
 import { serverUrl } from "./App";
 import { verifyAuth } from "./auth/Authenticator";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 type Booking = {
   reservation_id: number;
@@ -96,7 +96,7 @@ export default function Bookings() {
   }, []);
 
   return (
-    <Layout selected="Bookings">
+    <Layout selected="Marcações">
       {/* render all the rooms */}
       <Container maxW="container.xl" mt="10">
         <Center>

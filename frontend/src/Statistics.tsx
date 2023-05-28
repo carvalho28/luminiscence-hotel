@@ -14,8 +14,8 @@ import {
 import ReactEChart from "echarts-for-react";
 import { useEffect, useState } from "react";
 import { serverUrl } from "./App";
-import {verifyAuth} from "./auth/Authenticator";
-import {useNavigate} from "react-router-dom";
+import { verifyAuth } from "./auth/Authenticator";
+import { useNavigate } from "react-router-dom";
 
 type PeopleReservation = {
   value: number;
@@ -110,8 +110,10 @@ export default function Statistics() {
           // setFinancesByMonthIds(data.map((index: any) => index.month));
           console.log(data);
           setFinancesByMonthIds(
-          //     ordered
-            data.sort((a: any, b: any) => a.month - b.month).map((index: any) => getMonthName(index.month))
+            //     ordered
+            data
+              .sort((a: any, b: any) => a.month - b.month)
+              .map((index: any) => getMonthName(index.month))
           );
           // order by month
           setFinancesByMonthValues(data.map((index: any) => index.revenue));
@@ -236,7 +238,7 @@ export default function Statistics() {
   }, []);
 
   return (
-    <Layout selected="Statistics">
+    <Layout selected="Estatísticas">
       <Container maxW="container.xl" mt="10">
         <Center>
           <Text fontSize="4xl" as="b">

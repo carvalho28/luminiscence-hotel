@@ -133,7 +133,7 @@ export default function Users() {
   }, []);
 
   return (
-    <Layout selected="Users">
+    <Layout selected="Utilizadores">
       <Container maxW="container.xl" mt="10">
         <Center>
           <Text fontSize="3xl" as="b">
