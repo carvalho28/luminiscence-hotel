@@ -52,6 +52,7 @@ luminescence-hotel
 ### What you need
 
 - [Gradle](https://gradle.org/)
+- [Yarn](https://yarnpkg.com/)
 
 ### Clone
 
@@ -59,10 +60,28 @@ luminescence-hotel
 git clone git@github.com:carvalho28/luminiscence-hotel.git
 ```
 
-#### Build Backend
+#### Build and Run Backend
 
 ```bash
-gradle build
+db_password=A db_url=B db_username=C ./gradlew bootRun
 ```
 
+Where:
+
+- A is the database password;
+- B is the database url;
+- C is the database username.
+
 ### Frontend
+
+#### Install dependencies
+
+```bash
+cd frontend && yarn
+```
+
+#### Run
+
+```bash
+yarn dev
+```
