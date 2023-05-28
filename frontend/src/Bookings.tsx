@@ -20,6 +20,7 @@ import {
 import { useEffect, useState } from "react";
 import { serverUrl } from "./App";
 import { verifyAuth } from "./auth/Authenticator";
+import {useNavigate} from "react-router-dom";
 
 type Booking = {
   reservation_id: number;
@@ -31,6 +32,8 @@ type Booking = {
 };
 
 export default function Bookings() {
+  const navigate = useNavigate();
+
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [reservationIds, setReservationIds] = useState([]);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
