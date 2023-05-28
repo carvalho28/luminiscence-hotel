@@ -62,7 +62,7 @@ public class ReservationService {
             AllReservationsResponse allReservationsResponse = new AllReservationsResponse();
             allReservationsResponse.setReservation_id(reservation.getReservation_id());
             allReservationsResponse.setName(reservation.getUser().getName());
-            allReservationsResponse.setCustomer_id(reservation.getUser().getId());
+            allReservationsResponse.setCustomer_id(Long.parseLong(reservation.getUser().getNif()));
             allReservationsResponse.setRoom_number(reservation.getRoom().getRoom_id());
             allReservationsResponse.setStart_date(reservation.getStart_date().toString());
             allReservationsResponse.setEnd_date(reservation.getEnd_date().toString());
@@ -283,9 +283,9 @@ public class ReservationService {
     }
 
     // delete multiple reservations by reservation_id
-//    public void deleteMultipleReservations(List<String> reservationIds) {
-//        List<Reservation> reservations = reservationRepository.findAllById(reservationIds.stream().map(Long::parseLong).collect(Collectors.toList()));
-//        reservationRepository.deleteAll(reservations);
-//
-//    }
+    public void deleteMultipleReservations(List<String> reservationIds) {
+        List<Reservation> reservations = reservationRepository.findAllById(reservationIds.stream().map(Long::parseLong).collect(Collectors.toList()));
+        reservationRepository.deleteAll(reservations);
+
+    }
 }

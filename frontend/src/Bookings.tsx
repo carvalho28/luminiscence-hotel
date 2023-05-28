@@ -164,7 +164,7 @@ export default function Bookings() {
                       <Th>Check In</Th>
                       <Th>Check Out</Th>
                       <Th>Número do Quarto</Th>
-                      <Th>ID do Client</Th>
+                      <Th>NIF do Client</Th>
                       <Th>Nome do Client</Th>
                     </Tr>
                   </Thead>

@@ -126,23 +126,6 @@ public class ReservationController {
         return ResponseEntity.ok(reservationService.getCommentsForMostReservedRooms());
     }
 
-
-//
-//    @PostMapping(path = "/delete")
-//    public ResponseEntity<Map<String, Object>> deleteReservation(@RequestBody GetReservationRequest getReservationRequest) {
-//        int result = reservationService.deleteReservationById(getReservationRequest.getId(), getReservationRequest.getNif());
-//        Map<String, Object> response = new HashMap<>();
-//        if (result == 1) {
-//            response.put("status", "ok");
-//            response.put("message", "Reservation deleted successfully");
-//            return ResponseEntity.ok(response);
-//        } else {
-//            response.put("status", "error");
-//            response.put("message", "Reservation not deleted");
-//            return ResponseEntity.ok(response);
-//        }
-//    }
-
     @PostMapping(path = "/setCheckIn")
     public ResponseEntity<Map<String, String>> setCheckIn(@RequestBody SetCheckedInRequest req) {
         return ResponseEntity.ok(reservationService.setCheckIn(req));
@@ -161,13 +144,13 @@ public class ReservationController {
     }
 
     // delete reservations by id
-//    @DeleteMapping(path = "/delete")
-//    public ResponseEntity<Map<String, Object>> deleteReservationById(@RequestBody List<String> reservation_id) {
-//        reservationService.deleteMultipleReservations(reservation_id);
-//        Map<String, Object> response = new HashMap<>();
-//        response.put("status", "ok");
-//        response.put("message", "Reservation deleted successfully");
-//        return ResponseEntity.ok(response);
-//
-//    }
+    @DeleteMapping(path = "/delete")
+    public ResponseEntity<Map<String, Object>> deleteReservationById(@RequestBody List<String> reservation_id) {
+        reservationService.deleteMultipleReservations(reservation_id);
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", "ok");
+        response.put("message", "Reservation deleted successfully");
+        return ResponseEntity.ok(response);
+
+    }
 }
