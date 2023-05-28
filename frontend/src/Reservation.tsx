@@ -62,9 +62,16 @@ export default function Reservation() {
   }, []);
 
   useEffect(() => {
-    // calculate price
-    const total = nNights * price;
-    setTotalPrice(total);
+    let totalP = 0;
+    if (nNights === 0) {
+        totalP = price;
+        setNNights(1);
+        setNDays(0);
+    } else {
+      // calculate price
+      totalP = nNights * price;
+    }
+    setTotalPrice(totalP);
   }, [nNights]);
 
   const procurarCliente = async () => {
@@ -96,15 +103,12 @@ export default function Reservation() {
         const { id, name, nif } = data[0];
         setShowError(false);
         const newCliente: Cliente = { id, name, nif };
-        console.log("new", newCliente);
         setCliente(newCliente);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
-  useEffect(() => {}, [cliente, nNights, nDays, totalPrice]);
 
   const createNewCustomer = async () => {
     setShowPopup(true);
@@ -146,7 +150,7 @@ export default function Reservation() {
 
   const onPopupCloseSuccess = () => {
     setShowSuccess(false);
-    navigate("/rooms");
+    navigate("/dashboard");
   };
 
   useEffect(() => {
