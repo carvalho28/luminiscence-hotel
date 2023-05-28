@@ -13,6 +13,7 @@ import {
   AlertTitle,
   AlertDescription,
   Alert,
+  Flex
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { serverUrl } from "./App";
@@ -42,7 +43,7 @@ export default function Reservation() {
   const [cliente, setCliente] = useState<null | Cliente>(null);
 
   const [nDays, setNDays] = useState<number>(0);
-  const [nNights, setNNights] = useState<number>(0);
+  const [nNights, setNNights] = useState<number>(1);
   const [totalPrice, setTotalPrice] = useState<number>(0);
 
   const [showError, setShowError] = useState<boolean>(false);
@@ -58,21 +59,22 @@ export default function Reservation() {
     const diffTime = Math.abs(end.getTime() - start.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     setNDays(diffDays);
-    setNNights(Math.abs(diffDays - 1));
   }, []);
 
   useEffect(() => {
-    let totalP = 0;
-    if (nNights === 0) {
-        totalP = price;
-        setNNights(1);
-        setNDays(0);
-    } else {
-      // calculate price
-      totalP = nNights * price;
+    setNNights(Math.abs(nDays - 1));
+  }, [nDays]);
+
+  useEffect(() => {
+    const totalP = nNights * price;
+    if (totalP === 0) {
+      setNNights(1);
+      setTotalPrice(price);
+      setNDays(0);
+      return;
     }
     setTotalPrice(totalP);
-  }, [nNights]);
+  }, [nNights, price]);
 
   const procurarCliente = async () => {
     if (nif === "") {
@@ -80,7 +82,6 @@ export default function Reservation() {
       setErrorMessage("Insira o NIF do cliente");
       return;
     }
-    console.log(nif);
     await fetch(`${serverUrl}/user/nif`, {
       method: "POST",
       headers: {
@@ -93,7 +94,6 @@ export default function Reservation() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         if (data.length === 0) {
           setShowError(true);
           setErrorMessage("Cliente não encontrado");
@@ -124,9 +124,6 @@ export default function Reservation() {
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
   const makeReservation = async () => {
     if (!cliente) return;
-    console.log(room_id, cliente.nif, start_date, end_date);
-    console.log(new Date(start_date).toISOString().slice(0, 10));
-    console.log(new Date(end_date).toISOString().slice(0, 10));
     await fetch(`${serverUrl}/reservation/make`, {
       method: "POST",
       headers: {
@@ -143,7 +140,6 @@ export default function Reservation() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setShowSuccess(true);
       });
   };
@@ -163,30 +159,35 @@ export default function Reservation() {
     <Layout>
       <Container maxW="container.xl" mt="10">
         <Center>
-          <Text fontSize="3xl" as="b">
+          <Text fontSize="4xl" as="b">
             Reservation
           </Text>
         </Center>
 
-        <Text fontSize="xl">Procurar cliente</Text>
+        <Center mt={20}>
+        <Text fontSize="xl" as={"b"}>Procurar cliente</Text>
+        </Center>
         <Center>
-          <InputGroup w="29%" mt={10}>
+          <Flex direction="column" mt={8}>
+          <InputGroup>
             <Input
               type="text"
               placeholder="Insira o NIF do cliente"
               value={nif}
               onChange={(e) => setNif(e.target.value)}
             />
+          </InputGroup>
             <Button
+                mt={5}
+                mx={10}
               colorScheme="blue"
               onClick={procurarCliente}
-              ml={"6"}
-              w={"50%"}
             >
               {" "}
               Procurar
             </Button>
-          </InputGroup>
+
+            </Flex>
         </Center>
 
         {showError ? (
@@ -237,10 +238,12 @@ export default function Reservation() {
 
         {cliente ? (
           <>
-            <Text fontSize="xl" mt={20}>
+            <Center>
+            <Text fontSize="xl" mt={20} as={"b"}>
               Resumo da reserva
             </Text>
-            <Center>
+            </Center>
+            <Center mt={5}>
               <Box
                 maxW="sm"
                 borderWidth="1px"

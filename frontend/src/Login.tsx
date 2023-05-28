@@ -97,7 +97,7 @@ export default function Login() {
                             <PasswordField name="password" label="Password" value={password}
                                            onChange={(e) => setPassword(e.target.value)}/>
                         </Stack>
-                        <Button colorScheme="blue" size="lg" fontSize="md" onClick={login}>
+                        <Button type={"submit"} colorScheme="blue" size="lg" fontSize="md" onClick={login}>
                             Log in
                         </Button>
                         {showSpinner && (
