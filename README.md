@@ -60,7 +60,7 @@ luminescence-hotel
 git clone git@github.com:carvalho28/luminiscence-hotel.git
 ```
 
-#### Build and Run Backend
+### Build and Run Backend
 
 ```bash
 db_password=A db_url=B db_username=C ./gradlew bootRun
